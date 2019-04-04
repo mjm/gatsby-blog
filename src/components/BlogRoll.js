@@ -29,6 +29,20 @@ class BlogRoll extends React.Component {
                 ) : (
                   <HTMLContent className="e-content" content={post.html} />
                 )}
+                <div className="flex flex-row justify-end items-baseline mt-4 text-xs">
+                  <Link
+                    to={post.fields.slug}
+                    className="u-url text-purple-600 bg-purple-100 rounded-lg uppercase no-underline px-2 pb-px pt-1 border-0 border-b-2 border-solid border-transparent hover:border-purple-500"
+                  >
+                    ➔{" "}
+                    <time
+                      className="dt-published ml-1"
+                      datetime={post.frontmatter.isoDate}
+                    >
+                      {post.frontmatter.date}
+                    </time>
+                  </Link>
+                </div>
               </article>
               <hr className="h-1 bg-purple-100 mx-auto w-1/3 rounded-full" />
             </>
@@ -69,7 +83,8 @@ export default () => (
               frontmatter {
                 title
                 templateKey
-                date(formatString: "MMMM DD, YYYY")
+                date(formatString: "MMM D, Y")
+                isoDate: date(formatString: "YYYY-MM-DDTHH:mm:ssZ")
               }
             }
           }
