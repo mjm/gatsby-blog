@@ -4,25 +4,34 @@ import { graphql } from "gatsby";
 import Layout from "../components/Layout";
 import Content, { HTMLContent } from "../components/Content";
 
-export const MicroblogPostTemplate = ({ content, contentComponent }) => {
+export const MicroblogPostTemplate = ({
+  content,
+  contentComponent,
+  date,
+  isoDate
+}) => {
   const PostContent = contentComponent || Content;
 
   return (
-    <section className="section">
-      <div className="container content">
-        <div className="columns">
-          <div className="column is-10 is-offset-1">
-            <PostContent content={content} />
-          </div>
-        </div>
+    <article className="h-entry mt-12 mb-10">
+      <PostContent className="p-name e-content" content={content} />
+      <div className="text-right mt-4">
+        <time
+          className="dt-published text-xs py-2 px-3 text-purple-600 bg-purple-100 rounded-lg uppercase no-underline"
+          dateTime={isoDate}
+        >
+          {date}
+        </time>
       </div>
-    </section>
+    </article>
   );
 };
 
 MicroblogPostTemplate.propTypes = {
   content: PropTypes.node.isRequired,
-  contentComponent: PropTypes.func
+  contentComponent: PropTypes.func,
+  date: PropTypes.string,
+  isoDate: PropTypes.string
 };
 
 const MicroblogPost = ({ data }) => {
@@ -33,6 +42,8 @@ const MicroblogPost = ({ data }) => {
       <MicroblogPostTemplate
         content={post.html}
         contentComponent={HTMLContent}
+        date={post.frontmatter.date}
+        isoDate={post.frontmatter.isoDate}
       />
     </Layout>
   );
@@ -52,7 +63,8 @@ export const pageQuery = graphql`
       id
       html
       frontmatter {
-        date(formatString: "MMMM DD, YYYY")
+        date(formatString: "MMM D, Y")
+        isoDate: date(formatString: "YYYY-MM-DDTHH:mm:ssZ")
       }
     }
   }
