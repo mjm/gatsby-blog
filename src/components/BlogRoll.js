@@ -12,8 +12,8 @@ class BlogRoll extends React.Component {
       <div className="h-feed">
         {posts &&
           posts.map(({ node: post }) => (
-            <>
-              <article className="h-entry mt-12 mb-10" key={post.id}>
+            <div key={post.id}>
+              <article className="h-entry mt-12 mb-10">
                 {post.frontmatter.title && (
                   <h1 className="p-name">
                     <Link
@@ -37,7 +37,7 @@ class BlogRoll extends React.Component {
                     ➔{" "}
                     <time
                       className="dt-published ml-1"
-                      datetime={post.frontmatter.isoDate}
+                      dateTime={post.frontmatter.isoDate}
                     >
                       {post.frontmatter.date}
                     </time>
@@ -45,7 +45,7 @@ class BlogRoll extends React.Component {
                 </div>
               </article>
               <hr className="h-1 bg-purple-100 mx-auto w-1/3 rounded-full" />
-            </>
+            </div>
           ))}
       </div>
     );
