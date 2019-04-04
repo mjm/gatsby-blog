@@ -1,2 +1,7 @@
 @tailwind components;
+
+.e-content a {
+  @apply text-purple-700;
+}
+
 @tailwind utilities;
