@@ -57,6 +57,14 @@ module.exports = {
             options: {
               destinationDir: "static"
             }
+          },
+          {
+            resolve: `@raae/gatsby-remark-oembed`,
+            options: {
+              providers: {
+                include: ["Instagram", "Twitter", "YouTube"]
+              }
+            }
           }
         ]
       }
