@@ -10,7 +10,7 @@ import "./all.css";
 const TemplateWrapper = ({ children }) => {
   const { title, description } = useSiteMetadata();
   return (
-    <div className="bg-white w-full min-h-screen mt-2 pb-12">
+    <div className="bg-white w-full min-h-screen mt-2 pb-12 text-indigo-900">
       <Helmet>
         <html lang="en" />
         <title>{title}</title>
@@ -49,7 +49,7 @@ const TemplateWrapper = ({ children }) => {
       <div className="container mx-auto">
         <Header />
         <Navbar />
-        <div className="max-w-lg mx-auto px-3 mt-6">{children}</div>
+        <section className="max-w-lg mx-auto px-3 mt-6">{children}</section>
       </div>
     </div>
   );
