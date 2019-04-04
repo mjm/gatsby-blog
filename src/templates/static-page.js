@@ -4,39 +4,29 @@ import { graphql } from "gatsby";
 import Layout from "../components/Layout";
 import Content, { HTMLContent } from "../components/Content";
 
-export const AboutPageTemplate = ({ title, content, contentComponent }) => {
+export const StaticPageTemplate = ({ title, content, contentComponent }) => {
   const PageContent = contentComponent || Content;
 
   return (
-    <section className="section section--gradient">
-      <div className="container">
-        <div className="columns">
-          <div className="column is-10 is-offset-1">
-            <div className="section">
-              <h2 className="title is-size-3 has-text-weight-bold is-bold-light">
-                {title}
-              </h2>
-              <PageContent content={content} />
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <article className="h-entry mt-12 mb-10">
+      <h2 className="p-name">{title}</h2>
+      <PageContent className="e-content" content={content} />
+    </article>
   );
 };
 
-AboutPageTemplate.propTypes = {
+StaticPageTemplate.propTypes = {
   title: PropTypes.string.isRequired,
   content: PropTypes.string,
   contentComponent: PropTypes.func
 };
 
-const AboutPage = ({ data }) => {
+const StaticPage = ({ data }) => {
   const { markdownRemark: post } = data;
 
   return (
     <Layout>
-      <AboutPageTemplate
+      <StaticPageTemplate
         contentComponent={HTMLContent}
         title={post.frontmatter.title}
         content={post.html}
@@ -45,14 +35,14 @@ const AboutPage = ({ data }) => {
   );
 };
 
-AboutPage.propTypes = {
+StaticPage.propTypes = {
   data: PropTypes.object.isRequired
 };
 
-export default AboutPage;
+export default StaticPage;
 
 export const aboutPageQuery = graphql`
-  query AboutPage($id: String!) {
+  query StaticPage($id: String!) {
     markdownRemark(id: { eq: $id }) {
       html
       frontmatter {
