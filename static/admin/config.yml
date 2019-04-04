@@ -65,3 +65,18 @@ collections:
             }
           - { label: "Title", name: "title", widget: "string" }
           - { label: "Body", name: "body", widget: "markdown" }
+      - file: "src/pages/music/index.md"
+        label: "Music"
+        name: music
+        fields:
+          - { label: "Template Key", name: templateKey, widget: hidden, default: music-page }
+          - { label: "Title", name: title, widget: string }
+          - { label: "Body", name: body, widget: markdown }
+          - label: "Albums"
+            name: albums
+            widget: list
+            fields:
+              - { label: "Name", name: name, widget: string }
+              - { label: "Artist", name: artist, widget: string }
+              - { label: "Link", name: url, widget: string }
+              - { label: "Image", name: image, widget: image, allow_multiple: false }
