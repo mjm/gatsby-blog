@@ -1,13 +1,16 @@
 import React from "react";
 import Helmet from "react-helmet";
+import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import useSiteMetadata from "./SiteMetadata";
 
+import "./all.css";
+
 const TemplateWrapper = ({ children }) => {
   const { title, description } = useSiteMetadata();
   return (
-    <div>
+    <div className="bg-white w-full min-h-screen mt-2 pb-12">
       <Helmet>
         <html lang="en" />
         <title>{title}</title>
@@ -43,9 +46,11 @@ const TemplateWrapper = ({ children }) => {
         <meta property="og:url" content="/" />
         <meta property="og:image" content="/img/og-image.jpg" />
       </Helmet>
-      <Navbar />
-      <div>{children}</div>
-      <Footer />
+      <div className="container mx-auto">
+        <Header />
+        <Navbar />
+        <div className="max-w-lg mx-auto px-3 mt-6">{children}</div>
+      </div>
     </div>
   );
 };
