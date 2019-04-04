@@ -1,15 +1,10 @@
 import React from "react";
 import { Link } from "gatsby";
 
-const NavItem = ({ className, ...props }) => {
-  className = className || "";
-  return (
-    <li
-      className={`pt-2 pb-1 mx-1 my-0 px-1 border-solid border-0 border-b-4 border-transparent hover:border-purple-300 ${className}`}
-      {...props}
-    />
-  );
-};
+const linkClassName =
+  "block pt-2 pb-1 mx-1 my-0 px-1 border-solid border-0 border-b-4 border-transparent hover:border-purple-300 text-purple-600 no-underline";
+const activeLinkClassName =
+  "font-bold border-purple-500 hover:border-purple-500";
 
 const Navbar = () => {
   return (
@@ -19,26 +14,42 @@ const Navbar = () => {
       aria-label="main-navigation"
     >
       <ul className="list-none m-0 p-0 flex flex-row justify-center bg-purple-100 mt-3 mb-4 sm:rounded-lg shadow-md">
-        <NavItem>
-          <Link to="/" className="text-purple-600 no-underline">
+        <li className="m-0 p-0">
+          <Link
+            to="/"
+            className={linkClassName}
+            activeClassName={activeLinkClassName}
+          >
             Home
           </Link>
-        </NavItem>
-        <NavItem>
-          <Link to="/about" className="text-purple-600 no-underline">
+        </li>
+        <li className="m-0 p-0">
+          <Link
+            to="/about"
+            className={linkClassName}
+            activeClassName={activeLinkClassName}
+          >
             About
           </Link>
-        </NavItem>
-        <NavItem>
-          <Link to="/music" className="text-purple-600 no-underline">
+        </li>
+        <li className="m-0 p-0">
+          <Link
+            to="/music"
+            className={linkClassName}
+            activeClassName={activeLinkClassName}
+          >
             Music
           </Link>
-        </NavItem>
-        <NavItem>
-          <Link to="/talks" className="text-purple-600 no-underline">
+        </li>
+        <li className="m-0 p-0">
+          <Link
+            to="/talks"
+            className={linkClassName}
+            activeClassName={activeLinkClassName}
+          >
             Talks
           </Link>
-        </NavItem>
+        </li>
       </ul>
     </nav>
   );
