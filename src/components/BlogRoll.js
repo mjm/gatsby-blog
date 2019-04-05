@@ -71,6 +71,7 @@ export default () => (
               templateKey: { in: ["blog-post", "microblog-post"] }
             }
           }
+          limit: 30
         ) {
           edges {
             node {
