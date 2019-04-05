@@ -24,10 +24,8 @@ export const MusicPageTemplate = ({
             <p>
               <a href={album.url}>
                 <img
-                  src={album.image}
+                  src={`${album.image.publicURL}?nf_resize=fit&w=300&h=300`}
                   alt={`${album.name} - ${album.artist}`}
-                  width="300"
-                  height="300"
                 />
               </a>
             </p>
@@ -65,7 +63,9 @@ export const pageQuery = graphql`
           name
           artist
           url
-          image
+          image {
+            publicURL
+          }
         }
       }
     }
