@@ -9,7 +9,6 @@ export const BlogPostTemplate = ({
   content,
   contentComponent,
   date,
-  description,
   helmet,
   isoDate,
   title
@@ -21,7 +20,6 @@ export const BlogPostTemplate = ({
       {helmet || ""}
       <h1 className="p-name">{title}</h1>
       <div className="e-content">
-        <p>{description}</p>
         <PostContent content={content} />
       </div>
       <div className="text-right mt-4">
@@ -40,7 +38,6 @@ BlogPostTemplate.propTypes = {
   content: PropTypes.node.isRequired,
   contentComponent: PropTypes.func,
   date: PropTypes.string,
-  description: PropTypes.string,
   helmet: PropTypes.object,
   isoDate: PropTypes.string,
   title: PropTypes.string
@@ -55,14 +52,9 @@ const BlogPost = ({ data }) => {
         content={post.html}
         contentComponent={HTMLContent}
         date={post.frontmatter.date}
-        description={post.frontmatter.description}
         helmet={
           <Helmet titleTemplate="%s | Blog">
             <title>{post.frontmatter.title}</title>
-            <meta
-              name="description"
-              content={`${post.frontmatter.description}`}
-            />
           </Helmet>
         }
         isoDate={post.frontmatter.isoDate}
@@ -89,7 +81,6 @@ export const pageQuery = graphql`
         date(formatString: "MMM D, Y")
         isoDate: date(formatString: "YYYY-MM-DDTHH:mm:ssZ")
         title
-        description
       }
     }
   }
