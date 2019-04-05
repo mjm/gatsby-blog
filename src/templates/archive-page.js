@@ -1,35 +1,30 @@
-import React from "react";
-import { Link } from "gatsby";
-import Layout from "../components/Layout";
-import BlogRoll from "../components/BlogRoll";
+import React from 'react';
+import { graphql } from 'gatsby';
+import Layout from '../components/Layout'
+import BlogRoll from '../components/BlogRoll'
 
-const IndexPage = ({ data }) => {
+const ArchivePage = ({ data }) => {
   const { allMarkdownRemark: { edges } } = data;
 
   return (
     <Layout>
       <BlogRoll posts={edges} />
-      <div className="text-center mt-8">
-        <p>
-          See more posts in the <Link to="/archives/" className="text-purple-700">archives</Link>.
-        </p>
-      </div>
     </Layout>
   );
 };
 
-export default IndexPage;
+export default ArchivePage;
 
 export const pageQuery = graphql`
-  query IndexQuery {
+  query GetArchivedPosts($dateStart: Date!, $dateEnd: Date!) {
     allMarkdownRemark(
-      sort: { order: DESC, fields: [frontmatter___date] }
       filter: {
         frontmatter: {
+          date: { gte: $dateStart, lte: $dateEnd },
           templateKey: { in: ["blog-post", "microblog-post"] }
-        }
-      }
-      limit: 30
+        },
+      },
+      sort: { fields: [frontmatter___date], order: [DESC] }
     ) {
       edges {
         node {
@@ -49,4 +44,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`
+`;

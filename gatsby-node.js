@@ -14,6 +14,7 @@ exports.createPages = ({ actions, graphql }) => {
             id
             fields {
               slug
+              archivePage
             }
             frontmatter {
               templateKey
@@ -29,8 +30,13 @@ exports.createPages = ({ actions, graphql }) => {
     }
 
     const posts = result.data.allMarkdownRemark.edges;
+    const archivePages = new Set();
 
     posts.forEach(edge => {
+      if (edge.node.fields.archivePage) {
+        archivePages.add(edge.node.fields.archivePage);
+      }
+
       const id = edge.node.id;
       createPage({
         path: edge.node.fields.slug,
@@ -43,6 +49,20 @@ exports.createPages = ({ actions, graphql }) => {
         }
       });
     });
+
+    const archivePageComponent = path.resolve("src/templates/archive-page.js");
+    for (const archivePage of archivePages) {
+      const [year, month] = archivePage.split("/");
+
+      createPage({
+        path: archivePage,
+        component: archivePageComponent,
+        context: {
+          dateStart: `${year}-${month}-00`,
+          dateEnd: `${year}-${month}-99`,
+        },
+      });
+    }
   });
 };
 
@@ -58,11 +78,21 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     } else if (templateKey === "microblog-post") {
       basePath = "micro";
     }
-    const value = createFilePath({ node, getNode, basePath });
+    const slug = createFilePath({ node, getNode, basePath });
     createNodeField({
       name: `slug`,
       node,
-      value
+      value: slug,
     });
+
+    const date = node.frontmatter.date;
+    if (date) {
+      const archivePage = date.substring(0, 7).replace("-", "/");
+      createNodeField({
+        name: "archivePage",
+        node,
+        value: archivePage,
+      });
+    }
   }
 };
