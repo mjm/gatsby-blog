@@ -58,6 +58,7 @@ module.exports = {
         modulePath: `${__dirname}/src/cms/cms.js`
       }
     },
+    "gatsby-plugin-force-trailing-slashes",
     "gatsby-plugin-postcss",
     {
       resolve: "gatsby-plugin-typography",

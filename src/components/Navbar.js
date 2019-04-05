@@ -25,7 +25,7 @@ const Navbar = () => {
         </li>
         <li className="m-0 p-0">
           <Link
-            to="/about"
+            to="/about/"
             className={linkClassName}
             activeClassName={activeLinkClassName}
           >
@@ -34,7 +34,7 @@ const Navbar = () => {
         </li>
         <li className="m-0 p-0">
           <Link
-            to="/music"
+            to="/music/"
             className={linkClassName}
             activeClassName={activeLinkClassName}
           >
@@ -43,7 +43,7 @@ const Navbar = () => {
         </li>
         <li className="m-0 p-0">
           <Link
-            to="/talks"
+            to="/talks/"
             className={linkClassName}
             activeClassName={activeLinkClassName}
           >
