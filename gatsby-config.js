@@ -3,8 +3,8 @@ var proxy = require("http-proxy-middleware");
 module.exports = {
   siteMetadata: {
     title: "Matt Moriarity",
-    description:
-      "This repo contains an example business website that is built with Gatsby, and Netlify CMS.It follows the JAMstack architecture by using Git as a single source of truth, and Netlify for continuous deployment, and CDN distribution."
+    description: "Matt's personal blog",
+    siteUrl: "https://new.mattmoriarity.com"
   },
   plugins: [
     "gatsby-plugin-react-helmet",
@@ -59,6 +59,56 @@ module.exports = {
       }
     },
     "gatsby-plugin-force-trailing-slashes",
+    {
+      resolve: "gatsby-plugin-feed",
+      options: {
+        feeds: [
+          {
+            query: `
+              {
+                allMarkdownRemark(
+                  filter: {
+                    frontmatter: {
+                      templateKey: { in: ["blog-post", "microblog-post"] }
+                    }
+                  },
+                  sort: { order: DESC, fields: [frontmatter___date] },
+                  limit: 20,
+                ) {
+                  edges {
+                    node {
+                      excerpt
+                      html
+                      fields { slug }
+                      frontmatter {
+                        title
+                        date
+                      }
+                    }
+                  }
+                }
+              }
+            `,
+            serialize({ query: { site, allMarkdownRemark } }) {
+              return allMarkdownRemark.edges.map(({ node }) => {
+                const url = site.siteMetadata.siteUrl + node.fields.slug;
+                const item = {
+                  title: node.frontmatter.title,
+                  date: node.frontmatter.date,
+                  description: node.excerpt,
+                  url,
+                  guid: url,
+                  custom_elements: [{ "content:encoded": node.html }]
+                };
+                return item;
+              });
+            },
+            output: "/feed.xml",
+            title: "Matt Moriarity"
+          }
+        ]
+      }
+    },
     "gatsby-plugin-postcss",
     {
       resolve: "gatsby-plugin-typography",
