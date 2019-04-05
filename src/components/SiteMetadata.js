@@ -8,6 +8,8 @@ const useSiteMetadata = () => {
           siteMetadata {
             title
             description
+            selfLinks
+            webmentionUsername
           }
         }
       }

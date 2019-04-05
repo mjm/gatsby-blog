@@ -4,7 +4,12 @@ module.exports = {
   siteMetadata: {
     title: "Matt Moriarity",
     description: "Matt's personal blog",
-    siteUrl: "https://new.mattmoriarity.com"
+    siteUrl: "https://new.mattmoriarity.com",
+    selfLinks: [
+      "https://github.com/mjm",
+      "mailto:matt@mattmoriarity.com",
+    ],
+    webmentionUsername: "mattmoriarity.com"
   },
   plugins: [
     "gatsby-plugin-react-helmet",

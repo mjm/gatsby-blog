@@ -7,7 +7,13 @@ import useSiteMetadata from "./SiteMetadata";
 import "./all.css";
 
 const TemplateWrapper = ({ children }) => {
-  const { title, description } = useSiteMetadata();
+  const {
+    title,
+    description,
+    selfLinks,
+    webmentionUsername
+  } = useSiteMetadata();
+
   return (
     <div className="bg-white w-full min-h-screen mt-2 pb-12 text-indigo-900">
       <Helmet>
@@ -15,9 +21,18 @@ const TemplateWrapper = ({ children }) => {
         <title>{title}</title>
         <meta name="description" content={description} />
 
-        <link rel="me" href="https://github.com/mjm" />
-        <link rel="me" href="mailto:matt@mattmoriarity.com" />
+        {selfLinks.map(href => (
+          <link rel="me" href={href} key={href} />
+        ))}
         <link rel="authorization_endpoint" href="https://indieauth.com/auth" />
+        <link
+          rel="webmention"
+          href={`https://webmention.io/${webmentionUsername}/webmention`}
+        />
+        <link
+          rel="pingback"
+          href={`https://webmention.io/${webmentionUsername}/xmlrpc`}
+        />
 
         <meta name="theme-color" content="#fff" />
 
