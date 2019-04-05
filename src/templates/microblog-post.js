@@ -8,13 +8,20 @@ export const MicroblogPostTemplate = ({
   content,
   contentComponent,
   date,
-  isoDate
+  isoDate,
+  photos
 }) => {
+  photos = photos || [];
   const PostContent = contentComponent || Content;
 
   return (
     <article className="h-entry mt-12 mb-10">
       <PostContent className="p-name e-content" content={content} />
+      {photos.map(photo => (
+        <figure key={photo}>
+          <img src={photo} className="u-photo" />
+        </figure>
+      ))}
       <div className="text-right mt-4">
         <time
           className="dt-published text-xs py-2 px-3 text-purple-600 bg-purple-100 rounded-lg uppercase no-underline"
@@ -31,7 +38,8 @@ MicroblogPostTemplate.propTypes = {
   content: PropTypes.node.isRequired,
   contentComponent: PropTypes.func,
   date: PropTypes.string,
-  isoDate: PropTypes.string
+  isoDate: PropTypes.string,
+  photos: PropTypes.array
 };
 
 const MicroblogPost = ({ data }) => {
@@ -44,6 +52,7 @@ const MicroblogPost = ({ data }) => {
         contentComponent={HTMLContent}
         date={post.frontmatter.date}
         isoDate={post.frontmatter.isoDate}
+        photos={post.frontmatter.photos}
       />
     </Layout>
   );
@@ -65,6 +74,7 @@ export const pageQuery = graphql`
       frontmatter {
         date(formatString: "MMM D, Y")
         isoDate: date(formatString: "YYYY-MM-DDTHH:mm:ssZ")
+        photos
       }
     }
   }
