@@ -14,6 +14,10 @@ albums:
     image: /img/deathofabachelor.png
     name: Death of a Bachelor
     url: 'https://itunes.apple.com/us/album/death-of-a-bachelor/1050385369'
+  - artist: Weezer
+    image: /img/pinkerton.png
+    name: Pinkerton
+    url: 'https://itunes.apple.com/us/album/pinkerton-deluxe-edition/1136783477'
 ---
 
 When somebody asks me about my taste in music, I panic a little bit. I like music, sometimes a little, sometimes a lot. I have no idea how to summarize it, though. I don't really think about how to describe it, and it's always changing.
