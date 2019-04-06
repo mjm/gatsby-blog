@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "gatsby";
 import { HTMLContent } from "./Content";
 import useSiteMetadata from "./SiteMetadata";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faComment } from "@fortawesome/free-solid-svg-icons";
 
 const BlogRoll = ({ posts }) => {
   const { siteUrl } = useSiteMetadata();
@@ -61,7 +63,10 @@ const BlogRollEntry = ({ siteUrl, post }) => {
         ))}
         <div className="flex flex-row justify-end items-baseline mt-4 text-xs">
           {mentionCount > 0 && (
-            <div className="text-purple-600 mr-2 text-sm">{mentionCount}</div>
+            <div className="text-purple-600 mr-2 text-sm">
+              <FontAwesomeIcon icon={faComment} className="mr-1 text-xs" />
+              {mentionCount}
+            </div>
           )}
           <Link
             to={post.fields.slug}
