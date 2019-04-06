@@ -4,8 +4,11 @@ import Helmet from "react-helmet";
 import { graphql } from "gatsby";
 import Layout from "../components/Layout";
 import Content, { HTMLContent } from "../components/Content";
+import Mentions from "../components/Mentions";
+import useSiteMetadata from "../components/SiteMetadata";
 
 export const BlogPostTemplate = ({
+  slug,
   content,
   contentComponent,
   date,
@@ -13,6 +16,9 @@ export const BlogPostTemplate = ({
   isoDate,
   title
 }) => {
+  const { siteUrl } = useSiteMetadata();
+  const url = slug && siteUrl + slug;
+
   const PostContent = contentComponent || Content;
 
   return (
@@ -30,6 +36,7 @@ export const BlogPostTemplate = ({
           {date}
         </time>
       </div>
+      <Mentions url={url} />
     </article>
   );
 };
@@ -49,6 +56,7 @@ const BlogPost = ({ data }) => {
   return (
     <Layout>
       <BlogPostTemplate
+        slug={post.fields.slug}
         content={post.html}
         contentComponent={HTMLContent}
         date={post.frontmatter.date}
@@ -77,6 +85,9 @@ export const pageQuery = graphql`
     markdownRemark(id: { eq: $id }) {
       id
       html
+      fields {
+        slug
+      }
       frontmatter {
         date(formatString: "MMM D, Y")
         isoDate: date(formatString: "YYYY-MM-DDTHH:mm:ssZ")

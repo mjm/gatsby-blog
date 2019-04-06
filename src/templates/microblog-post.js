@@ -3,14 +3,20 @@ import PropTypes from "prop-types";
 import { graphql } from "gatsby";
 import Layout from "../components/Layout";
 import Content, { HTMLContent } from "../components/Content";
+import Mentions from "../components/Mentions";
+import useSiteMetadata from "../components/SiteMetadata";
 
 export const MicroblogPostTemplate = ({
+  slug,
   content,
   contentComponent,
   date,
   isoDate,
   photos
 }) => {
+  const { siteUrl } = useSiteMetadata();
+  const url = slug && siteUrl + slug;
+
   photos = photos || [];
   const PostContent = contentComponent || Content;
 
@@ -30,6 +36,7 @@ export const MicroblogPostTemplate = ({
           {date}
         </time>
       </div>
+      <Mentions url={url} />
     </article>
   );
 };
@@ -48,6 +55,7 @@ const MicroblogPost = ({ data }) => {
   return (
     <Layout>
       <MicroblogPostTemplate
+        slug={post.fields.slug}
         content={post.html}
         contentComponent={HTMLContent}
         date={post.frontmatter.date}
@@ -71,6 +79,9 @@ export const pageQuery = graphql`
     markdownRemark(id: { eq: $id }) {
       id
       html
+      fields {
+        slug
+      }
       frontmatter {
         date(formatString: "MMM D, Y")
         isoDate: date(formatString: "YYYY-MM-DDTHH:mm:ssZ")

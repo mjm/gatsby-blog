@@ -1,6 +1,7 @@
 @tailwind components;
 
-.e-content a {
+.e-content a,
+.mention-content a {
   @apply text-purple-700;
 }
 
