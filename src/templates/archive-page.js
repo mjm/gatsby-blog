@@ -1,10 +1,12 @@
-import React from 'react';
-import { graphql } from 'gatsby';
-import Layout from '../components/Layout'
-import BlogRoll from '../components/BlogRoll'
+import React from "react";
+import { graphql } from "gatsby";
+import Layout from "../components/Layout";
+import BlogRoll from "../components/BlogRoll";
 
 const ArchivePage = ({ data }) => {
-  const { allMarkdownRemark: { edges } } = data;
+  const {
+    allMarkdownRemark: { edges }
+  } = data;
 
   return (
     <Layout>
@@ -20,10 +22,10 @@ export const pageQuery = graphql`
     allMarkdownRemark(
       filter: {
         frontmatter: {
-          date: { gte: $dateStart, lte: $dateEnd },
+          date: { gte: $dateStart, lte: $dateEnd }
           templateKey: { in: ["blog-post", "microblog-post"] }
-        },
-      },
+        }
+      }
       sort: { fields: [frontmatter___date], order: [DESC] }
     ) {
       edges {
@@ -39,6 +41,7 @@ export const pageQuery = graphql`
             templateKey
             date(formatString: "MMM D, Y")
             isoDate: date(formatString: "YYYY-MM-DDTHH:mm:ssZ")
+            photos
           }
         }
       }

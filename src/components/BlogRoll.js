@@ -1,4 +1,4 @@
-import React, { useEffect,  useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "gatsby";
 import { HTMLContent } from "./Content";
 import useSiteMetadata from "./SiteMetadata";
@@ -21,7 +21,7 @@ const BlogRollEntry = ({ siteUrl, post }) => {
 
   const [mentionCount, setMentionCount] = useState(0);
   useEffect(() => {
-    loadMentionCount()
+    loadMentionCount();
   }, [entryUrl]);
 
   async function loadMentionCount() {
@@ -33,6 +33,8 @@ const BlogRollEntry = ({ siteUrl, post }) => {
 
     setMentionCount(responseJson.count);
   }
+
+  const photos = post.frontmatter.photos || [];
 
   return (
     <div>
@@ -52,11 +54,15 @@ const BlogRollEntry = ({ siteUrl, post }) => {
         ) : (
           <HTMLContent className="e-content" content={post.html} />
         )}
+        {photos.map(photo => (
+          <figure key={photo}>
+            <img src={photo} className="u-photo" />
+          </figure>
+        ))}
         <div className="flex flex-row justify-end items-baseline mt-4 text-xs">
-          {mentionCount > 0 &&
-            <div className="text-purple-600 mr-2 text-sm">
-              {mentionCount}
-            </div>}
+          {mentionCount > 0 && (
+            <div className="text-purple-600 mr-2 text-sm">{mentionCount}</div>
+          )}
           <Link
             to={post.fields.slug}
             className="u-url text-purple-600 bg-purple-100 rounded-lg uppercase no-underline px-2 pb-px pt-1 border-0 border-b-2 border-solid border-transparent hover:border-purple-500"
