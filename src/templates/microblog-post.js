@@ -25,7 +25,7 @@ export const MicroblogPostTemplate = ({
       <PostContent className="p-name e-content" content={content} />
       {photos.map(photo => (
         <figure key={photo}>
-          <img src={photo} className="u-photo" />
+          <img src={photo} alt="" className="u-photo" />
         </figure>
       ))}
       <div className="text-right mt-4">

@@ -22,7 +22,7 @@ const Mentions = ({ url }) => {
     setMentions(responseJson.children);
   }
 
-  if (mentions.length == 0) {
+  if (mentions.length === 0) {
     return null;
   }
 
@@ -64,7 +64,11 @@ const Mention = ({ mention }) => {
 const MentionAvatar = ({ mention }) => {
   return (
     <a href={mention.author.url}>
-      <img src={mention.author.photo} className="w-10 mb-0 rounded-full" />
+      <img
+        src={mention.author.photo}
+        alt={mention.author.name}
+        className="w-10 mb-0 rounded-full"
+      />
     </a>
   );
 };

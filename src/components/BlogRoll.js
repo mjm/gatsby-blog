@@ -58,7 +58,7 @@ const BlogRollEntry = ({ siteUrl, post }) => {
         )}
         {photos.map(photo => (
           <figure key={photo}>
-            <img src={photo} className="u-photo" />
+            <img src={photo} alt="" className="u-photo" />
           </figure>
         ))}
         <div className="flex flex-row justify-end items-baseline mt-4 text-xs">
