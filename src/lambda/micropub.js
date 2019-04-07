@@ -1,5 +1,5 @@
 import GitHub from "github-api";
-import { URLSearchParams } from "url";
+import { URL, URLSearchParams } from "url";
 import slug from "slug";
 import * as rs from "randomstring";
 import moment from "moment";
@@ -49,6 +49,7 @@ const TOKEN_URL = "https://tokens.indieauth.com/token";
 async function isValidAuth(event) {
   const token = getAuthToken(event);
   if (!token) {
+    console.error("No token!");
     return false;
   }
 
@@ -59,12 +60,13 @@ async function isValidAuth(event) {
     }
   });
   if (!response.ok) {
+    console.error("Bad response from token endpoint");
     return false;
   }
 
   const responseJson = await response.json();
 
-  const expectedMe = new URL(siteUrl).hostname;
+  const expectedMe = new URL(baseUrl).hostname;
   const actualMe = new URL(responseJson.me).hostname;
   if (expectedMe !== actualMe) {
     return false;
@@ -74,9 +76,9 @@ async function isValidAuth(event) {
 }
 
 function getAuthToken(event) {
-  for (const key in Object.keys(event.headers)) {
+  for (const key of Object.keys(event.headers)) {
     if (key.toLowerCase() === "authorization") {
-      const value = event.headers[value];
+      const value = event.headers[key];
       const [type, token] = value.split(" ");
       if (type !== "Bearer") {
         throw new Error(`Invalid authorization type '${type}`);
