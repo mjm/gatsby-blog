@@ -10,6 +10,7 @@ const TemplateWrapper = ({ children }) => {
   const {
     title,
     description,
+    siteUrl,
     selfLinks,
     webmentionUsername
   } = useSiteMetadata();
@@ -25,6 +26,8 @@ const TemplateWrapper = ({ children }) => {
           <link rel="me" href={href} key={href} />
         ))}
         <link rel="authorization_endpoint" href="https://indieauth.com/auth" />
+        <link rel="token_endpoint" href="https://tokens.indieauth.com/token" />
+        <link rel="micropub" href={`${siteUrl}/.netlify/functions/micropub`} />
         <link
           rel="webmention"
           href={`https://webmention.io/${webmentionUsername}/webmention`}
