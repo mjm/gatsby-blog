@@ -4,11 +4,8 @@ module.exports = {
   siteMetadata: {
     title: "Matt Moriarity",
     description: "Matt's personal blog",
-    siteUrl: "https://new.mattmoriarity.com",
-    selfLinks: [
-      "https://github.com/mjm",
-      "mailto:matt@mattmoriarity.com",
-    ],
+    siteUrl: "https://www.mattmoriarity.com",
+    selfLinks: ["https://github.com/mjm", "mailto:matt@mattmoriarity.com"],
     webmentionUsername: "mattmoriarity.com"
   },
   plugins: [
