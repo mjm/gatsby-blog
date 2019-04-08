@@ -16,21 +16,28 @@ export const MusicPageTemplate = ({
       <h2 className="p-name">{title}</h2>
       <div className="e-content">
         <PageContent content={content} />
-        {albums.map(album => (
-          <div key={`${album.name}-${album.artist}`}>
-            <h3>
-              <em>{album.name}</em> - {album.artist}
-            </h3>
-            <p>
-              <a href={album.url}>
-                <img
-                  src={`${album.image}?nf_resize=fit&w=300&h=300`}
-                  alt={`${album.name} - ${album.artist}`}
-                />
-              </a>
-            </p>
-          </div>
-        ))}
+        <div className="flex flex-row flex-wrap">
+          {albums.map(album => (
+            <div
+              key={`${album.name}-${album.artist}`}
+              className="sm:w-1/2 p-2 text-center leading-snug"
+            >
+              <div>
+                <a href={album.url}>
+                  <img
+                    src={`${album.image}?nf_resize=fit&w=300&h=300`}
+                    alt={`${album.name} - ${album.artist}`}
+                    className="m-0 shadow-lg"
+                  />
+                </a>
+              </div>
+              <div>
+                <em>{album.name}</em>
+              </div>
+              <div className="text-sm uppercase">{album.artist}</div>
+            </div>
+          ))}
+        </div>
       </div>
     </article>
   );
