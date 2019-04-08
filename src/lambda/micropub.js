@@ -171,7 +171,7 @@ function readPostJson(str) {
   if (props.name) {
     post.name = props.name[0];
   }
-  if (input.content) {
+  if (props.content) {
     post.content = props.content[0];
   }
   if (props["mp-slug"]) {
