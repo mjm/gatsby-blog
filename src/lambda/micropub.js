@@ -25,10 +25,7 @@ export async function handler(event) {
   }
 
   const post = readPost(event);
-  return {
-    statusCode: 200,
-    body: JSON.stringify(post)
-  };
+  console.log(post);
   const postFile = renderPost(post);
 
   await repo.writeFile(
