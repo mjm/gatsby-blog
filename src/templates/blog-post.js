@@ -22,7 +22,7 @@ export const BlogPostTemplate = ({
   const PostContent = contentComponent || Content;
 
   return (
-    <article className="section">
+    <article className="h-entry mt-12 mb-10">
       {helmet || ""}
       <h1 className="p-name">{title}</h1>
       <div className="e-content">
