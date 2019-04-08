@@ -21,7 +21,7 @@ export const ProjectPageTemplate = ({
         <div className="-mt-1 mb-3 text-sm">
           <a
             href={`https://github.com/${repository}`}
-            className="no-underline inline-flex items-center py-1 px-2 bg-purple-100 rounded border-solid border border-purple-200"
+            className="text-purple-800 no-underline inline-flex items-center py-1 px-2 bg-purple-100 rounded border-solid border border-purple-200"
           >
             <FontAwesomeIcon icon={faGithub} />
             <span className="ml-2 text-xs">{repository}</span>
