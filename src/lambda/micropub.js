@@ -94,11 +94,23 @@ function getAuthToken(event) {
 function readPost(event) {
   const contentType = getContentType(event);
 
+  let post;
   if (contentType === "application/x-www-form-urlencoded") {
-    return readPostUrlEncoded(event.body);
+    post = readPostUrlEncoded(event.body);
   } else if (contentType === "application/json") {
-    return readPostJson(event.body);
+    post = readPostJson(event.body);
+  } else {
+    return null;
   }
+
+  post.templateKey = post.name ? "blog-post" : "microblog-post";
+  post.slug = createSlug(post);
+  post.published = new Date();
+  post.urlPath =
+    "/" + moment.utc(post.published).format("YYYY-MM-DD-") + post.slug;
+  post.path = createPath(post);
+
+  return post;
 }
 
 function renderPost(post) {
@@ -145,12 +157,26 @@ function readPostUrlEncoded(str) {
     throw new Error("Cannot create a post that is not an entry.");
   }
 
-  post.templateKey = post.name ? "blog-post" : "microblog-post";
-  post.slug = createSlug(post);
-  post.published = new Date();
-  post.urlPath =
-    "/" + moment.utc(post.published).format("YYYY-MM-DD-") + post.slug;
-  post.path = createPath(post);
+  return post;
+}
+
+function readPostJson(str) {
+  const input = JSON.parse(str);
+
+  if (input.type !== "h-entry") {
+    throw new Error("Cannot create a post that is not an entry.");
+  }
+
+  const post = { type: "entry" };
+  if (input.name) {
+    post.name = input.name;
+  }
+  if (input.content) {
+    post.content = input.content;
+  }
+  if (input["mp-slug"]) {
+    post.slug = input["mp-slug"];
+  }
 
   return post;
 }
