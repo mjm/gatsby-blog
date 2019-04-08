@@ -34,6 +34,16 @@ const Navbar = () => {
         </li>
         <li className="m-0 p-0">
           <Link
+            to="/projects/"
+            className={linkClassName}
+            activeClassName={activeLinkClassName}
+            partiallyActive
+          >
+            Projects
+          </Link>
+        </li>
+        <li className="m-0 p-0">
+          <Link
             to="/music/"
             className={linkClassName}
             activeClassName={activeLinkClassName}
