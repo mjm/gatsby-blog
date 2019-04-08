@@ -25,6 +25,10 @@ export async function handler(event) {
   }
 
   const post = readPost(event);
+  return {
+    statusCode: 200,
+    body: JSON.stringify(post)
+  };
   const postFile = renderPost(post);
 
   await repo.writeFile(
@@ -161,6 +165,7 @@ function readPostUrlEncoded(str) {
 }
 
 function readPostJson(str) {
+  console.log(str);
   const { type, properties: props } = JSON.parse(str);
 
   if (type[0] !== "h-entry") {
