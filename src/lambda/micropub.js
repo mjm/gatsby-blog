@@ -163,19 +163,19 @@ function readPostUrlEncoded(str) {
 function readPostJson(str) {
   const input = JSON.parse(str);
 
-  if (input.type !== "h-entry") {
+  if (input.type[0] !== "h-entry") {
     throw new Error("Cannot create a post that is not an entry.");
   }
 
   const post = { type: "entry" };
   if (input.name) {
-    post.name = input.name;
+    post.name = input.name[0];
   }
   if (input.content) {
-    post.content = input.content;
+    post.content = input.content[0];
   }
   if (input["mp-slug"]) {
-    post.slug = input["mp-slug"];
+    post.slug = input["mp-slug"][0];
   }
 
   return post;
