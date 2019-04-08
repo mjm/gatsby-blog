@@ -42,6 +42,9 @@ module.exports = {
                 include: ["Instagram", "Twitter", "YouTube"]
               }
             }
+          },
+          {
+            resolve: "gatsby-remark-prismjs"
           }
         ]
       }

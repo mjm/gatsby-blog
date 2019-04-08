@@ -5,4 +5,12 @@
   @apply text-purple-700;
 }
 
+code,
+pre {
+  font-size: 16px !important;
+  font-variant-ligatures: none;
+  margin-top: 0 !important;
+  margin-bottom: 1rem !important;
+}
+
 @tailwind utilities;
