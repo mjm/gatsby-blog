@@ -1,10 +1,10 @@
-const _ = require("lodash");
-const path = require("path");
-const { createFilePath } = require("gatsby-source-filesystem");
-const { fmImagesToRelative } = require("gatsby-remark-relative-images");
+const _ = require("lodash")
+const path = require("path")
+const { createFilePath } = require("gatsby-source-filesystem")
+const { fmImagesToRelative } = require("gatsby-remark-relative-images")
 
 exports.createPages = ({ actions, graphql }) => {
-  const { createPage } = actions;
+  const { createPage } = actions
 
   return graphql(`
     {
@@ -25,19 +25,19 @@ exports.createPages = ({ actions, graphql }) => {
     }
   `).then(result => {
     if (result.errors) {
-      result.errors.forEach(e => console.error(e.toString()));
-      return Promise.reject(result.errors);
+      result.errors.forEach(e => console.error(e.toString()))
+      return Promise.reject(result.errors)
     }
 
-    const posts = result.data.allMarkdownRemark.edges;
-    const archivePages = new Set();
+    const posts = result.data.allMarkdownRemark.edges
+    const archivePages = new Set()
 
     posts.forEach(edge => {
       if (edge.node.fields.archivePage) {
-        archivePages.add(edge.node.fields.archivePage);
+        archivePages.add(edge.node.fields.archivePage)
       }
 
-      const id = edge.node.id;
+      const id = edge.node.id
       createPage({
         path: edge.node.fields.slug,
         component: path.resolve(
@@ -45,14 +45,14 @@ exports.createPages = ({ actions, graphql }) => {
         ),
         // additional data can be passed via context
         context: {
-          id
-        }
-      });
-    });
+          id,
+        },
+      })
+    })
 
-    const archivePageComponent = path.resolve("src/templates/archive-page.js");
+    const archivePageComponent = path.resolve("src/templates/archive-page.js")
     for (const archivePage of archivePages) {
-      const [year, month] = archivePage.split("/");
+      const [year, month] = archivePage.split("/")
 
       createPage({
         path: archivePage,
@@ -61,38 +61,38 @@ exports.createPages = ({ actions, graphql }) => {
           dateStart: `${year}-${month}-00`,
           dateEnd: `${year}-${month}-99`,
         },
-      });
+      })
     }
-  });
-};
+  })
+}
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
-  const { createNodeField } = actions;
-  fmImagesToRelative(node); // convert image paths for gatsby images
+  const { createNodeField } = actions
+  fmImagesToRelative(node) // convert image paths for gatsby images
 
   if (node.internal.type === `MarkdownRemark`) {
-    const templateKey = node.frontmatter.templateKey || "";
-    let basePath = "";
+    const templateKey = node.frontmatter.templateKey || ""
+    let basePath = ""
     if (templateKey === "blog-post") {
-      basePath = "blog";
+      basePath = "blog"
     } else if (templateKey === "microblog-post") {
-      basePath = "micro";
+      basePath = "micro"
     }
-    const slug = createFilePath({ node, getNode, basePath });
+    const slug = createFilePath({ node, getNode, basePath })
     createNodeField({
       name: `slug`,
       node,
       value: slug,
-    });
+    })
 
-    const date = node.frontmatter.date;
+    const date = node.frontmatter.date
     if (date) {
-      const archivePage = date.substring(0, 7).replace("-", "/");
+      const archivePage = date.substring(0, 7).replace("-", "/")
       createNodeField({
         name: "archivePage",
         node,
         value: archivePage,
-      });
+      })
     }
   }
-};
+}

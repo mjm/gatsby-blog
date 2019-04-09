@@ -1,18 +1,18 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { graphql } from "gatsby";
-import Layout from "../components/Layout";
-import Content, { HTMLContent } from "../components/Content";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import React from "react"
+import PropTypes from "prop-types"
+import { graphql } from "gatsby"
+import Layout from "../components/Layout"
+import Content, { HTMLContent } from "../components/Content"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faGithub } from "@fortawesome/free-brands-svg-icons"
 
 export const ProjectPageTemplate = ({
   title,
   repository,
   content,
-  contentComponent
+  contentComponent,
 }) => {
-  const PageContent = contentComponent || Content;
+  const PageContent = contentComponent || Content
 
   return (
     <article className="h-entry mt-12 mb-10">
@@ -30,17 +30,17 @@ export const ProjectPageTemplate = ({
       )}
       <PageContent className="e-content" content={content} />
     </article>
-  );
-};
+  )
+}
 
 ProjectPageTemplate.propTypes = {
   title: PropTypes.string.isRequired,
   content: PropTypes.string,
-  contentComponent: PropTypes.func
-};
+  contentComponent: PropTypes.func,
+}
 
 const ProjectPage = ({ data }) => {
-  const { markdownRemark: post } = data;
+  const { markdownRemark: post } = data
 
   return (
     <Layout>
@@ -51,14 +51,14 @@ const ProjectPage = ({ data }) => {
         content={post.html}
       />
     </Layout>
-  );
-};
+  )
+}
 
 ProjectPage.propTypes = {
-  data: PropTypes.object.isRequired
-};
+  data: PropTypes.object.isRequired,
+}
 
-export default ProjectPage;
+export default ProjectPage
 
 export const aboutPageQuery = graphql`
   query ProjectPage($id: String!) {
@@ -70,4 +70,4 @@ export const aboutPageQuery = graphql`
       }
     }
   }
-`;
+`

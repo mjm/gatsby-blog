@@ -1,13 +1,15 @@
-import React from 'react';
-import { Link, graphql } from 'gatsby';
-import { orderBy } from 'lodash';
-import moment from 'moment';
-import Layout from '../../components/Layout'
+import React from "react"
+import { Link, graphql } from "gatsby"
+import { orderBy } from "lodash"
+import moment from "moment"
+import Layout from "../../components/Layout"
 
 const ArchivesPage = ({ data }) => {
-  const { allMarkdownRemark: { archivePages } } = data;
+  const {
+    allMarkdownRemark: { archivePages },
+  } = data
 
-  const pages = orderBy(archivePages, 'fieldValue', 'desc');
+  const pages = orderBy(archivePages, "fieldValue", "desc")
 
   return (
     <Layout>
@@ -18,29 +20,28 @@ const ArchivesPage = ({ data }) => {
             <li key={fieldValue}>
               <Link to={`/${fieldValue}/`} className="text-purple-700">
                 {friendlyMonth(fieldValue)}
-              </Link>
-              {' '}
-              <span className="text-sm text-purple-400">
-                ({totalCount})
-              </span>
+              </Link>{" "}
+              <span className="text-sm text-purple-400">({totalCount})</span>
             </li>
           ))}
         </ul>
       </section>
     </Layout>
-  );
-};
-
-function friendlyMonth(value) {
-  return moment.utc(value, "YYYY/MM").format("MMMM Y");
+  )
 }
 
-export default ArchivesPage;
+function friendlyMonth(value) {
+  return moment.utc(value, "YYYY/MM").format("MMMM Y")
+}
+
+export default ArchivesPage
 
 export const pageQuery = graphql`
   query GetArchivePages {
     allMarkdownRemark(
-      filter: { frontmatter: { templateKey: { in: ["blog-post", "microblog-post"] } } }
+      filter: {
+        frontmatter: { templateKey: { in: ["blog-post", "microblog-post"] } }
+      }
     ) {
       archivePages: group(field: fields___archivePage) {
         fieldValue
@@ -48,4 +49,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`;
+`

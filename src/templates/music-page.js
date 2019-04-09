@@ -1,15 +1,15 @@
-import React from "react";
-import { graphql } from "gatsby";
-import Layout from "../components/Layout";
-import Content, { HTMLContent } from "../components/Content";
+import React from "react"
+import { graphql } from "gatsby"
+import Layout from "../components/Layout"
+import Content, { HTMLContent } from "../components/Content"
 
 export const MusicPageTemplate = ({
   title,
   content,
   contentComponent,
-  albums
+  albums,
 }) => {
-  const PageContent = contentComponent || Content;
+  const PageContent = contentComponent || Content
 
   return (
     <article className="h-entry mt-12 mb-10">
@@ -40,11 +40,11 @@ export const MusicPageTemplate = ({
         </div>
       </div>
     </article>
-  );
-};
+  )
+}
 
 const MusicPage = ({ data }) => {
-  const { markdownRemark: post } = data;
+  const { markdownRemark: post } = data
 
   return (
     <Layout>
@@ -55,10 +55,10 @@ const MusicPage = ({ data }) => {
         albums={post.frontmatter.albums}
       />
     </Layout>
-  );
-};
+  )
+}
 
-export default MusicPage;
+export default MusicPage
 
 export const pageQuery = graphql`
   query MusicPage($id: String!) {
@@ -75,4 +75,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`;
+`

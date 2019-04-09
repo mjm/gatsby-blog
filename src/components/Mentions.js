@@ -1,29 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { HTMLContent } from "./Content";
-import moment from "moment";
+import React, { useEffect, useState } from "react"
+import { HTMLContent } from "./Content"
+import moment from "moment"
 
 const Mentions = ({ url }) => {
-  const [mentions, setMentions] = useState([]);
+  const [mentions, setMentions] = useState([])
   useEffect(() => {
-    loadMentions();
-  }, [url]);
+    loadMentions()
+  }, [url])
 
   async function loadMentions() {
     if (!url) {
-      return;
+      return
     }
 
-    const search = new URLSearchParams({ target: url });
-    const fetchUrl = `https://webmention.io/api/mentions.jf2?${search.toString()}`;
+    const search = new URLSearchParams({ target: url })
+    const fetchUrl = `https://webmention.io/api/mentions.jf2?${search.toString()}`
 
-    const response = await fetch(fetchUrl);
-    const responseJson = await response.json();
+    const response = await fetch(fetchUrl)
+    const responseJson = await response.json()
 
-    setMentions(responseJson.children);
+    setMentions(responseJson.children)
   }
 
   if (mentions.length === 0) {
-    return null;
+    return null
   }
 
   return (
@@ -34,8 +34,8 @@ const Mentions = ({ url }) => {
         <Mention key={mention.url} mention={mention} />
       ))}
     </div>
-  );
-};
+  )
+}
 
 const Mention = ({ mention }) => {
   return (
@@ -58,8 +58,8 @@ const Mention = ({ mention }) => {
         />
       </div>
     </article>
-  );
-};
+  )
+}
 
 const MentionAvatar = ({ mention }) => {
   return (
@@ -70,8 +70,8 @@ const MentionAvatar = ({ mention }) => {
         className="w-10 mb-0 rounded-full"
       />
     </a>
-  );
-};
+  )
+}
 
 const MentionAuthor = ({ mention }) => {
   return (
@@ -81,21 +81,21 @@ const MentionAuthor = ({ mention }) => {
     >
       {mention.author.name}
     </a>
-  );
-};
+  )
+}
 
 const MentionTimestamp = ({ mention }) => {
   if (!mention.published) {
-    return null;
+    return null
   }
 
-  const formatted = moment(mention.published).format("MMM D, Y H:MM A");
+  const formatted = moment(mention.published).format("MMM D, Y H:MM A")
 
   return (
     <a href={mention.url} className="text-purple-700 no-underline">
       <time dateTime={mention.published}>{formatted}</time>
     </a>
-  );
-};
+  )
+}
 
-export default Mentions;
+export default Mentions

@@ -1,10 +1,10 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { graphql } from "gatsby";
-import Layout from "../components/Layout";
-import Content, { HTMLContent } from "../components/Content";
-import Mentions from "../components/Mentions";
-import useSiteMetadata from "../components/SiteMetadata";
+import React from "react"
+import PropTypes from "prop-types"
+import { graphql } from "gatsby"
+import Layout from "../components/Layout"
+import Content, { HTMLContent } from "../components/Content"
+import Mentions from "../components/Mentions"
+import useSiteMetadata from "../components/SiteMetadata"
 
 export const MicroblogPostTemplate = ({
   slug,
@@ -12,13 +12,13 @@ export const MicroblogPostTemplate = ({
   contentComponent,
   date,
   isoDate,
-  photos
+  photos,
 }) => {
-  const { siteUrl } = useSiteMetadata();
-  const url = slug && siteUrl + slug;
+  const { siteUrl } = useSiteMetadata()
+  const url = slug && siteUrl + slug
 
-  photos = photos || [];
-  const PostContent = contentComponent || Content;
+  photos = photos || []
+  const PostContent = contentComponent || Content
 
   return (
     <article className="h-entry mt-12 mb-10">
@@ -38,19 +38,19 @@ export const MicroblogPostTemplate = ({
       </div>
       <Mentions url={url} />
     </article>
-  );
-};
+  )
+}
 
 MicroblogPostTemplate.propTypes = {
   content: PropTypes.node.isRequired,
   contentComponent: PropTypes.func,
   date: PropTypes.string,
   isoDate: PropTypes.string,
-  photos: PropTypes.array
-};
+  photos: PropTypes.array,
+}
 
 const MicroblogPost = ({ data }) => {
-  const { markdownRemark: post } = data;
+  const { markdownRemark: post } = data
 
   return (
     <Layout>
@@ -63,16 +63,16 @@ const MicroblogPost = ({ data }) => {
         photos={post.frontmatter.photos}
       />
     </Layout>
-  );
-};
+  )
+}
 
 MicroblogPost.propTypes = {
   data: PropTypes.shape({
-    markdownRemark: PropTypes.object
-  })
-};
+    markdownRemark: PropTypes.object,
+  }),
+}
 
-export default MicroblogPost;
+export default MicroblogPost
 
 export const pageQuery = graphql`
   query MicroblogPostByID($id: String!) {
@@ -89,4 +89,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`;
+`

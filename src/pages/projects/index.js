@@ -1,11 +1,11 @@
-import React from "react";
-import Layout from "../../components/Layout";
-import { graphql, Link } from "gatsby";
+import React from "react"
+import Layout from "../../components/Layout"
+import { graphql, Link } from "gatsby"
 
 const ProjectsPage = ({ data }) => {
   const {
-    allMarkdownRemark: { nodes: projects }
-  } = data;
+    allMarkdownRemark: { nodes: projects },
+  } = data
 
   return (
     <Layout>
@@ -16,8 +16,8 @@ const ProjectsPage = ({ data }) => {
         ))}
       </article>
     </Layout>
-  );
-};
+  )
+}
 
 const ProjectCell = ({ project }) => {
   return (
@@ -31,10 +31,10 @@ const ProjectCell = ({ project }) => {
         </p>
       </Link>
     </div>
-  );
-};
+  )
+}
 
-export default ProjectsPage;
+export default ProjectsPage
 
 export const pageQuery = graphql`
   query ProjectPages {
@@ -53,4 +53,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`;
+`

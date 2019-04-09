@@ -1,12 +1,12 @@
-import React from "react";
-import { Link, graphql } from "gatsby";
-import Layout from "../components/Layout";
-import BlogRoll from "../components/BlogRoll";
+import React from "react"
+import { Link, graphql } from "gatsby"
+import Layout from "../components/Layout"
+import BlogRoll from "../components/BlogRoll"
 
 const IndexPage = ({ data }) => {
   const {
-    allMarkdownRemark: { edges }
-  } = data;
+    allMarkdownRemark: { edges },
+  } = data
 
   return (
     <Layout>
@@ -21,10 +21,10 @@ const IndexPage = ({ data }) => {
         </p>
       </div>
     </Layout>
-  );
-};
+  )
+}
 
-export default IndexPage;
+export default IndexPage
 
 export const pageQuery = graphql`
   query IndexQuery {
@@ -54,4 +54,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`;
+`

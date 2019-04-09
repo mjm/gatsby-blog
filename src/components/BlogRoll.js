@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "gatsby";
-import { HTMLContent } from "./Content";
-import useSiteMetadata from "./SiteMetadata";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComment } from "@fortawesome/free-solid-svg-icons";
+import React, { useEffect, useState } from "react"
+import { Link } from "gatsby"
+import { HTMLContent } from "./Content"
+import useSiteMetadata from "./SiteMetadata"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faComment } from "@fortawesome/free-solid-svg-icons"
 
 const BlogRoll = ({ posts }) => {
-  const { siteUrl } = useSiteMetadata();
+  const { siteUrl } = useSiteMetadata()
 
   return (
     <div className="h-feed">
@@ -15,28 +15,28 @@ const BlogRoll = ({ posts }) => {
           <BlogRollEntry key={post.id} post={post} siteUrl={siteUrl} />
         ))}
     </div>
-  );
-};
+  )
+}
 
 const BlogRollEntry = ({ siteUrl, post }) => {
-  const entryUrl = siteUrl + post.fields.slug;
+  const entryUrl = siteUrl + post.fields.slug
 
-  const [mentionCount, setMentionCount] = useState(0);
+  const [mentionCount, setMentionCount] = useState(0)
   useEffect(() => {
-    loadMentionCount();
-  }, [entryUrl]);
+    loadMentionCount()
+  }, [entryUrl])
 
   async function loadMentionCount() {
-    const search = new URLSearchParams({ target: entryUrl });
-    const fetchUrl = `https://webmention.io/api/count?${search.toString()}`;
+    const search = new URLSearchParams({ target: entryUrl })
+    const fetchUrl = `https://webmention.io/api/count?${search.toString()}`
 
-    const response = await fetch(fetchUrl);
-    const responseJson = await response.json();
+    const response = await fetch(fetchUrl)
+    const responseJson = await response.json()
 
-    setMentionCount(responseJson.count);
+    setMentionCount(responseJson.count)
   }
 
-  const photos = post.frontmatter.photos || [];
+  const photos = post.frontmatter.photos || []
 
   return (
     <div>
@@ -84,7 +84,7 @@ const BlogRollEntry = ({ siteUrl, post }) => {
       </article>
       <hr className="h-1 bg-purple-100 mx-auto w-1/3 rounded-full" />
     </div>
-  );
-};
+  )
+}
 
-export default BlogRoll;
+export default BlogRoll

@@ -1,10 +1,10 @@
-import React from "react";
-import { Link } from "gatsby";
+import React from "react"
+import { Link } from "gatsby"
 
 const linkClassName =
-  "block pt-2 pb-1 mx-1 my-0 px-1 border-solid border-0 border-b-4 border-transparent hover:border-purple-300 text-purple-600 no-underline";
+  "block pt-2 pb-1 mx-1 my-0 px-1 border-solid border-0 border-b-4 border-transparent hover:border-purple-300 text-purple-600 no-underline"
 const activeLinkClassName =
-  "font-bold border-purple-500 hover:border-purple-500";
+  "font-bold border-purple-500 hover:border-purple-500"
 
 const Navbar = () => {
   return (
@@ -62,7 +62,7 @@ const Navbar = () => {
         </li>
       </ul>
     </nav>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

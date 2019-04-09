@@ -1,21 +1,21 @@
-import React from "react";
-import { graphql } from "gatsby";
-import Layout from "../components/Layout";
-import BlogRoll from "../components/BlogRoll";
+import React from "react"
+import { graphql } from "gatsby"
+import Layout from "../components/Layout"
+import BlogRoll from "../components/BlogRoll"
 
 const ArchivePage = ({ data }) => {
   const {
-    allMarkdownRemark: { edges }
-  } = data;
+    allMarkdownRemark: { edges },
+  } = data
 
   return (
     <Layout>
       <BlogRoll posts={edges} />
     </Layout>
-  );
-};
+  )
+}
 
-export default ArchivePage;
+export default ArchivePage
 
 export const pageQuery = graphql`
   query GetArchivedPosts($dateStart: Date!, $dateEnd: Date!) {
@@ -47,4 +47,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`;
+`

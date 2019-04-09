@@ -1,10 +1,10 @@
-import React from "react";
-import Helmet from "react-helmet";
-import Header from "../components/Header";
-import Navbar from "../components/Navbar";
-import useSiteMetadata from "./SiteMetadata";
+import React from "react"
+import Helmet from "react-helmet"
+import Header from "../components/Header"
+import Navbar from "../components/Navbar"
+import useSiteMetadata from "./SiteMetadata"
 
-import "./all.css";
+import "./all.css"
 
 const TemplateWrapper = ({ children }) => {
   const {
@@ -12,8 +12,8 @@ const TemplateWrapper = ({ children }) => {
     description,
     siteUrl,
     selfLinks,
-    webmentionUsername
-  } = useSiteMetadata();
+    webmentionUsername,
+  } = useSiteMetadata()
 
   return (
     <div className="bg-white w-full min-h-screen mt-2 pb-12 text-indigo-900">
@@ -51,7 +51,7 @@ const TemplateWrapper = ({ children }) => {
         <section className="max-w-lg mx-auto px-3 mt-6">{children}</section>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default TemplateWrapper;
+export default TemplateWrapper
