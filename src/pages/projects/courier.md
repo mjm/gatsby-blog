@@ -5,6 +5,12 @@ repository: mjm/courier
 description: >
   A service for crossposting from microblogs to Twitter.
   Responsible for sending the posts on this site to my Twitter account.
+uses:
+- Ruby
+- Rails
+- Elm
+- PostgreSQL
+- Heroku
 ---
 
 Crossposting from a blog to Twitter is not a novel concept.

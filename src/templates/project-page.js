@@ -5,10 +5,12 @@ import Layout from "../components/Layout"
 import Content, { HTMLContent } from "../components/Content"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faGithub } from "@fortawesome/free-brands-svg-icons"
+import { faTools } from "@fortawesome/free-solid-svg-icons"
 
 export const ProjectPageTemplate = ({
   title,
   repository,
+  uses,
   content,
   contentComponent,
 }) => {
@@ -17,17 +19,25 @@ export const ProjectPageTemplate = ({
   return (
     <article className="h-entry mt-12 mb-10">
       <h2 className="p-name">{title}</h2>
-      {repository && (
-        <div className="-mt-1 mb-3 text-sm">
-          <a
-            href={`https://github.com/${repository}`}
-            className="text-purple-800 no-underline inline-flex items-center py-1 px-2 bg-purple-100 rounded border-solid border border-purple-200"
-          >
-            <FontAwesomeIcon icon={faGithub} />
-            <span className="ml-2 text-xs">{repository}</span>
-          </a>
-        </div>
-      )}
+      <div className="flex flex-row flex-wrap -mt-1 mb-1 text-sm text-purple-800">
+        {repository && (
+          <div>
+            <a
+              href={`https://github.com/${repository}`}
+              className="text-purple-800 no-underline inline-flex items-center mr-2 py-1 px-2 mb-2 bg-purple-100 rounded border-solid border border-purple-200"
+            >
+              <FontAwesomeIcon icon={faGithub} />
+              <span className="ml-2 text-xs">{repository}</span>
+            </a>
+          </div>
+        )}
+        {uses && uses.length > 0 && (
+          <div className="inline-flex items-center rounded py-1 px-2 mb-2 bg-purple-100 border-solid border border-purple-200">
+            <FontAwesomeIcon icon={faTools} />
+            <span className="ml-2 text-xs">{uses.join(", ").toLowerCase()}</span>
+          </div>
+        )}
+      </div>
       <PageContent className="e-content" content={content} />
     </article>
   )
@@ -48,6 +58,7 @@ const ProjectPage = ({ data }) => {
         contentComponent={HTMLContent}
         title={post.frontmatter.title}
         repository={post.frontmatter.repository}
+        uses={post.frontmatter.uses}
         content={post.html}
       />
     </Layout>
@@ -67,6 +78,7 @@ export const aboutPageQuery = graphql`
       frontmatter {
         title
         repository
+        uses
       }
     }
   }

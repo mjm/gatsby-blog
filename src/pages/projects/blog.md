@@ -5,6 +5,11 @@ repository: mjm/gatsby-blog
 description: >
   This website, a sweet combination of Gatsby and Netlify functions.
   The primary destination of my silly thoughts that would become tweets.
+uses:
+- JavaScript
+- Gatsby
+- React
+- Netlify
 ---
 
 This site is one of my projects.
