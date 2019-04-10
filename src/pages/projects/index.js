@@ -10,7 +10,7 @@ const ProjectsPage = ({ data }) => {
   return (
     <Layout>
       <article className="mt-12 mb-10">
-        <h2>Projects</h2>
+        <h2>Software Projects</h2>
         {projects.map(p => (
           <ProjectCell project={p} key={p.fields.slug} />
         ))}

@@ -6,15 +6,15 @@ description: >
   This website, a sweet combination of Gatsby and Netlify functions.
   The primary destination of my silly thoughts that would become tweets.
 uses:
-- JavaScript
-- Gatsby
-- React
-- Netlify
+  - JavaScript
+  - Gatsby
+  - React
+  - Netlify
 ---
 
 This site is one of my projects.
 I started it at the beginning of 2018 when I started [microblogging](https://micro.blog).
-The idea is that instead of posting to Twitter directly, I write things here, and have some software [crosspost to Twitter](https://github.com/mjm/courier).
+The idea is that instead of posting to Twitter directly, I write things here, and have some software [crosspost to Twitter](/projects/courier/).
 
 The site has gone through several generations of implementations, though the content has been carried forward as I transitioned between them.
 

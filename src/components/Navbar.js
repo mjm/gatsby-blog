@@ -20,7 +20,7 @@ const Navbar = () => {
             className={linkClassName}
             activeClassName={activeLinkClassName}
           >
-            Home
+            Blog
           </Link>
         </li>
         <li className="m-0 p-0">
