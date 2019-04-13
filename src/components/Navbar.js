@@ -13,7 +13,7 @@ const Navbar = () => {
       role="navigation"
       aria-label="main-navigation"
     >
-      <ul className="list-none m-0 p-0 flex flex-row justify-center bg-purple-100 mt-3 mb-4 sm:rounded-lg shadow-md">
+      <ul className="list-none m-0 p-0 flex flex-row flex-wrap justify-center text-sm sm:text-base bg-purple-100 mt-3 mb-4 sm:rounded-lg shadow-md">
         <li className="m-0 p-0">
           <Link
             to="/"
