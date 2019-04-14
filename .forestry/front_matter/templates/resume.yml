@@ -1,10 +1,14 @@
 ---
 label: Resume
 hide_body: false
+display_field: title
 fields:
 - type: text
   name: templateKey
   label: templateKey
+  config:
+    required: true
+  hidden: true
 - type: text
   name: title
   label: title
@@ -33,7 +37,7 @@ fields:
     label: company
   - type: text
     name: startDate
-    label: startDate
+    label: start date
   - type: textarea
     name: description
     label: description
