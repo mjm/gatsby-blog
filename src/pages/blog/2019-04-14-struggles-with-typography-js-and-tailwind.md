@@ -2,8 +2,8 @@
 templateKey: blog-post
 date: 2019-04-14T16:00:00+00:00
 title: Struggles with Typography.js and Tailwind
-
 ---
+
 On this site, I'm currently using both [Tailwind](https://tailwindcss.com/) and [Typography.js](https://kyleamathews.github.io/typography.js/) for styling. I really like both of these projects, but they do not interact very well with each other. I want to lay out why that is and the challenges I've been having with it.
 
 ## Why do I use these?
@@ -40,7 +40,7 @@ There are a few cases where the resets in Tailwind's base styles are needed for 
 <div class="border-green border-b-2">...</div>
 ```
 
-Without the correct reset, this won't actually apply any border at all. This is because [Tailwind applies ](https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css#L438)`[border-style: solid](https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css#L438)`[ to all elements by default](https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css#L438) and resets the `border-width` to 0. With that, the styles above are sufficient to apply a border. Without them, you actually have to do something much grosser:
+Without the correct reset, this won't actually apply any border at all. This is because [Tailwind applies `border-style: solid` to all elements by default](https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css#L438) and resets the `border-width` to 0. With that, the styles above are sufficient to apply a border. Without them, you actually have to do something much grosser:
 
 ```html
 <div class="border-green border-0 border-b-2 border-solid">...</div>
@@ -64,7 +64,7 @@ I tried switching the sizes to use `em`s, which would be relative to the right f
 
 So I've abandoned this approach.
 
-***
+---
 
 As of now, I'm continuing to use these two together and tolerating some of the weirdness. I see two paths forward to improving the situation:
 
