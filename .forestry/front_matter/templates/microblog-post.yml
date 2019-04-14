@@ -1,0 +1,10 @@
+---
+label: Microblog Post
+hide_body: false
+fields:
+- type: text
+  name: templateKey
+  label: templateKey
+- type: datetime
+  name: date
+  label: date
