@@ -1,19 +1,24 @@
 ---
 label: Project
 hide_body: false
+display_field: title
 fields:
 - type: text
   name: templateKey
   label: templateKey
+  default: project-page
+  hidden: true
+  config:
+    required: true
 - type: text
   name: title
   label: title
-- type: text
-  name: repository
-  label: repository
 - type: textarea
   name: description
   label: description
+- type: text
+  name: repository
+  label: repository
 - type: list
   name: uses
   label: uses
