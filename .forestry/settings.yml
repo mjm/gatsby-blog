@@ -33,6 +33,8 @@ sections:
   label: Projects
   create: documents
   match: "**/*.md"
+  templates:
+  - project
 - type: document
   path: src/pages/resume/index.md
   label: Resume
