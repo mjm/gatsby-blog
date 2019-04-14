@@ -41,7 +41,6 @@ sections:
 - type: document
   path: src/pages/talks/index.md
   label: Talks
-  match: "**/*"
 upload_dir: static/img
 public_path: "/img"
 front_matter_path: ''

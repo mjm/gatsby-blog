@@ -1,9 +1,9 @@
 ---
-templateKey: "static-page"
-path: /talks
+templateKey: static-page
+path: "/talks"
 title: Talks
----
 
+---
 ### WWDC
 
 I've been a part of a couple of sessions at Apple's [Worldwide Developer Conference](https://developer.apple.com/wwdc/):
