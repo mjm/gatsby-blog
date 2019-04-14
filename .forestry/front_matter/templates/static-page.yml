@@ -1,13 +1,19 @@
 ---
 label: Static Page
 hide_body: false
+display_field: title
 fields:
 - type: text
   name: templateKey
   label: templateKey
+  hidden: true
+  config:
+    required: true
+  default: static-page
 - type: text
   name: path
   label: path
+  hidden: true
 - type: text
   name: title
   label: title
