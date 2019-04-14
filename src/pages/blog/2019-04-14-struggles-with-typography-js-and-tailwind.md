@@ -1,5 +1,5 @@
 ---
-templateKey: microblog-post
+templateKey: blog-post
 date: 2019-04-14T16:00:00+00:00
 title: Struggles with Typography.js and Tailwind
 
