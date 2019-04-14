@@ -1,26 +1,39 @@
 ---
 label: Music
 hide_body: false
+display_field: title
 fields:
 - type: text
   name: templateKey
   label: templateKey
+  default: music-page
+  hidden: true
+  config:
+    required: true
 - type: text
   name: title
   label: title
 - type: field_group_list
   name: albums
-  label: albums
+  label: Albums
   fields:
-  - type: text
-    name: artist
-    label: artist
-  - type: file
-    name: image
-    label: image
   - type: text
     name: name
     label: name
+    config:
+      required: true
+  - type: text
+    name: artist
+    label: artist
+    config:
+      required: true
   - type: text
     name: url
     label: url
+    config:
+      required: true
+  - type: file
+    name: image
+    label: image
+  config:
+    labelField: name
