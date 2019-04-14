@@ -37,3 +37,5 @@ fields:
     label: image
   config:
     labelField: name
+pages:
+- src/pages/music/index.md
