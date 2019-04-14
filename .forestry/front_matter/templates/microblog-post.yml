@@ -16,5 +16,5 @@ fields:
     display_utc: true
     required: true
 pages:
-- src/pages/blog/struggles-with-typography-js-and-tailwind.md
+- src/pages/blog/2019-04-14-struggles-with-typography-js-and-tailwind.md
 - src/pages/micro/2019-04-14-i-setup-forestry-io-as-a-cms.md
