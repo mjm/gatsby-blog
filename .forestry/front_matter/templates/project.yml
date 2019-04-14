@@ -1,0 +1,19 @@
+---
+label: Project
+hide_body: false
+fields:
+- type: text
+  name: templateKey
+  label: templateKey
+- type: text
+  name: title
+  label: title
+- type: text
+  name: repository
+  label: repository
+- type: textarea
+  name: description
+  label: description
+- type: list
+  name: uses
+  label: uses
