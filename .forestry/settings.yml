@@ -4,19 +4,40 @@ auto_deploy: false
 admin_path: ''
 webhook_url: 
 sections:
-- type: document
-  path: src/pages/about/index.md
-  label: About
-- type: directory
-  path: src/pages/blog
-  label: Blog
-  create: all
-  match: "**/*.md"
+- type: heading
+  label: Posts
 - type: directory
   path: src/pages/micro
   label: Microblog
   create: all
   match: "**/*.md"
+  templates:
+  - microblog-post
+- type: directory
+  path: src/pages/blog
+  label: Blog
+  create: all
+  match: "**/*.md"
+  templates:
+  - blog-post
+- type: heading
+  label: Pages
+- type: document
+  path: src/pages/about/index.md
+  label: About
+- type: document
+  path: src/pages/music/index.md
+  label: Music
+  match: "**/*"
+- type: directory
+  path: src/pages/projects
+  label: Projects
+  create: documents
+  match: "**/*.md"
+- type: document
+  path: src/pages/resume/index.md
+  label: Resume
+  match: "**/*"
 upload_dir: static/img
 public_path: "/img"
 front_matter_path: ''
