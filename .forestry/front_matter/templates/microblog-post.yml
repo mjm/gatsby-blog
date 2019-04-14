@@ -16,3 +16,5 @@ fields:
     display_utc: true
     required: true
   default: '2019-04-14T04:12:24Z'
+pages:
+- src/pages/micro/2019-04-14-i-setup-forestry-io-as-a-cms.md
