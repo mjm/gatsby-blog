@@ -12,7 +12,7 @@ export const MusicPageTemplate = ({
   const PageContent = contentComponent || Content
 
   return (
-    <article className="h-entry mt-12 mb-10">
+    <article className="h-entry">
       <h2 className="p-name">{title}</h2>
       <div className="e-content">
         <PageContent content={content} />

@@ -8,7 +8,7 @@ export const StaticPageTemplate = ({ title, content, contentComponent }) => {
   const PageContent = contentComponent || Content
 
   return (
-    <article className="h-entry mt-12 mb-10">
+    <article className="h-entry">
       <h2 className="p-name">{title}</h2>
       <PageContent className="e-content" content={content} />
     </article>

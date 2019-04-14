@@ -17,7 +17,7 @@ export const ProjectPageTemplate = ({
   const PageContent = contentComponent || Content
 
   return (
-    <article className="h-entry mt-12 mb-10">
+    <article className="h-entry">
       <h2 className="p-name">{title}</h2>
       <div className="flex flex-row flex-wrap -mt-1 mb-1 text-sm text-purple-800">
         {repository && (
@@ -34,7 +34,9 @@ export const ProjectPageTemplate = ({
         {uses && uses.length > 0 && (
           <div className="inline-flex items-center rounded py-1 px-2 mb-2 bg-purple-100 border-solid border border-purple-200">
             <FontAwesomeIcon icon={faTools} />
-            <span className="ml-2 text-xs">{uses.join(", ").toLowerCase()}</span>
+            <span className="ml-2 text-xs">
+              {uses.join(", ").toLowerCase()}
+            </span>
           </div>
         )}
       </div>

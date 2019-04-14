@@ -3,7 +3,7 @@ import Layout from "../components/Layout"
 
 const NotFoundPage = () => (
   <Layout>
-    <article className="mt-12 mb-10">
+    <article>
       <h2>Couldn't find it!</h2>
       <p>Sorry, but the page you're looking for doesn't seem to be here.</p>
       <p>

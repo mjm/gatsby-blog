@@ -40,7 +40,7 @@ const BlogRollEntry = ({ siteUrl, post }) => {
 
   return (
     <div>
-      <article className="h-entry mt-12 mb-10">
+      <article className="h-entry">
         {post.frontmatter.title && (
           <h1 className="p-name">
             <Link
@@ -82,7 +82,7 @@ const BlogRollEntry = ({ siteUrl, post }) => {
           </Link>
         </div>
       </article>
-      <hr className="h-1 bg-purple-100 mx-auto w-1/3 rounded-full" />
+      <hr className="h-1 bg-purple-100 mx-auto w-1/3 rounded-full mt-10 mb-12" />
     </div>
   )
 }

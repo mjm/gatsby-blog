@@ -48,7 +48,9 @@ const TemplateWrapper = ({ children }) => {
       <div className="container mx-auto">
         <Header />
         <Navbar />
-        <section className="max-w-lg mx-auto px-3 mt-6">{children}</section>
+        <section className="max-w-lg mx-auto px-3 mt-6 pt-12 pb-10">
+          {children}
+        </section>
       </div>
     </div>
   )

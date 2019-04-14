@@ -21,7 +21,7 @@ export const MicroblogPostTemplate = ({
   const PostContent = contentComponent || Content
 
   return (
-    <article className="h-entry mt-12 mb-10">
+    <article className="h-entry">
       <PostContent className="p-name e-content" content={content} />
       {photos.map(photo => (
         <figure key={photo}>
