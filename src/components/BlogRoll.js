@@ -70,7 +70,7 @@ const BlogRollEntry = ({ siteUrl, post }) => {
           )}
           <Link
             to={post.fields.slug}
-            className="u-url text-purple-600 bg-purple-100 rounded-lg uppercase no-underline px-2 pb-px pt-1 border-0 border-b-2 border-solid border-transparent hover:border-purple-500"
+            className="u-url text-purple-600 bg-purple-100 shadow hover:shadow-md rounded-lg uppercase no-underline px-2 pb-px pt-1 border-0 border-b-2 border-solid border-transparent hover:border-purple-500"
           >
             ➔{" "}
             <time

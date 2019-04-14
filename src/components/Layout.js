@@ -16,7 +16,7 @@ const TemplateWrapper = ({ children }) => {
   } = useSiteMetadata()
 
   return (
-    <div className="bg-white w-full min-h-screen mt-2 pb-12 text-indigo-900">
+    <div className="bg-gray-100 w-full min-h-screen mt-2 pb-12 text-indigo-900">
       <Helmet>
         <html lang="en" />
         <title>{title}</title>
