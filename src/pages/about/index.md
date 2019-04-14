@@ -1,9 +1,9 @@
 ---
-templateKey: "static-page"
-path: /about
+templateKey: static-page
+path: "/about"
 title: About Me
----
 
+---
 My name is Matt Moriarity. I'm a software engineer living in Littleton, CO.
 
 By day, I work on infrastructure at [Travis CI](https://travis-ci.com). By night (early evening I guess), I have [a few side projects](/projects/), including this site!
