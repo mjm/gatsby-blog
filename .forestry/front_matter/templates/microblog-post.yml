@@ -5,6 +5,11 @@ fields:
 - type: text
   name: templateKey
   label: templateKey
+  default: microblog-post
 - type: datetime
   name: date
-  label: date
+  label: Date
+  config:
+    display_utc: true
+    required: true
+  default: '2019-04-14T04:12:24Z'
