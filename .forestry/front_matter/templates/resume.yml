@@ -51,3 +51,5 @@ fields:
   - type: list
     name: tools
     label: tools
+pages:
+- src/pages/resume/index.md
