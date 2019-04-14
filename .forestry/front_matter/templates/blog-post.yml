@@ -1,13 +1,23 @@
 ---
 label: Blog Post
 hide_body: false
+display_field: title
 fields:
 - type: text
   name: templateKey
-  label: templateKey
+  label: Template Key
+  default: blog-post
+  hidden: true
+  config:
+    required: true
 - type: datetime
   name: date
-  label: date
+  label: Date
+  config:
+    display_utc: true
+    required: true
 - type: text
   name: title
-  label: title
+  label: Title
+  config:
+    required: true
