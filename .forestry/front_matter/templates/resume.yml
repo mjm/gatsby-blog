@@ -1,0 +1,49 @@
+---
+label: Resume
+hide_body: false
+fields:
+- type: text
+  name: templateKey
+  label: templateKey
+- type: text
+  name: title
+  label: title
+- type: field_group
+  name: education
+  label: education
+  fields:
+  - type: text
+    name: school
+    label: school
+  - type: text
+    name: location
+    label: location
+  - type: text
+    name: degree
+    label: degree
+  - type: number
+    name: year
+    label: year
+- type: field_group_list
+  name: experience
+  label: experience
+  fields:
+  - type: text
+    name: company
+    label: company
+  - type: text
+    name: startDate
+    label: startDate
+  - type: textarea
+    name: description
+    label: description
+- type: field_group
+  name: skills
+  label: skills
+  fields:
+  - type: list
+    name: languages
+    label: languages
+  - type: list
+    name: tools
+    label: tools
