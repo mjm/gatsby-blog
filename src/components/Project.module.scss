@@ -1,0 +1,64 @@
+@import "./variables.scss";
+
+.metadata {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: spacing(-1) 0 spacing(1) 0;
+  font-size: 0.9rem;
+  color: $purple-800;
+}
+
+%pill {
+  background-color: $purple-100;
+  color: $purple-800;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  margin: 0 spacing(2) spacing(2) 0;
+  padding: spacing(1) spacing(2);
+  border-radius: 0.25rem;
+  border: 1px solid $purple-200;
+
+  .label {
+    font-size: 0.75rem;
+    margin-left: spacing(2);
+  }
+}
+
+.repository {
+  @extend %pill;
+}
+
+.uses {
+  @extend %pill;
+}
+
+.cell {
+  border: 1px solid $purple-300;
+  border-radius: 0.5rem;
+  background-color: $purple-100;
+  margin-bottom: spacing(5);
+  @include shadow;
+
+  a {
+    display: block;
+    padding: spacing(4);
+    text-decoration: none;
+  }
+
+  h3,
+  p {
+    font-size: 0.9rem;
+  }
+
+  h3 {
+    margin-bottom: spacing(2);
+    color: $purple-800;
+  }
+
+  p {
+    margin-bottom: 0;
+    color: $indigo-900;
+  }
+}

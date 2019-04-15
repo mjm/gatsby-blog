@@ -1,6 +1,7 @@
 import React from "react"
 import Layout from "../../components/Layout"
 import { graphql, Link } from "gatsby"
+import styles from "../../components/Project.module.scss"
 
 const ProjectsPage = ({ data }) => {
   const {
@@ -21,14 +22,10 @@ const ProjectsPage = ({ data }) => {
 
 const ProjectCell = ({ project }) => {
   return (
-    <div className="border-solid border border-purple-300 rounded-lg bg-purple-100 mb-4">
-      <Link className="block p-3 no-underline" to={project.fields.slug}>
-        <h3 className="text-sm mb-2 text-purple-800">
-          {project.frontmatter.title}
-        </h3>
-        <p className="text-sm mb-0 text-indigo-900">
-          {project.frontmatter.description}
-        </p>
+    <div className={styles.cell}>
+      <Link to={project.fields.slug}>
+        <h3>{project.frontmatter.title}</h3>
+        <p>{project.frontmatter.description}</p>
       </Link>
     </div>
   )

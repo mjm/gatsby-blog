@@ -6,6 +6,7 @@ import Content, { HTMLContent } from "../components/Content"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faGithub } from "@fortawesome/free-brands-svg-icons"
 import { faTools } from "@fortawesome/free-solid-svg-icons"
+import styles from "../components/Project.module.scss"
 
 export const ProjectPageTemplate = ({
   title,
@@ -19,22 +20,22 @@ export const ProjectPageTemplate = ({
   return (
     <article className="h-entry">
       <h2 className="p-name">{title}</h2>
-      <div className="flex flex-row flex-wrap -mt-1 mb-1 text-sm text-purple-800">
+      <div className={styles.metadata}>
         {repository && (
           <div>
             <a
               href={`https://github.com/${repository}`}
-              className="text-purple-800 no-underline inline-flex items-center mr-2 py-1 px-2 mb-2 bg-purple-100 rounded border-solid border border-purple-200"
+              className={styles.repository}
             >
               <FontAwesomeIcon icon={faGithub} />
-              <span className="ml-2 text-xs">{repository}</span>
+              <span className={styles.label}>{repository}</span>
             </a>
           </div>
         )}
         {uses && uses.length > 0 && (
-          <div className="inline-flex items-center rounded py-1 px-2 mb-2 bg-purple-100 border-solid border border-purple-200">
+          <div className={styles.uses}>
             <FontAwesomeIcon icon={faTools} />
-            <span className="ml-2 text-xs">
+            <span className={styles.label}>
               {uses.join(", ").toLowerCase()}
             </span>
           </div>
