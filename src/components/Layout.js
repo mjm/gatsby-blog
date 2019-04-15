@@ -4,7 +4,7 @@ import Header from "../components/Header"
 import Navbar from "../components/Navbar"
 import useSiteMetadata from "./SiteMetadata"
 
-import "./all.css"
+import "./all.scss"
 import styles from "./Layout.module.scss"
 
 const TemplateWrapper = ({ children }) => {

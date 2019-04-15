@@ -3,6 +3,7 @@ import { Link, graphql } from "gatsby"
 import { orderBy } from "lodash"
 import moment from "moment"
 import Layout from "../../components/Layout"
+import styles from "../../components/Blog.module.scss"
 
 const ArchivesPage = ({ data }) => {
   const {
@@ -13,15 +14,13 @@ const ArchivesPage = ({ data }) => {
 
   return (
     <Layout>
-      <section className="mt-8 mb-10">
-        <h1>Archives</h1>
-        <ul className="list-none m-0">
+      <section>
+        <h2>Archives</h2>
+        <ul className={styles.archives}>
           {pages.map(({ fieldValue, totalCount }) => (
             <li key={fieldValue}>
-              <Link to={`/${fieldValue}/`} className="text-purple-700">
-                {friendlyMonth(fieldValue)}
-              </Link>{" "}
-              <span className="text-sm text-purple-400">({totalCount})</span>
+              <Link to={`/${fieldValue}/`}>{friendlyMonth(fieldValue)}</Link>{" "}
+              <span className={styles.articleCount}>({totalCount})</span>
             </li>
           ))}
         </ul>

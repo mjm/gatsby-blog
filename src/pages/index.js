@@ -2,6 +2,7 @@ import React from "react"
 import { Link, graphql } from "gatsby"
 import Layout from "../components/Layout"
 import BlogRoll from "../components/BlogRoll"
+import styles from "../components/Blog.module.scss"
 
 const IndexPage = ({ data }) => {
   const {
@@ -11,13 +12,9 @@ const IndexPage = ({ data }) => {
   return (
     <Layout>
       <BlogRoll posts={edges} />
-      <div className="text-center mt-8">
+      <div className={styles.seeMore}>
         <p>
-          See more posts in the{" "}
-          <Link to="/archives/" className="text-purple-700">
-            archives
-          </Link>
-          .
+          See more posts in the <Link to="/archives/">archives</Link>.
         </p>
       </div>
     </Layout>

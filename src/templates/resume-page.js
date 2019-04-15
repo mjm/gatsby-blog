@@ -2,6 +2,7 @@ import React from "react"
 import { graphql } from "gatsby"
 import Layout from "../components/Layout"
 import Content, { HTMLContent } from "../components/Content"
+import styles from "../components/Resume.module.scss"
 
 export const ResumePageTemplate = ({
   title,
@@ -26,20 +27,17 @@ export const ResumePageTemplate = ({
 
 const Experience = ({ experience }) => {
   return (
-    <section className="mb-6">
+    <section className={styles.section}>
       <h3>Experience</h3>
       {experience.map((exp, i) => (
-        <div
-          key={i}
-          className="bg-purple-100 border-solid border-0 border-t-4 border-purple-300 mb-4 p-3 shadow-md"
-        >
-          <div className="flex items-baseline">
-            <h4 class="flex-grow mb-2">{exp.company}</h4>
-            <div class="text-xs italic">
+        <div key={i} className={styles.experience}>
+          <div className={styles.header}>
+            <h4 class={styles.company}>{exp.company}</h4>
+            <div class={styles.dates}>
               {exp.startDate} - {exp.endDate || "Now"}
             </div>
           </div>
-          <p className="text-sm mb-0">{exp.description}</p>
+          <p>{exp.description}</p>
         </div>
       ))}
     </section>
@@ -49,12 +47,12 @@ const Experience = ({ experience }) => {
 const Education = ({ education }) => {
   const { school, location, degree, year } = education
   return (
-    <section className="mb-6">
+    <section className={`${styles.section} ${styles.education}`}>
       <h3>Education</h3>
-      <h4 className="mb-1">
+      <h4>
         {school} – <em>{location}</em>
       </h4>
-      <p className="text-sm">
+      <p>
         {degree}, {year}
       </p>
     </section>
@@ -67,7 +65,7 @@ const Skills = ({ skills }) => {
   return (
     <section>
       <h3>Skills</h3>
-      <div className="flex flex-wrap">
+      <div className={styles.skillLists}>
         <SkillList label="Languages" items={languages} />
         <SkillList label="Tools" items={tools} />
       </div>
@@ -77,14 +75,11 @@ const Skills = ({ skills }) => {
 
 const SkillList = ({ label, items }) => {
   return (
-    <div className="w-full sm:w-1/2">
-      <h4 className="mr-2 mb-3">{label}</h4>
-      <div className="flex flex-row flex-wrap items-center mt-2 mb-2">
+    <div className={styles.skillList}>
+      <h4>{label}</h4>
+      <div className={styles.skills}>
         {items.map(i => (
-          <div
-            key={i}
-            className="text-sm bg-purple-100 rounded px-2 py-1 mr-2 mb-2 shadow"
-          >
+          <div key={i} className={styles.skill}>
             {i}
           </div>
         ))}

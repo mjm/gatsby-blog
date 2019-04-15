@@ -1,14 +1,16 @@
+@import "./variables.scss";
+
 @tailwind components;
 
 .e-content a,
 .mention-content a {
-  @apply text-purple-700;
+  color: $purple-700;
 }
 
 /* purgecss start ignore */
 body code[class*="language-"],
 body pre[class*="language-"] {
-  font-size: 16px;
+  font-size: 0.8rem;
   font-variant-ligatures: none;
   margin-top: 0;
   margin-bottom: 1rem;

@@ -31,3 +31,26 @@
   width: 33.3333%;
   border-radius: 9999px;
 }
+
+.seeMore {
+  text-align: center;
+  margin-top: spacing(8);
+
+  a {
+    color: $purple-700;
+  }
+}
+
+.archives {
+  list-style: none;
+  margin: 0;
+
+  a {
+    color: $purple-700;
+  }
+
+  .articleCount {
+    font-size: 0.9rem;
+    color: $purple-400;
+  }
+}

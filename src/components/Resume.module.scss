@@ -1,0 +1,80 @@
+@import "./variables.scss";
+
+.section {
+  margin-bottom: spacing(8);
+}
+
+.experience {
+  background-color: $purple-100;
+  border-top: 4px solid $purple-300;
+  margin-bottom: spacing(5);
+  padding: spacing(4);
+  @include shadow-md;
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+  }
+
+  .company {
+    flex-grow: 1;
+    margin-bottom: spacing(3);
+  }
+
+  .dates {
+    font-size: 0.75rem;
+    font-style: italic;
+  }
+
+  p {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+  }
+}
+
+.education {
+  h4 {
+    margin-bottom: spacing(1);
+  }
+
+  p {
+    font-size: 0.9rem;
+  }
+}
+
+.skillLists {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.skillList {
+  width: 100%;
+
+  @media (min-width: $sm-width) {
+    width: 50%;
+  }
+
+  h4 {
+    margin-right: spacing(3);
+    margin-bottom: spacing(4);
+  }
+
+  .skills {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: spacing(3) 0;
+  }
+
+  .skill {
+    font-size: 0.9rem;
+    background-color: $purple-100;
+    padding: spacing(1) spacing(2);
+    margin: 0 spacing(2) spacing(2) 0;
+    border-radius: 0.25rem;
+    @include shadow;
+  }
+}
