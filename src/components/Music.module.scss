@@ -1,0 +1,27 @@
+@import "./variables.scss";
+
+.albums {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.album {
+  padding: spacing(2);
+  text-align: center;
+  line-height: 1.375;
+
+  @media (min-width: $sm-width) {
+    width: 50%;
+  }
+
+  img {
+    margin: 0;
+    @include shadow-lg;
+  }
+}
+
+.artist {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}

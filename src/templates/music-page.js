@@ -2,6 +2,7 @@ import React from "react"
 import { graphql } from "gatsby"
 import Layout from "../components/Layout"
 import Content, { HTMLContent } from "../components/Content"
+import styles from "../components/Music.module.scss"
 
 export const MusicPageTemplate = ({
   title,
@@ -16,25 +17,21 @@ export const MusicPageTemplate = ({
       <h2 className="p-name">{title}</h2>
       <div className="e-content">
         <PageContent content={content} />
-        <div className="flex flex-row flex-wrap">
+        <div className={styles.albums}>
           {albums.map(album => (
-            <div
-              key={`${album.name}-${album.artist}`}
-              className="sm:w-1/2 p-2 text-center leading-snug"
-            >
+            <div key={`${album.name}-${album.artist}`} className={styles.album}>
               <div>
                 <a href={album.url}>
                   <img
                     src={`${album.image}?nf_resize=fit&w=300&h=300`}
                     alt={`${album.name} - ${album.artist}`}
-                    className="m-0 shadow-lg"
                   />
                 </a>
               </div>
               <div>
                 <em>{album.name}</em>
               </div>
-              <div className="text-sm uppercase">{album.artist}</div>
+              <div className={styles.artist}>{album.artist}</div>
             </div>
           ))}
         </div>
