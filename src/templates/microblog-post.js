@@ -5,6 +5,8 @@ import Layout from "../components/Layout"
 import Content, { HTMLContent } from "../components/Content"
 import Mentions from "../components/Mentions"
 import useSiteMetadata from "../components/SiteMetadata"
+import DateBubble from "../components/DateBubble"
+import styles from "../components/Blog.module.scss"
 
 export const MicroblogPostTemplate = ({
   slug,
@@ -28,13 +30,10 @@ export const MicroblogPostTemplate = ({
           <img src={photo} alt="" className="u-photo" />
         </figure>
       ))}
-      <div className="text-right mt-4">
-        <time
-          className="dt-published text-xs py-2 px-3 text-purple-600 bg-purple-100 rounded-lg uppercase no-underline"
-          dateTime={isoDate}
-        >
+      <div className={styles.footer}>
+        <DateBubble isoDate={isoDate} className="dt-published">
           {date}
-        </time>
+        </DateBubble>
       </div>
       <Mentions url={url} />
     </article>

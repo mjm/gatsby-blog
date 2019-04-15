@@ -1,0 +1,33 @@
+@import "./variables.scss";
+
+.title {
+  color: $purple-800;
+  text-decoration: none;
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: baseline;
+  margin-top: spacing(4);
+}
+
+.mentionCount {
+  color: $purple-600;
+  margin-right: spacing(3);
+  font-size: 0.9rem;
+
+  svg {
+    margin-right: spacing(1);
+    font-size: 0.75rem;
+  }
+}
+
+.separator {
+  height: spacing(1);
+  background-color: $purple-200;
+  margin: spacing(10) auto spacing(12) auto;
+  width: 33.3333%;
+  border-radius: 9999px;
+}

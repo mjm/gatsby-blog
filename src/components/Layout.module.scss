@@ -1,0 +1,31 @@
+@import "./variables.scss";
+
+.body {
+  background-color: $purple-600;
+}
+
+.outer {
+  background-color: $gray-100;
+  color: $indigo-900;
+  width: 100%;
+  min-height: 100vh;
+  margin-top: spacing(2);
+  padding-bottom: spacing(10);
+}
+
+.inner {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (min-width: $sm-width) {
+  .inner {
+    max-width: $sm-width;
+  }
+}
+
+.main {
+  padding: spacing(7) spacing(4) spacing(12) spacing(4);
+  margin-top: spacing(8);
+}

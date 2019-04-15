@@ -95,6 +95,12 @@ module.exports = {
         ],
       },
     },
+    {
+      resolve: "gatsby-plugin-sass",
+      options: {
+        implementation: require("sass"),
+      },
+    },
     "gatsby-plugin-postcss",
     {
       resolve: "gatsby-plugin-typography",

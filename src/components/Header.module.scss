@@ -1,0 +1,45 @@
+@import "./variables.scss";
+
+.header {
+  text-align: center;
+  padding-top: spacing(6);
+  padding-bottom: spacing(3);
+
+  a {
+    color: $purple-900;
+    text-decoration: none;
+  }
+
+  h1 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+    font-size: 1.8rem;
+    line-height: 1em;
+
+    @media (min-width: $sm-width) {
+      font-size: 2.2rem;
+    }
+  }
+}
+
+.avatar {
+  width: spacing(10);
+  height: spacing(10);
+  margin: 0 spacing(3) 0 0;
+  border-radius: 9999px;
+
+  @media (min-width: $sm-width) {
+    width: spacing(12);
+    height: spacing(12);
+    margin-right: spacing(4);
+  }
+}
+
+.label {
+  margin-top: spacing(2);
+}

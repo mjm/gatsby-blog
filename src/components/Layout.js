@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar"
 import useSiteMetadata from "./SiteMetadata"
 
 import "./all.css"
+import styles from "./Layout.module.scss"
 
 const TemplateWrapper = ({ children }) => {
   const {
@@ -16,7 +17,7 @@ const TemplateWrapper = ({ children }) => {
   } = useSiteMetadata()
 
   return (
-    <div className="bg-gray-100 w-full min-h-screen mt-2 pb-12 text-indigo-900">
+    <div className={styles.outer}>
       <Helmet>
         <html lang="en" />
         <title>{title}</title>
@@ -43,14 +44,12 @@ const TemplateWrapper = ({ children }) => {
         <meta property="og:title" content={title} />
         <meta property="og:url" content="/" />
         <meta property="og:image" content="/img/og-image.jpg" />
-        <body className="bg-purple-600" />
+        <body className={styles.body} />
       </Helmet>
-      <div className="container mx-auto">
+      <div className={styles.inner}>
         <Header />
         <Navbar />
-        <section className="max-w-lg mx-auto px-3 mt-6 pt-6 pb-10">
-          {children}
-        </section>
+        <section className={styles.main}>{children}</section>
       </div>
     </div>
   )

@@ -1,0 +1,32 @@
+@import "./variables.scss";
+
+%bubble {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: $purple-600;
+  background-color: $purple-100;
+  border-radius: 0.5rem;
+}
+
+.bubble {
+  @extend %bubble;
+  padding: spacing(2) spacing(3);
+  @include shadow-md;
+}
+
+.link {
+  @extend %bubble;
+  padding: spacing(2) spacing(3) spacing(1) spacing(3);
+  border-bottom: 3px solid transparent;
+  @include shadow;
+
+  &:hover {
+    @include shadow-md;
+    border-color: $purple-500;
+  }
+
+  time {
+    margin-left: spacing(1);
+  }
+}

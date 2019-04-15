@@ -4,6 +4,8 @@ import { HTMLContent } from "./Content"
 import useSiteMetadata from "./SiteMetadata"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faComment } from "@fortawesome/free-solid-svg-icons"
+import { DateBubbleLink } from "./DateBubble"
+import styles from "./Blog.module.scss"
 
 const BlogRoll = ({ posts }) => {
   const { siteUrl } = useSiteMetadata()
@@ -43,10 +45,7 @@ const BlogRollEntry = ({ siteUrl, post }) => {
       <article className="h-entry">
         {post.frontmatter.title && (
           <h1 className="p-name">
-            <Link
-              className="no-underline text-purple-800"
-              to={post.fields.slug}
-            >
+            <Link className={styles.title} to={post.fields.slug}>
               {post.frontmatter.title}
             </Link>
           </h1>
@@ -61,28 +60,24 @@ const BlogRollEntry = ({ siteUrl, post }) => {
             <img src={photo} alt="" className="u-photo" />
           </figure>
         ))}
-        <div className="flex flex-row justify-end items-baseline mt-4 text-xs">
+        <div className={styles.footer}>
           {mentionCount > 0 && (
-            <div className="text-purple-600 mr-2 text-sm">
-              <FontAwesomeIcon icon={faComment} className="mr-1 text-xs" />
+            <div className={styles.mentionCount}>
+              <FontAwesomeIcon icon={faComment} />
               {mentionCount}
             </div>
           )}
-          <Link
+          <DateBubbleLink
             to={post.fields.slug}
-            className="u-url text-purple-600 bg-purple-100 shadow hover:shadow-md rounded-lg uppercase no-underline px-2 pb-px pt-1 border-0 border-b-2 border-solid border-transparent hover:border-purple-500"
+            linkClassName="u-url"
+            className="dt-published"
+            isoDate={post.frontmatter.isoDate}
           >
-            ➔{" "}
-            <time
-              className="dt-published ml-1"
-              dateTime={post.frontmatter.isoDate}
-            >
-              {post.frontmatter.date}
-            </time>
-          </Link>
+            {post.frontmatter.date}
+          </DateBubbleLink>
         </div>
       </article>
-      <hr className="h-1 bg-purple-100 mx-auto w-1/3 rounded-full mt-10 mb-12" />
+      <hr className={styles.separator} />
     </div>
   )
 }
