@@ -1,8 +1,38 @@
 import React, { useEffect, useState } from "react"
 import { HTMLContent } from "./Content"
 import moment from "moment"
+import styles from "./Mentions.module.scss"
+
+// use for testing mentions on posts that don't have any
+// eslint-disable-next-line
+const exampleMentions = [
+  {
+    type: "entry",
+    author: {
+      type: "card",
+      name: "Tantek Çelik",
+      url: "http://tantek.com/",
+      photo: "http://tantek.com/logo.jpg",
+    },
+    url:
+      "http://tantek.com/2013/112/t2/milestone-show-indieweb-comments-h-entry-pingback",
+    published: "2013-04-22T15:03:00-07:00",
+    "wm-received": "2013-04-25T17:09:33-07:00",
+    "wm-id": 900,
+    content: {
+      text:
+        "Another milestone: @eschnou automatically shows #indieweb comments with h-entry sent via pingback http://eschnou.com/entry/testing-indieweb-federation-with-waterpigscouk-aaronpareckicom-and--62-24908.html",
+      html:
+        'Another milestone: <a href="https://twitter.com/eschnou">@eschnou</a> automatically shows #indieweb comments with h-entry sent via pingback <a href="http://eschnou.com/entry/testing-indieweb-federation-with-waterpigscouk-aaronpareckicom-and--62-24908.html">http://eschnou.com/entry/testing-indieweb-federation-with-waterpigscouk-aaronpareckicom-and--62-24908.html</a>',
+    },
+    "mention-of": "https://indieweb.org/",
+    "wm-property": "mention-of",
+    "wm-private": false,
+  },
+]
 
 const Mentions = ({ url }) => {
+  //const [mentions, setMentions] = useState(exampleMentions)
   const [mentions, setMentions] = useState([])
   useEffect(() => {
     loadMentions()
@@ -28,7 +58,7 @@ const Mentions = ({ url }) => {
 
   return (
     <div>
-      <hr className="h-1 bg-purple-100 mx-auto w-1/3 rounded-full mt-6" />
+      <hr className={styles.separator} />
       <h3>Mentions</h3>
       {mentions.map(mention => (
         <Mention key={mention.url} mention={mention} />
@@ -39,23 +69,20 @@ const Mentions = ({ url }) => {
 
 const Mention = ({ mention }) => {
   return (
-    <article className="flex flex-row mt-3 bg-purple-100 px-3 py-2 rounded-lg shadow">
-      <div className="mr-3 flex-none">
+    <article className={styles.mention}>
+      <div className={styles.avatar}>
         <MentionAvatar mention={mention} />
       </div>
-      <div className="flex flex-col flex-grow text-xs">
-        <div className="flex flex-row">
-          <div className="flex-grow mb-1">
+      <div className={styles.content}>
+        <div className={styles.header}>
+          <div className={styles.author}>
             <MentionAuthor mention={mention} />
           </div>
-          <div className="flex-no-grow">
+          <div className={styles.timestamp}>
             <MentionTimestamp mention={mention} />
           </div>
         </div>
-        <HTMLContent
-          className="mention-content"
-          content={mention.content.html}
-        />
+        <HTMLContent className={styles.body} content={mention.content.html} />
       </div>
     </article>
   )
@@ -64,24 +91,13 @@ const Mention = ({ mention }) => {
 const MentionAvatar = ({ mention }) => {
   return (
     <a href={mention.author.url}>
-      <img
-        src={mention.author.photo}
-        alt={mention.author.name}
-        className="w-10 mb-0 rounded-full"
-      />
+      <img src={mention.author.photo} alt={mention.author.name} />
     </a>
   )
 }
 
 const MentionAuthor = ({ mention }) => {
-  return (
-    <a
-      href={mention.author.url}
-      className="font-bold no-underline text-purple-800"
-    >
-      {mention.author.name}
-    </a>
-  )
+  return <a href={mention.author.url}>{mention.author.name}</a>
 }
 
 const MentionTimestamp = ({ mention }) => {
@@ -92,7 +108,7 @@ const MentionTimestamp = ({ mention }) => {
   const formatted = moment(mention.published).format("MMM D, Y H:MM A")
 
   return (
-    <a href={mention.url} className="text-purple-700 no-underline">
+    <a href={mention.url}>
       <time dateTime={mention.published}>{formatted}</time>
     </a>
   )

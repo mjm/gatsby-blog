@@ -1,0 +1,66 @@
+@import "./variables.scss";
+
+.separator {
+  height: spacing(1);
+  background-color: $purple-200;
+  margin: spacing(6) auto spacing(5) auto;
+  width: 33.3333%;
+  border-radius: 9999px;
+}
+
+.mention {
+  display: flex;
+  flex-direction: row;
+  margin-top: spacing(3);
+  background-color: $purple-100;
+  padding: spacing(2) spacing(3);
+  border-radius: 0.5rem;
+  @include shadow;
+}
+
+.avatar {
+  margin-right: spacing(3);
+  flex: none;
+
+  img {
+    width: spacing(12);
+    margin-bottom: 0;
+    border-radius: 9999px;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  font-size: 0.8rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+}
+
+.author {
+  flex-grow: 1;
+  margin-bottom: spacing(1);
+
+  a {
+    font-weight: 700;
+    text-decoration: none;
+    color: $purple-800;
+  }
+}
+
+.timestamp {
+  flex-grow: 0;
+
+  a {
+    text-decoration: none;
+    color: $purple-700;
+  }
+}
+
+.body a {
+  color: $purple-700;
+}
