@@ -1,12 +1,9 @@
 @import "./variables.scss";
 
-@tailwind components;
-
 .e-content a {
   color: $purple-700;
 }
 
-/* purgecss start ignore */
 body code[class*="language-"],
 body pre[class*="language-"] {
   font-size: 0.8rem;
@@ -14,6 +11,3 @@ body pre[class*="language-"] {
   margin-top: 0;
   margin-bottom: 1rem;
 }
-/* purgecss end ignore */
-
-@tailwind utilities;
