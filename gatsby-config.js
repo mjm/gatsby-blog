@@ -93,6 +93,7 @@ module.exports = {
         ],
       },
     },
+    "gatsby-plugin-json-feed",
     {
       resolve: "gatsby-plugin-sass",
       options: {
