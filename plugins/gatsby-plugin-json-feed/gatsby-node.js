@@ -58,7 +58,7 @@ exports.onPostBuild = async ({ graphql }, pluginOptions) => {
       id: url,
       link: url,
       description: post.excerpt,
-      date: new Date(post.frontmatter.date),
+      published: new Date(post.frontmatter.date),
       content: post.html,
     })
   })
