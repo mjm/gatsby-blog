@@ -4,7 +4,7 @@ module.exports = {
     description: "Matt's personal blog",
     siteUrl: "https://www.mattmoriarity.com",
     selfLinks: ["https://github.com/mjm", "mailto:matt@mattmoriarity.com"],
-    webmentionUsername: "mattmoriarity.com",
+    webmentionUsername: "www.mattmoriarity.com",
   },
   plugins: [
     "gatsby-plugin-react-helmet",
