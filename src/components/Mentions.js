@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { HTMLContent } from "./Content"
 import moment from "moment"
 import styles from "./Mentions.module.scss"
+import { orderBy } from "lodash"
 
 // use for testing mentions on posts that don't have any
 // eslint-disable-next-line
@@ -49,7 +50,8 @@ const Mentions = ({ url }) => {
     const response = await fetch(fetchUrl)
     const responseJson = await response.json()
 
-    setMentions(responseJson.children)
+    const children = orderBy(responseJson.children, "published")
+    setMentions(children)
   }
 
   if (mentions.length === 0) {
@@ -105,7 +107,7 @@ const MentionTimestamp = ({ mention }) => {
     return null
   }
 
-  const formatted = moment(mention.published).format("MMM D, Y H:MM A")
+  const formatted = moment.utc(mention.published).format("MMM D, Y h:MM A")
 
   return (
     <a href={mention.url}>

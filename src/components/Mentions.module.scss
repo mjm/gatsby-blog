@@ -11,9 +11,9 @@
 .mention {
   display: flex;
   flex-direction: row;
-  margin-top: spacing(3);
+  margin-top: spacing(4);
   background-color: $purple-100;
-  padding: spacing(2) spacing(3);
+  padding: spacing(3) spacing(3);
   border-radius: 0.5rem;
   @include shadow;
 }
@@ -61,6 +61,12 @@
   }
 }
 
-.body a {
-  color: $purple-700;
+.body {
+  a {
+    color: $purple-700;
+  }
+
+  *:last-child {
+    margin-bottom: 0;
+  }
 }
