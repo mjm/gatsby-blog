@@ -103,6 +103,7 @@ module.exports = {
       resolve: "gatsby-plugin-typography",
       options: {
         pathToConfigModule: "src/utils/typography",
+        omitGoogleFont: true,
       },
     },
     "gatsby-plugin-netlify", // make sure to keep it last in the array

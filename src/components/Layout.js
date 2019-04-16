@@ -4,6 +4,8 @@ import Header from "../components/Header"
 import Navbar from "../components/Navbar"
 import useSiteMetadata from "./SiteMetadata"
 
+import "typeface-eczar"
+import "typeface-gentium-basic"
 import "./all.scss"
 import styles from "./Layout.module.scss"
 

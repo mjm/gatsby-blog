@@ -38,6 +38,8 @@
     "react-helmet": "^5.2.0",
     "react-typography": "^0.16.19",
     "slug": "^1.1.0",
+    "typeface-eczar": "0.0.72",
+    "typeface-gentium-basic": "0.0.72",
     "typography": "^0.16.19",
     "uuid": "^3.2.1"
   },
