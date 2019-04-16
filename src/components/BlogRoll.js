@@ -51,7 +51,7 @@ const BlogRollEntry = ({ siteUrl, post }) => {
           </h1>
         )}
         {post.frontmatter.title ? (
-          <section className="e-content">{post.excerpt}</section>
+          <HTMLContent className="e-content" content={post.excerpt} />
         ) : (
           <HTMLContent className="e-content" content={post.html} />
         )}
