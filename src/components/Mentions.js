@@ -13,11 +13,13 @@ export const MentionCount = ({ url, children }) => {
 
   const mentionCount = useFetch(getFetchUrl(), {
     initial: 0,
-    transform(data) { return data.count },
+    transform(data) {
+      return data.count
+    },
   })
 
   if (mentionCount === 0) {
-    return null;
+    return null
   }
 
   return children(mentionCount)
@@ -37,7 +39,7 @@ const Mentions = ({ url }) => {
     initial: [],
     transform(data) {
       return orderBy(data.children, "published")
-    }
+    },
   })
 
   if (mentions.length === 0) {
