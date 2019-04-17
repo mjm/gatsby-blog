@@ -1,58 +1,44 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { HTMLContent } from "./Content"
 import moment from "moment"
 import styles from "./Mentions.module.scss"
 import { orderBy } from "lodash"
+import { useFetch } from "./hooks"
 
-// use for testing mentions on posts that don't have any
-// eslint-disable-next-line
-const exampleMentions = [
-  {
-    type: "entry",
-    author: {
-      type: "card",
-      name: "Tantek Çelik",
-      url: "http://tantek.com/",
-      photo: "http://tantek.com/logo.jpg",
-    },
-    url:
-      "http://tantek.com/2013/112/t2/milestone-show-indieweb-comments-h-entry-pingback",
-    published: "2013-04-22T15:03:00-07:00",
-    "wm-received": "2013-04-25T17:09:33-07:00",
-    "wm-id": 900,
-    content: {
-      text:
-        "Another milestone: @eschnou automatically shows #indieweb comments with h-entry sent via pingback http://eschnou.com/entry/testing-indieweb-federation-with-waterpigscouk-aaronpareckicom-and--62-24908.html",
-      html:
-        'Another milestone: <a href="https://twitter.com/eschnou">@eschnou</a> automatically shows #indieweb comments with h-entry sent via pingback <a href="http://eschnou.com/entry/testing-indieweb-federation-with-waterpigscouk-aaronpareckicom-and--62-24908.html">http://eschnou.com/entry/testing-indieweb-federation-with-waterpigscouk-aaronpareckicom-and--62-24908.html</a>',
-    },
-    "mention-of": "https://indieweb.org/",
-    "wm-property": "mention-of",
-    "wm-private": false,
-  },
-]
+export const MentionCount = ({ url, children }) => {
+  function getFetchUrl() {
+    const search = new URLSearchParams({ target: url })
+    return `https://webmention.io/api/count?${search.toString()}`
+  }
+
+  const mentionCount = useFetch(getFetchUrl(), {
+    initial: 0,
+    transform(data) { return data.count },
+  })
+
+  if (mentionCount === 0) {
+    return null;
+  }
+
+  return children(mentionCount)
+}
 
 const Mentions = ({ url }) => {
-  //const [mentions, setMentions] = useState(exampleMentions)
-  const [mentions, setMentions] = useState([])
-  useEffect(() => {
-    loadMentions()
-  }, [url])
-
-  async function loadMentions() {
+  function getFetchUrl() {
     if (!url) {
-      return
+      return null
     }
 
     const search = new URLSearchParams({ target: url })
-    const fetchUrl = `https://webmention.io/api/mentions.jf2?${search.toString()}`
-
-    const response = await fetch(fetchUrl)
-    const responseJson = await response.json()
-
-    const children = orderBy(responseJson.children, "published")
-    setMentions(children)
+    return `https://webmention.io/api/mentions.jf2?${search.toString()}`
   }
+
+  const mentions = useFetch(getFetchUrl(), {
+    initial: [],
+    transform(data) {
+      return orderBy(data.children, "published")
+    }
+  })
 
   if (mentions.length === 0) {
     return null

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { Link } from "gatsby"
 import { HTMLContent } from "./Content"
 import useSiteMetadata from "./SiteMetadata"
@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faComment } from "@fortawesome/free-solid-svg-icons"
 import { DateBubbleLink } from "./DateBubble"
 import styles from "./Blog.module.scss"
+import { MentionCount } from "./Mentions"
 
 const BlogRoll = ({ posts }) => {
   const { siteUrl } = useSiteMetadata()
@@ -22,22 +23,6 @@ const BlogRoll = ({ posts }) => {
 
 const BlogRollEntry = ({ siteUrl, post }) => {
   const entryUrl = siteUrl + post.fields.slug
-
-  const [mentionCount, setMentionCount] = useState(0)
-  useEffect(() => {
-    loadMentionCount()
-  }, [entryUrl])
-
-  async function loadMentionCount() {
-    const search = new URLSearchParams({ target: entryUrl })
-    const fetchUrl = `https://webmention.io/api/count?${search.toString()}`
-
-    const response = await fetch(fetchUrl)
-    const responseJson = await response.json()
-
-    setMentionCount(responseJson.count)
-  }
-
   const photos = post.frontmatter.photos || []
 
   return (
@@ -61,12 +46,14 @@ const BlogRollEntry = ({ siteUrl, post }) => {
           </figure>
         ))}
         <div className={styles.footer}>
-          {mentionCount > 0 && (
-            <div className={styles.mentionCount}>
-              <FontAwesomeIcon icon={faComment} />
-              {mentionCount}
-            </div>
-          )}
+          <MentionCount url={entryUrl}>
+            {count => (
+              <div className={styles.mentionCount}>
+                <FontAwesomeIcon icon={faComment} />
+                {count}
+              </div>
+            )}
+          </MentionCount>
           <DateBubbleLink
             to={post.fields.slug}
             linkClassName="u-url"
