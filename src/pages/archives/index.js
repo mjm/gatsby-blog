@@ -1,6 +1,6 @@
 import React from "react"
 import { Link, graphql } from "gatsby"
-import { orderBy } from "lodash"
+import { orderBy, groupBy } from "lodash"
 import moment from "moment"
 import Layout from "../../components/Layout"
 import styles from "../../components/Blog.module.scss"
@@ -11,19 +11,31 @@ const ArchivesPage = ({ data }) => {
   } = data
 
   const pages = orderBy(archivePages, "fieldValue", "desc")
+  const groups = orderBy(
+    Object.entries(groupBy(pages, p => p.fieldValue.substring(0, 4))),
+    entry => entry[0],
+    "desc"
+  )
 
   return (
     <Layout>
       <section>
         <h2>Archives</h2>
-        <ul className={styles.archives}>
-          {pages.map(({ fieldValue, totalCount }) => (
-            <li key={fieldValue}>
-              <Link to={`/${fieldValue}/`}>{friendlyMonth(fieldValue)}</Link>{" "}
-              <span className={styles.articleCount}>({totalCount})</span>
-            </li>
-          ))}
-        </ul>
+        {groups.map(([year, pages]) => (
+          <section key={year}>
+            <h3 className={styles.archiveYear}>{year}</h3>
+            <ul className={styles.archives}>
+              {pages.map(({ fieldValue, totalCount }) => (
+                <li key={fieldValue}>
+                  <Link to={`/${fieldValue}/`}>
+                    {friendlyMonth(fieldValue)}
+                  </Link>{" "}
+                  <span className={styles.articleCount}>({totalCount})</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
       </section>
     </Layout>
   )

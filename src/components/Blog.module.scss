@@ -41,9 +41,13 @@
   }
 }
 
+.archiveYear {
+  margin-bottom: 0.6rem;
+}
+
 .archives {
   list-style: none;
-  margin: 0;
+  margin-left: 0;
 
   a {
     color: $purple-700;
