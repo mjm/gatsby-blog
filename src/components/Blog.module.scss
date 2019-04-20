@@ -41,6 +41,41 @@
   }
 }
 
+.pinnedPosts hr {
+  margin-top: spacing(15);
+}
+
+.pinned {
+  background-color: $purple-100;
+  padding: spacing(5) spacing(4) spacing(4) spacing(4);
+  border-top: 4px solid $purple-300;
+  margin-bottom: spacing(6);
+  @include shadow-md;
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  .dateBubble {
+    background-color: white;
+  }
+}
+
+.pinnedLabel {
+  flex-grow: 1;
+  display: flex;
+  align-self: flex-end;
+  align-items: center;
+
+  color: $purple-400;
+  font-style: italic;
+  font-size: 0.85rem;
+
+  svg {
+    margin-right: spacing(2);
+  }
+}
+
 .archiveYear {
   margin-bottom: 0.6rem;
 }

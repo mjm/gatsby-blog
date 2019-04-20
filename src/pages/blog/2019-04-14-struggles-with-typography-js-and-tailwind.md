@@ -2,6 +2,7 @@
 templateKey: blog-post
 date: 2019-04-14T16:00:00+00:00
 title: Struggles with Typography.js and Tailwind
+pinned: true
 ---
 
 On this site, I'm currently using both [Tailwind](https://tailwindcss.com/) and [Typography.js](https://kyleamathews.github.io/typography.js/) for styling. I really like both of these projects, but they do not interact very well with each other. I want to lay out why that is and the challenges I've been having with it.

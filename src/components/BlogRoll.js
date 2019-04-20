@@ -3,7 +3,7 @@ import { Link } from "gatsby"
 import { HTMLContent } from "./Content"
 import useSiteMetadata from "./SiteMetadata"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faComment } from "@fortawesome/free-solid-svg-icons"
+import { faComment, faThumbtack } from "@fortawesome/free-solid-svg-icons"
 import { DateBubbleLink } from "./DateBubble"
 import styles from "./Blog.module.scss"
 import { MentionCount } from "./Mentions"
@@ -21,19 +21,19 @@ const BlogRoll = ({ posts }) => {
   )
 }
 
-const BlogRollEntry = ({ siteUrl, post }) => {
+export const BlogRollEntry = ({ siteUrl, post, pinned }) => {
   const entryUrl = siteUrl + post.fields.slug
   const photos = post.frontmatter.photos || []
 
   return (
     <div>
-      <article className="h-entry">
+      <article className={`h-entry ${pinned ? styles.pinned : ""}`}>
         {post.frontmatter.title && (
-          <h1 className="p-name">
+          <h2 className="p-name">
             <Link className={styles.title} to={post.fields.slug}>
               {post.frontmatter.title}
             </Link>
-          </h1>
+          </h2>
         )}
         {post.frontmatter.title ? (
           <HTMLContent className="e-content" content={post.excerpt} />
@@ -46,6 +46,12 @@ const BlogRollEntry = ({ siteUrl, post }) => {
           </figure>
         ))}
         <div className={styles.footer}>
+          {pinned && (
+            <div className={styles.pinnedLabel}>
+              <FontAwesomeIcon icon={faThumbtack} />
+              <div>Pinned</div>
+            </div>
+          )}
           <MentionCount url={entryUrl}>
             {count => (
               <div className={styles.mentionCount}>
@@ -56,7 +62,7 @@ const BlogRollEntry = ({ siteUrl, post }) => {
           </MentionCount>
           <DateBubbleLink
             to={post.fields.slug}
-            linkClassName="u-url"
+            linkClassName={`u-url ${styles.dateBubble}`}
             className="dt-published"
             isoDate={post.frontmatter.isoDate}
           >
@@ -64,7 +70,7 @@ const BlogRollEntry = ({ siteUrl, post }) => {
           </DateBubbleLink>
         </div>
       </article>
-      <hr className={styles.separator} />
+      {!pinned && <hr className={styles.separator} />}
     </div>
   )
 }
