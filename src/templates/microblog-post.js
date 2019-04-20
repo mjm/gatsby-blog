@@ -1,5 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
+import Helmet from "react-helmet"
 import { graphql } from "gatsby"
 import Layout from "../components/Layout"
 import Content, { HTMLContent } from "../components/Content"
@@ -15,6 +16,7 @@ export const MicroblogPostTemplate = ({
   date,
   isoDate,
   photos,
+  helmet,
 }) => {
   const { siteUrl } = useSiteMetadata()
   const url = slug && siteUrl + slug
@@ -24,6 +26,7 @@ export const MicroblogPostTemplate = ({
 
   return (
     <article className="h-entry">
+      {helmet}
       <PostContent className="p-name e-content" content={content} />
       {photos.map(photo => (
         <figure key={photo}>
@@ -60,6 +63,11 @@ const MicroblogPost = ({ data }) => {
         date={post.frontmatter.date}
         isoDate={post.frontmatter.isoDate}
         photos={post.frontmatter.photos}
+        helmet={
+          <Helmet>
+            <meta property="og:url" content={post.fields.slug} />
+          </Helmet>
+        }
       />
     </Layout>
   )

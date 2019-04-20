@@ -60,8 +60,10 @@ const BlogPost = ({ data }) => {
         contentComponent={HTMLContent}
         date={post.frontmatter.date}
         helmet={
-          <Helmet titleTemplate="%s | Blog">
+          <Helmet>
             <title>{post.frontmatter.title}</title>
+            <meta property="og:title" content={post.frontmatter.title} />
+            <meta property="og:url" content={post.fields.slug} />
           </Helmet>
         }
         isoDate={post.frontmatter.isoDate}

@@ -42,10 +42,14 @@ const TemplateWrapper = ({ children }) => {
 
         <meta name="theme-color" content="#fff" />
 
-        <meta property="og:type" content="business.business" />
+        <meta property="og:type" content="website" />
         <meta property="og:title" content={title} />
         <meta property="og:url" content="/" />
-        <meta property="og:image" content="/img/og-image.jpg" />
+        <meta property="og:site_name" content={title} />
+        <meta
+          property="og:image"
+          content="https://gravatar.com/avatar/fe0af3575ea6c1fa7881a17aaf72c510"
+        />
         <body className={styles.body} />
       </Helmet>
       <div className={styles.inner}>
