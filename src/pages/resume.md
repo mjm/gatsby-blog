@@ -7,8 +7,13 @@ education:
   degree: B.S. Computer Science
   year: 2013
 experience:
-- company: Travis CI GmbH
+- company: Stripe
+  startDate: May 2019
+  description: >
+    This story hasn't been written yet.
+- company: Travis CI
   startDate: June 2018
+  endDate: May 2019
   description: 'Technical lead for macOS build infrastructure. Created automated process
     for building new macOS VM images using Packer and a custom Slack bot. Led transition
     to running internal services in containers on Kubernetes clusters, and introduced
@@ -16,7 +21,7 @@ experience:
     operators.
 
 '
-- company: Apple, Inc.
+- company: Apple
   startDate: February 2014
   endDate: May 2018
   description: 'Full-stack engineer on all aspects of Xcode Server, the continuous
@@ -55,4 +60,5 @@ skills:
   - Redis
 
 ---
+
 I am an experienced and enthusiastic software engineer currently interested in infrastructure/SRE work after several years of full-stack development.
