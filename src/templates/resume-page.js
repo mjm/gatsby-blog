@@ -32,8 +32,8 @@ const Experience = ({ experience }) => {
       {experience.map((exp, i) => (
         <div key={i} className={styles.experience}>
           <div className={styles.header}>
-            <h4 class={styles.company}>{exp.company}</h4>
-            <div class={styles.dates}>
+            <h4 className={styles.company}>{exp.company}</h4>
+            <div className={styles.dates}>
               {exp.startDate} - {exp.endDate || "Now"}
             </div>
           </div>
