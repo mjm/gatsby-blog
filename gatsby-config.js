@@ -42,6 +42,7 @@ module.exports = {
         ],
       },
     },
+    "gatsby-transformer-yaml",
     "gatsby-plugin-force-trailing-slashes",
     "gatsby-plugin-catch-links",
     {

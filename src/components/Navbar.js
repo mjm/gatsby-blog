@@ -45,6 +45,15 @@ const Navbar = () => {
         </li>
         <li>
           <Link
+            to="/books/"
+            className={styles.link}
+            activeClassName={styles.active}
+          >
+            Reading
+          </Link>
+        </li>
+        <li>
+          <Link
             to="/talks/"
             className={styles.link}
             activeClassName={styles.active}
