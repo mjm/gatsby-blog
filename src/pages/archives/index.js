@@ -4,6 +4,7 @@ import { orderBy, groupBy } from "lodash"
 import moment from "moment"
 import Layout from "../../components/Layout"
 import styles from "../../components/Blog.module.scss"
+import { Helmet } from "react-helmet";
 
 const ArchivesPage = ({ data }) => {
   const {
@@ -19,6 +20,9 @@ const ArchivesPage = ({ data }) => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Archives</title>
+      </Helmet>
       <section>
         <h2>Archives</h2>
         {groups.map(([year, pages]) => (

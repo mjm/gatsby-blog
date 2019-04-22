@@ -20,9 +20,10 @@ const TemplateWrapper = ({ children }) => {
 
   return (
     <div className={styles.outer}>
-      <Helmet>
+      <Helmet
+        defaultTitle={title}
+        titleTemplate={`%s - ${title}`}>
         <html lang="en" />
-        <title>{title}</title>
         <meta name="description" content={description} />
 
         {selfLinks.map(href => (

@@ -80,6 +80,12 @@
   margin-bottom: 0.6rem;
 }
 
+.archiveTitle {
+  padding-bottom: spacing(1);
+  margin-bottom: spacing(10);
+  border-bottom: 4px solid $purple-200;
+}
+
 .archives {
   list-style: none;
   margin-left: 0;

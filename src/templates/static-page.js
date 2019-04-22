@@ -3,6 +3,7 @@ import PropTypes from "prop-types"
 import { graphql } from "gatsby"
 import Layout from "../components/Layout"
 import Content, { HTMLContent } from "../components/Content"
+import { Helmet } from "react-helmet"
 
 export const StaticPageTemplate = ({ title, content, contentComponent }) => {
   const PageContent = contentComponent || Content
@@ -26,6 +27,9 @@ const StaticPage = ({ data }) => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>{post.frontmatter.title}</title>
+      </Helmet>
       <StaticPageTemplate
         contentComponent={HTMLContent}
         title={post.frontmatter.title}

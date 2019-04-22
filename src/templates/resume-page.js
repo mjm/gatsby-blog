@@ -3,6 +3,7 @@ import { graphql } from "gatsby"
 import Layout from "../components/Layout"
 import Content, { HTMLContent } from "../components/Content"
 import styles from "../components/Resume.module.scss"
+import { Helmet } from "react-helmet"
 
 export const ResumePageTemplate = ({
   title,
@@ -93,6 +94,9 @@ const ResumePage = ({ data }) => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Resume</title>
+      </Helmet>
       <ResumePageTemplate
         contentComponent={HTMLContent}
         title={post.frontmatter.title}

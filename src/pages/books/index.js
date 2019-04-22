@@ -4,12 +4,16 @@ import Layout from "../../components/Layout"
 import styles from "../../components/Books.module.scss"
 import { orderBy } from "lodash"
 import moment from "moment"
+import { Helmet } from "react-helmet";
 
 const ReadingList = ({ data }) => {
   const { reading, toRead, finished } = data
 
   return (
     <Layout>
+      <Helmet>
+        <title>Reading List</title>
+      </Helmet>
       <div className="h-feed">
         <BooksSection
           title="Currently Reading"

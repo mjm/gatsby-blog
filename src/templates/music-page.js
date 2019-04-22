@@ -3,6 +3,7 @@ import { graphql } from "gatsby"
 import Layout from "../components/Layout"
 import Content, { HTMLContent } from "../components/Content"
 import styles from "../components/Music.module.scss"
+import { Helmet } from "react-helmet";
 
 export const MusicPageTemplate = ({
   title,
@@ -45,6 +46,9 @@ const MusicPage = ({ data }) => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>{post.frontmatter.title}</title>
+      </Helmet>
       <MusicPageTemplate
         contentComponent={HTMLContent}
         title={post.frontmatter.title}

@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faGithub } from "@fortawesome/free-brands-svg-icons"
 import { faTools } from "@fortawesome/free-solid-svg-icons"
 import styles from "../components/Project.module.scss"
+import { Helmet } from "react-helmet";
 
 export const ProjectPageTemplate = ({
   title,
@@ -57,6 +58,9 @@ const ProjectPage = ({ data }) => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>{post.frontmatter.title}</title>
+      </Helmet>
       <ProjectPageTemplate
         contentComponent={HTMLContent}
         title={post.frontmatter.title}

@@ -2,6 +2,7 @@ import React from "react"
 import Layout from "../../components/Layout"
 import { graphql, Link } from "gatsby"
 import styles from "../../components/Project.module.scss"
+import { Helmet } from "react-helmet";
 
 const ProjectsPage = ({ data }) => {
   const {
@@ -10,6 +11,9 @@ const ProjectsPage = ({ data }) => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Software Projects</title>
+      </Helmet>
       <article>
         <h2>Software Projects</h2>
         {projects.map(p => (
