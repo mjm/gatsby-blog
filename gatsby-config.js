@@ -46,6 +46,13 @@ module.exports = {
     "gatsby-plugin-force-trailing-slashes",
     "gatsby-plugin-catch-links",
     {
+      resolve: "@jamesdanylik/gatsby-source-goodreads",
+      options: {
+        key: process.env.GOODREADS_API_KEY,
+        id: "96331589",
+      },
+    },
+    {
       resolve: "gatsby-plugin-feed",
       options: {
         feeds: [

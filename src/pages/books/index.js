@@ -1,56 +1,96 @@
 import React from "react"
 import { graphql } from "gatsby"
 import Layout from "../../components/Layout"
-import { groupBy } from "lodash"
 import styles from "../../components/Books.module.scss"
+import { orderBy } from "lodash"
+import moment from "moment"
 
 const ReadingList = ({ data }) => {
-  const {
-    allBooksYaml: { nodes: books },
-  } = data
-
-  const booksByStatus = groupBy(books, "status")
+  const { reading, toRead, finished } = data
 
   return (
     <Layout>
       <div className="h-feed">
-        <BooksSection title="Currently Reading" books={booksByStatus.reading} />
-        <BooksSection title="To Read" books={booksByStatus["to-read"]} />
-        <BooksSection title="Finished" books={booksByStatus.finished} />
+        <BooksSection
+          title="Currently Reading"
+          status="reading"
+          reviews={reading.reviews}
+        />
+        <BooksSection
+          title="To Read"
+          status="to-read"
+          reviews={toRead.reviews}
+        />
+        <BooksSection
+          title="Finished"
+          status="finished"
+          reviews={finished.reviews}
+        />
       </div>
     </Layout>
   )
 }
 
-const BooksSection = ({ title, books }) => {
-  if (!books || books.length === 0) {
+const distantPast = new Date(1970)
+
+const BooksSection = ({ title, status, reviews }) => {
+  if (!reviews || reviews.length === 0) {
     return null
   }
+
+  reviews = reviews.map(review => ({
+    ...review,
+    read_at: goodreadsDate(review.read_at),
+    started_at: goodreadsDate(review.started_at),
+  }))
+  reviews = reviews.map(review => ({
+    ...review,
+    date: review.read_at || review.started_at,
+  }))
+  reviews = orderBy(
+    reviews,
+    [r => r.read_at || distantPast, "book.title_without_series"],
+    ["desc", "asc"]
+  )
 
   return (
     <section className={styles.section}>
       <h2>{title}</h2>
       <ul className={styles.books}>
-        {books.map(book => (
-          <li
-            key={book.isbn || book.title}
-            className={`h-entry ${styles.book}`}
-          >
+        {reviews.map(review => (
+          <li key={review.id} className={`h-entry ${styles.book}`}>
             <div style={{ display: "none" }} className="p-read-status">
-              {book.status}
+              {status}
             </div>
-            <a
-              href={`https://isbn.nu/${book.isbn}`}
-              className="p-read-of h-cite u-url"
-            >
-              <div className={`p-name ${styles.title}`}>{book.title}</div>
-              <div className={`p-author ${styles.author}`}>{book.author}</div>
+            <figure>
+              <a href={review.book.link}>
+                <img
+                  src={review.book.small_image_url}
+                  alt={review.book.title_without_series}
+                />
+              </a>
+            </figure>
+            <div className={`p-read-of h-cite ${styles.info}`}>
+              <a href={review.book.link} className={`p-name ${styles.title}`}>
+                {review.book.title_without_series}
+              </a>
+              <a
+                href={review.book.authors[0].link}
+                className={`p-author ${styles.author}`}
+              >
+                {review.book.authors[0].name}
+              </a>
+            </div>
+            <a href={review.link} className={`u-url ${styles.date}`}>
+              {review.date && (
+                <time
+                  className="dt-published"
+                  dateTime={moment(review.date).format()}
+                >
+                  {moment(review.date).format("MMM D, Y")}
+                </time>
+              )}
             </a>
-            <div className={styles.date}>
-              <time className="dt-published" dateTime={book.isoDate}>
-                {book.date}
-              </time>
-            </div>
           </li>
         ))}
       </ul>
@@ -58,18 +98,45 @@ const BooksSection = ({ title, books }) => {
   )
 }
 
+const goodreadsDate = date => {
+  if (!date || date === "") {
+    return null
+  }
+
+  return moment(date).toDate()
+}
+
 export default ReadingList
 
 export const pageQuery = graphql`
   query GetReadingList {
-    allBooksYaml(sort: { order: [DESC, ASC], fields: [date, title] }) {
-      nodes {
-        title
-        author
-        isbn
-        date(formatString: "MMM D, Y")
-        isoDate: date
-        status
+    reading: goodreadsShelf(name: { eq: "currently-reading" }) {
+      ...shelfContents
+    }
+    toRead: goodreadsShelf(name: { eq: "to-read" }) {
+      ...shelfContents
+    }
+    finished: goodreadsShelf(name: { eq: "read" }) {
+      ...shelfContents
+    }
+  }
+
+  fragment shelfContents on GoodreadsShelf {
+    reviews {
+      id
+      rating
+      started_at
+      read_at
+      link
+      book {
+        id
+        title_without_series
+        link
+        small_image_url
+        authors {
+          name
+          link
+        }
       }
     }
   }
