@@ -4,9 +4,6 @@ import Header from "../components/Header"
 import Navbar from "../components/Navbar"
 import useSiteMetadata from "./SiteMetadata"
 
-import "typeface-eczar"
-import "typeface-gentium-basic"
-import "./all.scss"
 import styles from "./Layout.module.scss"
 
 const TemplateWrapper = ({ children }) => {
@@ -20,9 +17,7 @@ const TemplateWrapper = ({ children }) => {
 
   return (
     <div className={styles.outer}>
-      <Helmet
-        defaultTitle={title}
-        titleTemplate={`%s - ${title}`}>
+      <Helmet defaultTitle={title} titleTemplate={`%s - ${title}`}>
         <html lang="en" />
         <meta name="description" content={description} />
 
