@@ -2,9 +2,9 @@ import React from "react"
 import { Link, graphql } from "gatsby"
 import { orderBy, groupBy } from "lodash"
 import moment from "moment"
-import Layout from "../../components/Layout"
-import styles from "../../components/Blog.module.scss"
-import { Helmet } from "react-helmet";
+import Layout from "../components/Layout"
+import styles from "../components/Blog.module.scss"
+import { Helmet } from "react-helmet"
 
 const ArchivesPage = ({ data }) => {
   const {

@@ -1,10 +1,10 @@
 import React from "react"
 import { graphql } from "gatsby"
-import Layout from "../../components/Layout"
-import styles from "../../components/Books.module.scss"
+import Layout from "../components/Layout"
+import styles from "../components/Books.module.scss"
 import { orderBy } from "lodash"
 import moment from "moment"
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet"
 
 const ReadingList = ({ data }) => {
   const { reading, toRead, finished } = data
