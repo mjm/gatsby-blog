@@ -24,7 +24,8 @@ class LFS {
   async _writeRefFile(shaString, size, path) {
     const refFile = `version https://git-lfs.github.com/spec/v1
 oid sha256:${shaString}
-size ${size}`
+size ${size}
+`
 
     await this.repo.writeFile("master", path, refFile, `Upload "${path}"`, {
       encode: true,
