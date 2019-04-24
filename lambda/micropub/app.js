@@ -151,9 +151,10 @@ function readPost(req) {
     throw new Error(`Unexpected content type: ${req.get("content-type")}`)
   }
 
+  post.content = post.content || ""
   post.templateKey = post.title ? "blog-post" : "microblog-post"
   post.slug = createSlug(post)
-  post.published = new Date()
+  post.published = post.published || new Date()
   post.urlPath =
     "/" + moment.utc(post.published).format("YYYY-MM-DD-") + post.slug
   post.path = createPath(post)
@@ -211,6 +212,9 @@ function readPostForm(body, files) {
   if (body.name) {
     post.title = body.name
   }
+  if (body.published) {
+    post.published = body.published
+  }
   if (body["mp-slug"]) {
     post.slug = body.slug
   }
@@ -238,6 +242,9 @@ function readPostJson({ type, properties: props }) {
   }
   if (props.content) {
     post.content = props.content[0]
+  }
+  if (props.published) {
+    post.published = props.published[0]
   }
   if (props["mp-slug"]) {
     post.slug = props["mp-slug"][0]
