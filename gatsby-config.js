@@ -3,7 +3,11 @@ module.exports = {
     title: "Matt Moriarity",
     description: "Matt's personal blog",
     siteUrl: "https://www.mattmoriarity.com",
-    selfLinks: ["https://github.com/mjm", "mailto:matt@mattmoriarity.com"],
+    selfLinks: [
+      "https://github.com/mjm",
+      "mailto:matt@mattmoriarity.com",
+      "https://instagram.com/mjmoriarity",
+    ],
     webmentionUsername: "www.mattmoriarity.com",
   },
   plugins: [
