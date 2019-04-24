@@ -1,4 +1,5 @@
 const express = require("express")
+const morgan = require("morgan")
 const bodyParser = require("body-parser")
 const multer = require("multer")
 const { URL } = require("url")
@@ -19,22 +20,27 @@ const app = express()
 const storage = multer.memoryStorage()
 const upload = multer({ storage })
 
+app.use(morgan("combined"))
 app.use(validateAuth)
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.post(
   "/.netlify/functions/micropub/media",
   upload.single("file"),
-  async (req, res) => {
-    const urlPath = mediaUrl(req.file)
-    const destFile = "static" + urlPath
+  async (req, res, next) => {
+    try {
+      const urlPath = mediaUrl(req.file)
+      const destFile = "static" + urlPath
 
-    const { oid, size } = await lfs.persistBuffer({
-      buffer: req.file.buffer,
-      path: destFile,
-    })
-    res.location(baseUrl + urlPath)
-    res.status(201).send({ oid, size })
+      const { oid, size } = await lfs.persistBuffer({
+        buffer: req.file.buffer,
+        path: destFile,
+      })
+      res.location(baseUrl + urlPath)
+      res.status(201).send({ oid, size })
+    } catch (err) {
+      next(err)
+    }
   }
 )
 app.get("/.netlify/functions/micropub", async (req, res) => {
@@ -49,21 +55,25 @@ app.get("/.netlify/functions/micropub", async (req, res) => {
 app.post(
   "/.netlify/functions/micropub",
   upload.array("photo", 8),
-  async (req, res) => {
-    const post = readPost(req)
-    console.log(post)
-    const postFile = renderPost(post)
+  async (req, res, next) => {
+    try {
+      const post = readPost(req)
+      console.log(post)
+      const postFile = renderPost(post)
 
-    await repo.writeFile(
-      "master",
-      post.path,
-      postFile,
-      `Added ${path.basename(post.path)}`,
-      { encode: true }
-    )
+      await repo.writeFile(
+        "master",
+        post.path,
+        postFile,
+        `Added ${path.basename(post.path)}`,
+        { encode: true }
+      )
 
-    res.set("Location", baseUrl + post.urlPath + "/")
-    res.status(202).send("")
+      res.set("Location", baseUrl + post.urlPath + "/")
+      res.status(202).send("")
+    } catch (err) {
+      next(err)
+    }
   }
 )
 
