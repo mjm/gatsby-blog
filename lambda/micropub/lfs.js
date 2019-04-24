@@ -53,6 +53,12 @@ size ${size}
       },
     })
     const responseJson = await response.json()
+    const object = responseJson.objects[0]
+
+    if (!object.actions || !object.actions.upload) {
+      // If there is no upload action, then we've probably already the file with this SHA before.
+      return
+    }
 
     const { href, header } = responseJson.objects[0].actions.upload
     if (!href) {
