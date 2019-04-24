@@ -1,5 +1,6 @@
 const express = require("express")
 const bodyParser = require("body-parser")
+const multer = require("multer")
 const { URL } = require("url")
 const slug = require("slug")
 const rs = require("randomstring")
@@ -7,34 +8,64 @@ const moment = require("moment")
 const path = require("path")
 const matter = require("gray-matter")
 const fetch = require("node-fetch")
-const repo = require("./repo")
+const mime = require("mime-types")
+const uuid = require("uuid/v4")
 
+const { repo, lfs } = require("./repo")
 const baseUrl = "https://www.mattmoriarity.com"
 
 const app = express()
 
+const storage = multer.memoryStorage()
+const upload = multer({ storage })
+
 app.use(validateAuth)
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.post("/.netlify/functions/micropub/media", async (req, res) => {
-  res.status(200).send("This is the media endpoint")
-})
-app.post("/.netlify/functions/micropub", async (req, res) => {
-  const post = readPost(req)
-  console.log(post)
-  const postFile = renderPost(post)
+app.post(
+  "/.netlify/functions/micropub/media",
+  upload.single("file"),
+  async (req, res) => {
+    const urlPath = mediaUrl(req.file)
+    const destFile = "static" + urlPath
 
-  await repo.writeFile(
-    "master",
-    post.path,
-    postFile,
-    `Added ${path.basename(post.path)}`,
-    { encode: true }
-  )
-
-  res.set("Location", baseUrl + post.urlPath + "/")
-  res.status(202).send("")
+    const { oid, size } = await lfs.persistBuffer({
+      buffer: req.file.buffer,
+      path: destFile,
+    })
+    res.location(baseUrl + urlPath)
+    res.status(201).send({ oid, size })
+  }
+)
+app.get("/.netlify/functions/micropub", async (req, res) => {
+  if (req.query.q === "config") {
+    res.send({
+      "media-endpoint": baseUrl + "/.netlify/functions/micropub/media",
+    })
+  } else {
+    res.status(400).send("Unknown q value")
+  }
 })
+app.post(
+  "/.netlify/functions/micropub",
+  upload.array("photo", 8),
+  async (req, res) => {
+    const post = readPost(req)
+    console.log(post)
+    const postFile = renderPost(post)
+
+    await repo.writeFile(
+      "master",
+      post.path,
+      postFile,
+      `Added ${path.basename(post.path)}`,
+      { encode: true }
+    )
+
+    res.set("Location", baseUrl + post.urlPath + "/")
+    res.status(202).send("")
+  }
+)
 
 const TOKEN_URL = "https://tokens.indieauth.com/token"
 
@@ -206,6 +237,16 @@ function createPath(post) {
   path += ".md"
 
   return path
+}
+
+function mediaUrl(file) {
+  const components = ["", "media"]
+  components.push(moment.utc().format("YYYY/MM"))
+
+  const ext = file.mimetype ? `.${mime.extension(file.mimetype)}` : ""
+  components.push(`${uuid()}${ext}`)
+
+  return components.join("/")
 }
 
 module.exports = app
