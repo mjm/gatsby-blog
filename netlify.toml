@@ -3,6 +3,5 @@
   command = "npm run build"
   functions = "lambda"
 [dev]
-  command = "npm run start:app"
   port = 8000
   publish = "public"
