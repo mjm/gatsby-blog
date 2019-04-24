@@ -54,11 +54,16 @@ app.get("/.netlify/functions/micropub", async (req, res) => {
 })
 app.post(
   "/.netlify/functions/micropub",
-  upload.array("photo", 8),
+  upload.fields([
+    { name: "photo", maxCount: 8 },
+    { name: "photo[]", maxCount: 8 },
+  ]),
   async (req, res, next) => {
     try {
       const post = readPost(req)
       console.log(post)
+
+      await persistFiles(post)
       const postFile = renderPost(post)
 
       await repo.writeFile(
@@ -135,12 +140,15 @@ function getAuthToken(req) {
 
 function readPost(req) {
   let post
-  if (req.is("application/x-www-form-urlencoded")) {
-    post = readPostUrlEncoded(req.body)
+  if (
+    req.is("application/x-www-form-urlencoded") ||
+    req.is("multipart/form-data")
+  ) {
+    post = readPostForm(req.body, req.files)
   } else if (req.is("application/json")) {
     post = readPostJson(req.body)
   } else {
-    return null
+    throw new Error(`Unexpected content type: ${req.get("content-type")}`)
   }
 
   post.templateKey = post.title ? "blog-post" : "microblog-post"
@@ -163,10 +171,38 @@ function renderPost(post) {
     frontmatter.title = post.title
   }
 
+  if (post.photos) {
+    frontmatter.photos = post.photos
+  }
+
   return matter.stringify("\n" + post.content, frontmatter)
 }
 
-function readPostUrlEncoded(body) {
+async function persistFiles(post) {
+  if (post.photoFiles) {
+    const photoPaths = []
+
+    for (const file of post.photoFiles) {
+      const urlPath = mediaUrl(file)
+      const destFile = "static" + urlPath
+
+      await lfs.persistBuffer({
+        buffer: file.buffer,
+        path: destFile,
+      })
+
+      photoPaths.push(urlPath)
+    }
+
+    post.photos = photoPaths
+  }
+}
+
+function readPostForm(body, files) {
+  if (body.h !== "entry") {
+    throw new Error("Cannot create a post that is not an entry.")
+  }
+
   const post = {}
   post.type = body.h
   if (body.content) {
@@ -178,9 +214,14 @@ function readPostUrlEncoded(body) {
   if (body["mp-slug"]) {
     post.slug = body.slug
   }
-
-  if (post.type !== "entry") {
-    throw new Error("Cannot create a post that is not an entry.")
+  if (body.photo) {
+    post.photos = Array.isArray(body.photo) ? body.photo : [body.photo]
+  }
+  if (files.photo) {
+    post.photoFiles = files.photo
+  }
+  if (files["photo[]"]) {
+    post.photoFiles = files["photo[]"]
   }
 
   return post
@@ -200,6 +241,9 @@ function readPostJson({ type, properties: props }) {
   }
   if (props["mp-slug"]) {
     post.slug = props["mp-slug"][0]
+  }
+  if (props.photo) {
+    post.photos = props.photo
   }
 
   return post
