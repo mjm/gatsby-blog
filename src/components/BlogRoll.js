@@ -45,6 +45,13 @@ export const BlogRollEntry = ({ siteUrl, post, pinned }) => {
             <img src={photo} alt="" className="u-photo" />
           </figure>
         ))}
+        {post.frontmatter.title && (
+          <p>
+            <Link to={post.fields.slug} className={styles.readMore}>
+              Read more…
+            </Link>
+          </p>
+        )}
         <div className={styles.footer}>
           {pinned && (
             <div className={styles.pinnedLabel}>

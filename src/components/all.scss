@@ -1,13 +1,22 @@
 @import "./variables.scss";
 
-.e-content a {
-  color: $purple-700;
+.e-content {
+  a {
+    color: $purple-700;
+  }
+
+  hr {
+    background-color: $purple-200;
+    height: 2px;
+  }
 }
 
-body code[class*="language-"],
-body pre[class*="language-"] {
-  font-size: 0.8rem;
-  font-variant-ligatures: none;
-  margin-top: 0;
-  margin-bottom: 1rem;
+body {
+  code[class*="language-"],
+  pre[class*="language-"] {
+    font-size: 0.8rem;
+    font-variant-ligatures: none;
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
 }
