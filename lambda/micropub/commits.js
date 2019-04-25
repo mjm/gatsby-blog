@@ -1,3 +1,5 @@
+const beeline = require("honeycomb-beeline")
+
 class CommitBuilder {
   constructor(repo, branch = "master") {
     this.repo = repo
@@ -24,12 +26,25 @@ class CommitBuilder {
       message = `Changed ${this.files.length} files.`
     }
 
+    const span = beeline.startSpan({
+      "commit.message": message,
+      "commit.branch": this.branch,
+      "commit.files": this.files.length,
+    })
+
     const branch = await this._getBranch()
     const parentCommit = branch.commit.sha
+    beeline.customContext.add("commit.old_sha", parentCommit)
+
     const parentTree = branch.commit.commit.tree.sha
+    beeline.customContext.add("commit.old_tree_sha", parentTree)
 
     const { sha: treeSha } = await this._createTree(parentTree)
+    beeline.customContext.add("commit.new_tree_sha", treeSha)
+
     await this._createCommit(parentCommit, treeSha, message)
+
+    beeline.finishSpan(span)
   }
 
   async _getBranch() {
@@ -47,6 +62,8 @@ class CommitBuilder {
     console.log(`Creating commit "${message}"`)
     const response = await this.repo.commit(parent, tree, message)
     const { sha } = response.data
+
+    beeline.customContext.add("commit.new_sha", sha)
 
     await this.repo.updateHead(`heads/${this.branch}`, sha, false)
   }

@@ -1,3 +1,4 @@
+const beeline = require("honeycomb-beeline")
 const fetch = require("node-fetch")
 const crypto = require("crypto")
 
@@ -8,6 +9,10 @@ class LFS {
   }
 
   async persistBuffers(files, commit) {
+    const span = beeline.startSpan({
+      "lfs.file_count": files.length,
+    })
+
     // Compute OID and size for all files
     files = files.map(file => {
       const { oid, size } = this._computeId(file)
@@ -19,6 +24,8 @@ class LFS {
       await this._uploadFile(file)
       this._writePointerFile(file, commit)
     }
+
+    beeline.finishSpan(span)
 
     return files
   }
@@ -54,9 +61,11 @@ class LFS {
     })
     const responseJson = await response.json()
 
+    const existingFiles = 0
     responseJson.objects.forEach((object, i) => {
       if (!object.actions || !object.actions.upload) {
         // If there is no upload action, then we've probably already the file with this SHA before.
+        existingFiles++
         return
       }
 
@@ -64,6 +73,8 @@ class LFS {
       files[i].href = href
       files[i].headers = header || {}
     })
+
+    beeline.customContext.add("lfs.existing_files", existingFiles)
   }
 
   async _uploadFile({ href, buffer, headers }) {
