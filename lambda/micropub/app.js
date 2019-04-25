@@ -12,6 +12,7 @@ const fetch = require("node-fetch")
 const mime = require("mime-types")
 const uuid = require("uuid/v4")
 
+const { CommitBuilder } = require("./commits")
 const { repo, lfs } = require("./repo")
 const baseUrl = "https://www.mattmoriarity.com"
 
@@ -29,13 +30,17 @@ app.post(
   upload.single("file"),
   async (req, res, next) => {
     try {
+      const commit = new CommitBuilder(repo)
       const urlPath = mediaUrl(req.file)
       const destFile = "static" + urlPath
 
       const { oid, size } = await lfs.persistBuffer({
         buffer: req.file.buffer,
         path: destFile,
+        commit,
       })
+      await commit.commit(`Uploaded ${urlPath}`)
+
       res.location(baseUrl + urlPath)
       res.status(201).send({ oid, size })
     } catch (err) {
@@ -60,19 +65,15 @@ app.post(
   ]),
   async (req, res, next) => {
     try {
+      const commit = new CommitBuilder(repo)
       const post = readPost(req)
       console.log(post)
 
-      await persistFiles(post)
+      await persistFiles(post, commit)
       const postFile = renderPost(post)
 
-      await repo.writeFile(
-        "master",
-        post.path,
-        postFile,
-        `Added ${path.basename(post.path)}`,
-        { encode: true }
-      )
+      commit.addFile(post.path, postFile)
+      await commit.commit(`Added ${path.basename(post.path)}`)
 
       res.set("Location", baseUrl + post.urlPath + "/")
       res.status(202).send("")
@@ -179,7 +180,7 @@ function renderPost(post) {
   return matter.stringify("\n" + post.content, frontmatter)
 }
 
-async function persistFiles(post) {
+async function persistFiles(post, commit) {
   if (post.photoFiles) {
     const photoPaths = []
 
@@ -190,6 +191,7 @@ async function persistFiles(post) {
       await lfs.persistBuffer({
         buffer: file.buffer,
         path: destFile,
+        commit,
       })
 
       photoPaths.push(urlPath)
