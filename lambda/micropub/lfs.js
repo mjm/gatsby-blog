@@ -8,7 +8,7 @@ class LFS {
     this.batchUrl = baseUrl + "/objects/batch"
   }
 
-  async persistBuffer({ buffer, path }) {
+  async persistBuffer({ buffer, path, commit }) {
     const hash = crypto.createHash("sha256")
     hash.update(buffer)
     const oid = hash.digest("hex")
@@ -16,20 +16,18 @@ class LFS {
 
     console.log(oid, size)
 
-    await this._writeRefFile(oid, size, path)
+    this._writeRefFile(oid, size, path, commit)
     await this._uploadBlob(buffer, oid, size)
     return { oid, size }
   }
 
-  async _writeRefFile(shaString, size, path) {
+  _writeRefFile(shaString, size, path, commit) {
     const refFile = `version https://git-lfs.github.com/spec/v1
 oid sha256:${shaString}
 size ${size}
 `
 
-    await this.repo.writeFile("master", path, refFile, `Upload "${path}"`, {
-      encode: true,
-    })
+    commit.addFile(path, refFile)
   }
 
   async _uploadBlob(buffer, shaString, size) {
