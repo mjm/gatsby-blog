@@ -73,8 +73,8 @@ exports.onPostBuild = async ({ graphql }, pluginOptions) => {
 function renderContent(post) {
   const content = [post.html]
 
-  if (post.photos) {
-    for (const photo of post.photos) {
+  if (post.frontmatter.photos) {
+    for (const photo of post.frontmatter.photos) {
       content.push(`<figure><img src="${photo}"></figure>`)
     }
   }
