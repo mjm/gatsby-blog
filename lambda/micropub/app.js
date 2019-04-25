@@ -1,3 +1,9 @@
+const beeline = require("honeycomb-beeline")({
+  writeKey: process.env.HONEYCOMB_WRITE_KEY,
+  dataset: "gatsby-blog",
+  serviceName: "micropub",
+})
+
 const express = require("express")
 const morgan = require("morgan")
 const bodyParser = require("body-parser")
@@ -48,6 +54,8 @@ router.post("/micropub/media", upload.single("file"), async (req, res) => {
   res.status(201).send({})
 })
 router.get("/micropub", async (req, res) => {
+  beeline.customContext.add("micropub.q", req.query.q)
+
   if (req.query.q === "config") {
     res.send({
       "media-endpoint": baseUrl + "/.netlify/functions/micropub/media",
@@ -89,6 +97,8 @@ async function validateAuth(req, res, next) {
   try {
     token = getAuthToken(req)
     if (!token) {
+      beeline.customContext.add("token_present", false)
+
       res.status(401).send("No auth token provided")
       return
     }
@@ -96,6 +106,8 @@ async function validateAuth(req, res, next) {
     res.status(400).send(e.message)
     return
   }
+
+  beeline.customContext.add("token_present", true)
 
   const response = await fetch(TOKEN_URL, {
     headers: {
@@ -112,11 +124,14 @@ async function validateAuth(req, res, next) {
 
   const expectedMe = new URL(baseUrl).hostname
   const actualMe = new URL(responseJson.me).hostname
+  beeline.customContext.add("me", actualMe)
+
   if (expectedMe !== actualMe) {
     res.status(403).send("Forbidden")
     return
   }
 
+  beeline.customContext.add("scope", responseJson.scope)
   if (responseJson.scope.indexOf("create") >= 0) {
     next()
   } else {
@@ -194,6 +209,8 @@ async function persistFiles(post, commit) {
 }
 
 function readPostForm(body, files) {
+  beeline.customContext.add("micropub.request_type", "form")
+
   if (body.h !== "entry") {
     throw new Error("Cannot create a post that is not an entry.")
   }
@@ -228,6 +245,8 @@ function readPostForm(body, files) {
 }
 
 function readPostJson({ type, properties: props }) {
+  beeline.customContext.add("micropub.request_type", "json")
+
   if (type[0] !== "h-entry") {
     throw new Error("Cannot create a post that is not an entry.")
   }
