@@ -6,6 +6,7 @@ class CommitBuilder {
   }
 
   addFile(path, content) {
+    console.log(`Adding file ${path} to commit`)
     this.files.push({
       path,
       content,
@@ -37,11 +38,13 @@ class CommitBuilder {
   }
 
   async _createTree(parent) {
+    console.log(`Creating tree with ${this.files.length} files`)
     const response = await this.repo.createTree(this.files, parent)
     return response.data
   }
 
   async _createCommit(parent, tree, message) {
+    console.log(`Creating commit "${message}"`)
     const response = await this.repo.commit(parent, tree, message)
     return response.data
   }
