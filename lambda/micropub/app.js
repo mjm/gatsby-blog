@@ -25,32 +25,27 @@ app.use(morgan("combined"))
 app.use(validateAuth)
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.post(
-  "/.netlify/functions/micropub/media",
-  upload.single("file"),
-  async (req, res, next) => {
-    res.status(404).send("Media endpoint is not supported at the moment.")
 
-    try {
-      const commit = new CommitBuilder(repo)
-      const urlPath = mediaUrl(req.file)
-      const destFile = "static" + urlPath
+const router = require("express-promise-router")()
+router.post("/micropub/media", upload.single("file"), async (req, res) => {
+  res.status(400).send("Media endpoint is not supported at the moment.")
+  return
 
-      const { oid, size } = await lfs.persistBuffer({
-        buffer: req.file.buffer,
-        path: destFile,
-        commit,
-      })
-      await commit.commit(`Uploaded ${urlPath}`)
+  const commit = new CommitBuilder(repo)
+  const urlPath = mediaUrl(req.file)
+  const destFile = "static" + urlPath
 
-      res.location(baseUrl + urlPath)
-      res.status(201).send({ oid, size })
-    } catch (err) {
-      next(err)
-    }
-  }
-)
-app.get("/.netlify/functions/micropub", async (req, res) => {
+  const { oid, size } = await lfs.persistBuffer({
+    buffer: req.file.buffer,
+    path: destFile,
+    commit,
+  })
+  await commit.commit(`Uploaded ${urlPath}`)
+
+  res.location(baseUrl + urlPath)
+  res.status(201).send({ oid, size })
+})
+router.get("/micropub", async (req, res) => {
   if (req.query.q === "config") {
     res.send({
       "media-endpoint": baseUrl + "/.netlify/functions/micropub/media",
@@ -59,31 +54,29 @@ app.get("/.netlify/functions/micropub", async (req, res) => {
     res.status(400).send("Unknown q value")
   }
 })
-app.post(
-  "/.netlify/functions/micropub",
+router.post(
+  "/micropub",
   upload.fields([
     { name: "photo", maxCount: 8 },
     { name: "photo[]", maxCount: 8 },
   ]),
-  async (req, res, next) => {
-    try {
-      const commit = new CommitBuilder(repo)
-      const post = readPost(req)
-      console.log(post)
+  async (req, res) => {
+    const commit = new CommitBuilder(repo)
+    const post = readPost(req)
+    console.log(post)
 
-      await persistFiles(post, commit)
-      const postFile = renderPost(post)
+    await persistFiles(post, commit)
+    const postFile = renderPost(post)
 
-      commit.addFile(post.path, postFile)
-      await commit.commit(`Added ${path.basename(post.path)}`)
+    commit.addFile(post.path, postFile)
+    await commit.commit(`Added ${path.basename(post.path)}`)
 
-      res.set("Location", baseUrl + post.urlPath + "/")
-      res.status(202).send("")
-    } catch (err) {
-      next(err)
-    }
+    res.set("Location", baseUrl + post.urlPath + "/")
+    res.status(202).send("")
   }
 )
+
+app.use("/.netlify/functions", router)
 
 const TOKEN_URL = "https://tokens.indieauth.com/token"
 
