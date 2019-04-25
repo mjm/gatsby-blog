@@ -29,6 +29,8 @@ app.post(
   "/.netlify/functions/micropub/media",
   upload.single("file"),
   async (req, res, next) => {
+    res.status(404).send("Media endpoint is not supported at the moment.")
+
     try {
       const commit = new CommitBuilder(repo)
       const urlPath = mediaUrl(req.file)
