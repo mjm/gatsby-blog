@@ -46,7 +46,9 @@ class CommitBuilder {
   async _createCommit(parent, tree, message) {
     console.log(`Creating commit "${message}"`)
     const response = await this.repo.commit(parent, tree, message)
-    return response.data
+    const { sha } = response.data
+
+    await this.repo.updateHead(`refs/heads/${this.branch}`, sha, false)
   }
 }
 
