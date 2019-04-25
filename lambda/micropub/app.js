@@ -35,15 +35,17 @@ router.post("/micropub/media", upload.single("file"), async (req, res) => {
   const urlPath = mediaUrl(req.file)
   const destFile = "static" + urlPath
 
-  const { oid, size } = await lfs.persistBuffer({
-    buffer: req.file.buffer,
-    path: destFile,
-    commit,
-  })
+  await lfs.persistBuffer(
+    {
+      buffer: req.file.buffer,
+      path: destFile,
+    },
+    commit
+  )
   await commit.commit(`Uploaded ${urlPath}`)
 
   res.location(baseUrl + urlPath)
-  res.status(201).send({ oid, size })
+  res.status(201).send({})
 })
 router.get("/micropub", async (req, res) => {
   if (req.query.q === "config") {
@@ -62,13 +64,15 @@ router.post(
   ]),
   async (req, res) => {
     const commit = new CommitBuilder(repo)
+
     const post = readPost(req)
     console.log(post)
 
     await persistFiles(post, commit)
-    const postFile = renderPost(post)
 
+    const postFile = renderPost(post)
     commit.addFile(post.path, postFile)
+
     await commit.commit(`Added ${path.basename(post.path)}`)
 
     res.set("Location", baseUrl + post.urlPath + "/")
@@ -177,22 +181,15 @@ function renderPost(post) {
 
 async function persistFiles(post, commit) {
   if (post.photoFiles) {
-    const photoPaths = []
+    const files = post.photoFiles.map(file => {
+      const url = mediaUrl(file)
+      const path = "static" + url
+      return { ...file, url, path }
+    })
 
-    for (const file of post.photoFiles) {
-      const urlPath = mediaUrl(file)
-      const destFile = "static" + urlPath
+    const uploadedFiles = await lfs.persistBuffers(files, commit)
 
-      await lfs.persistBuffer({
-        buffer: file.buffer,
-        path: destFile,
-        commit,
-      })
-
-      photoPaths.push(urlPath)
-    }
-
-    post.photos = photoPaths
+    post.photos = uploadedFiles.map(({ url }) => url)
   }
 }
 
