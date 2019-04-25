@@ -223,11 +223,13 @@ function readPostForm(body, files) {
   if (body.photo) {
     post.photos = Array.isArray(body.photo) ? body.photo : [body.photo]
   }
-  if (files.photo) {
-    post.photoFiles = files.photo
-  }
-  if (files["photo[]"]) {
-    post.photoFiles = files["photo[]"]
+  if (files) {
+    if (files.photo) {
+      post.photoFiles = files.photo
+    }
+    if (files["photo[]"]) {
+      post.photoFiles = files["photo[]"]
+    }
   }
 
   return post

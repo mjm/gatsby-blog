@@ -48,7 +48,7 @@ class CommitBuilder {
     const response = await this.repo.commit(parent, tree, message)
     const { sha } = response.data
 
-    await this.repo.updateHead(`refs/heads/${this.branch}`, sha, false)
+    await this.repo.updateHead(`heads/${this.branch}`, sha, false)
   }
 }
 
