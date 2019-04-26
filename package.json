@@ -51,11 +51,12 @@
   "scripts": {
     "clean": "rimraf .cache public",
     "start": "npm run clean && gatsby develop",
-    "build": "npm run clean && npm install --cwd lambda --prefix lambda && gatsby build",
+    "build": "npm run clean && npm run lambda:install && npm test && gatsby build",
+    "lambda:install": "npm install --cwd lambda --prefix lambda",
     "develop": "netlify dev",
     "serve": "gatsby serve",
     "format": "prettier --write \"{gatsby-*.js,src/**/*.js}\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm test --prefix lambda --"
   },
   "devDependencies": {
     "graphql": "^14.2.1",
