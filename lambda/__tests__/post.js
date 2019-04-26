@@ -1,6 +1,7 @@
 const Post = require("../micropub/post.js")
 
 const MockDate = require("mockdate")
+const matter = require("gray-matter")
 
 test("exists", () => {
   expect(Post).toBeTruthy()
@@ -166,5 +167,54 @@ describe("generating", () => {
         "src/pages/micro/2019-05-04-a-little-thing-im-cooking-up.md"
       )
     })
+  })
+})
+
+describe("rendering", () => {
+  test("a minimal post", () => {
+    const post = new Post()
+    post.content = "This is some content."
+    post.published = "2018-01-02T03:04:05Z"
+    post.generate()
+
+    const { data, content } = matter(post.render())
+    expect(data).toEqual({
+      templateKey: "microblog-post",
+      date: new Date("2018-01-02T03:04:05.000Z"),
+    })
+    expect(content.trim()).toBe("This is some content.")
+  })
+
+  test("a post with title and photos", () => {
+    const post = new Post()
+    post.content = "This is my sweet blog post."
+    post.published = "2018-01-02T03:04:05Z"
+    post.title = "A New Post"
+    post.photos = ["/media/1.jpg", "/media/2.jpg"]
+    post.generate()
+
+    const { data, content } = matter(post.render())
+    expect(data).toEqual({
+      templateKey: "blog-post",
+      date: new Date("2018-01-02T03:04:05.000Z"),
+      title: "A New Post",
+      photos: ["/media/1.jpg", "/media/2.jpg"],
+    })
+    expect(content.trim()).toBe("This is my sweet blog post.")
+  })
+
+  test("a post with no content", () => {
+    const post = new Post()
+    post.published = "2018-01-02T03:04:05Z"
+    post.photos = ["/media/1.jpg"]
+    post.generate()
+
+    const { data, content } = matter(post.render())
+    expect(data).toEqual({
+      templateKey: "microblog-post",
+      date: new Date("2018-01-02T03:04:05.000Z"),
+      photos: ["/media/1.jpg"],
+    })
+    expect(content.trim()).toBe("")
   })
 })

@@ -1,6 +1,7 @@
 const slug = require("slug")
 const rs = require("randomstring")
 const moment = require("moment")
+const matter = require("gray-matter")
 
 slug.defaults.modes.pretty.lower = true
 const SLUG_MAX_LENGTH = 40
@@ -38,6 +39,27 @@ module.exports = class Post {
     this._createSlug()
     this._publish()
     this._generatePath()
+  }
+
+  render() {
+    return matter.stringify("\n" + this.content, this.frontmatter)
+  }
+
+  get frontmatter() {
+    const data = {
+      templateKey: this.templateKey,
+      date: this.published,
+    }
+
+    if (this.title) {
+      data.title = this.title
+    }
+
+    if (this.photos) {
+      data.photos = this.photos
+    }
+
+    return data
   }
 
   _createSlug() {

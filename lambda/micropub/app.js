@@ -11,7 +11,6 @@ const multer = require("multer")
 const { URL } = require("url")
 const moment = require("moment")
 const path = require("path")
-const matter = require("gray-matter")
 const fetch = require("node-fetch")
 const mime = require("mime-types")
 const uuid = require("uuid/v4")
@@ -77,7 +76,7 @@ router.post(
 
     await persistFiles(post, commit)
 
-    const postFile = renderPost(post)
+    const postFile = post.render()
     commit.addFile(post.path, postFile)
 
     await commit.commit(`Added ${path.basename(post.path)}`)
@@ -172,23 +171,6 @@ function readPost(req) {
 
   post.generate()
   return post
-}
-
-function renderPost(post) {
-  const frontmatter = {
-    templateKey: post.templateKey,
-    date: post.published,
-  }
-
-  if (post.title) {
-    frontmatter.title = post.title
-  }
-
-  if (post.photos) {
-    frontmatter.photos = post.photos
-  }
-
-  return matter.stringify("\n" + post.content, frontmatter)
 }
 
 async function persistFiles(post, commit) {
