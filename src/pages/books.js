@@ -61,53 +61,60 @@ const BooksSection = ({ title, status, reviews }) => {
     <section className={styles.section}>
       <h2>{title}</h2>
       <ul className={styles.books}>
-        {reviews.map(review => (
-          <li key={review.id} className={`h-entry ${styles.book}`}>
-            <div style={{ display: "none" }} className="p-read-status">
-              {status}
-            </div>
-            <figure>
-              <a href={review.book.link}>
-                <img
-                  src={review.book.small_image_url}
-                  alt={review.book.title_without_series}
-                />
-              </a>
-            </figure>
-            <div className={`p-read-of h-cite ${styles.info}`}>
-              <a href={review.book.link} className={`p-name ${styles.title}`}>
-                {review.book.title_without_series}
-              </a>
-              <a
-                href={review.book.authors[0].link}
-                className={`p-author ${styles.author}`}
-              >
-                {review.book.authors[0].name}
-              </a>
-            </div>
-            <a href={review.link} className={`u-url ${styles.date}`}>
-              {review.date && (
-                <time
-                  className="dt-published"
-                  dateTime={moment(review.date).format()}
-                >
-                  {moment(review.date).format("MMM D, Y")}
-                </time>
-              )}
-            </a>
-          </li>
+        {reviews.map(r => (
+          <BookReview key={r.id} review={r} status={status} />
         ))}
       </ul>
     </section>
   )
 }
 
+const BookReview = ({ review, status }) => {
+  const date = moment(review.date, goodreadsDateFormat)
+
+  return (
+    <li className={`h-entry ${styles.book}`}>
+      <div style={{ display: "none" }} className="p-read-status">
+        {status}
+      </div>
+      <figure>
+        <a href={review.book.link}>
+          <img
+            src={review.book.small_image_url}
+            alt={review.book.title_without_series}
+          />
+        </a>
+      </figure>
+      <div className={`p-read-of h-cite ${styles.info}`}>
+        <a href={review.book.link} className={`p-name ${styles.title}`}>
+          {review.book.title_without_series}
+        </a>
+        <a
+          href={review.book.authors[0].link}
+          className={`p-author ${styles.author}`}
+        >
+          {review.book.authors[0].name}
+        </a>
+      </div>
+      <a href={review.link} className={`u-url ${styles.date}`}>
+        {review.date && (
+          <time className="dt-published" dateTime={date.format()}>
+            {date.format("MMM D, Y")}
+          </time>
+        )}
+      </a>
+    </li>
+  )
+}
+
+const goodreadsDateFormat = "ddd MMM DD HH:mm:ss ZZ YYYY"
+
 const goodreadsDate = date => {
   if (!date || date === "") {
     return null
   }
 
-  return moment(date).toDate()
+  return moment(date, goodreadsDateFormat).toDate()
 }
 
 export default ReadingList
