@@ -57,7 +57,7 @@ class LFS {
     })
     const responseJson = await response.json()
 
-    const existingFiles = 0
+    let existingFiles = 0
     responseJson.objects.forEach((object, i) => {
       if (!object.actions || !object.actions.upload) {
         // If there is no upload action, then we've probably already the file with this SHA before.
