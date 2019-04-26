@@ -18,7 +18,7 @@ function setup(type, body, files = {}) {
 
 function createFile() {
   return {
-    buffer: new Buffer(""),
+    buffer: Buffer.from(""),
     mimetype: "image/jpeg",
   }
 }
