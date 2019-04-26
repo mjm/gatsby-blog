@@ -60,7 +60,7 @@ class LFS {
     let existingFiles = 0
     responseJson.objects.forEach((object, i) => {
       if (!object.actions || !object.actions.upload) {
-        // If there is no upload action, then we've probably already the file with this SHA before.
+        // If there is no upload action, then we've probably already uploaded the file with this SHA before.
         existingFiles++
         return
       }
@@ -74,6 +74,10 @@ class LFS {
   }
 
   async _uploadFile({ href, buffer, headers }) {
+    if (!href) {
+      return
+    }
+
     await fetch(href, {
       method: "PUT",
       body: buffer,
