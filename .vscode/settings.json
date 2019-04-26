@@ -1,3 +1,3 @@
 {
-  "jest.pathToJest": "npm run test --cwd lambda --prefix lambda --"
+  "jest.pathToJest": "npm test --"
 }
