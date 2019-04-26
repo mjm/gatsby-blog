@@ -26,28 +26,23 @@ class CommitBuilder {
       message = `Changed ${this.files.length} files.`
     }
 
-    await beeline.startAsyncSpan(
-      {
-        "app.commit.message": message,
-        "app.commit.branch": this.branch,
-        "app.commit.files": this.files.length,
-      },
-      async span => {
-        const branch = await this._getBranch()
-        const parentCommit = branch.commit.sha
-        beeline.customContext.add("commit.old_sha", parentCommit)
+    beeline.addContext({
+      "app.commit.message": message,
+      "app.commit.branch": this.branch,
+      "app.commit.files": this.files.length,
+    })
 
-        const parentTree = branch.commit.commit.tree.sha
-        beeline.customContext.add("commit.old_tree_sha", parentTree)
+    const branch = await this._getBranch()
+    const parentCommit = branch.commit.sha
+    beeline.customContext.add("commit.old_sha", parentCommit)
 
-        const { sha: treeSha } = await this._createTree(parentTree)
-        beeline.customContext.add("commit.new_tree_sha", treeSha)
+    const parentTree = branch.commit.commit.tree.sha
+    beeline.customContext.add("commit.old_tree_sha", parentTree)
 
-        await this._createCommit(parentCommit, treeSha, message)
+    const { sha: treeSha } = await this._createTree(parentTree)
+    beeline.customContext.add("commit.new_tree_sha", treeSha)
 
-        beeline.finishSpan(span)
-      }
-    )
+    await this._createCommit(parentCommit, treeSha, message)
   }
 
   async _getBranch() {

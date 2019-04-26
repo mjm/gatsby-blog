@@ -9,28 +9,21 @@ class LFS {
   }
 
   async persistBuffers(files, commit) {
-    return await beeline.startAsyncSpan(
-      {
-        "lfs.file_count": files.length,
-      },
-      async span => {
-        // Compute OID and size for all files
-        files = files.map(file => {
-          const { oid, size } = this._computeId(file)
-          return { ...file, oid, size }
-        })
+    beeline.customContext.add("lfs.file_count", files.length)
 
-        await this._initiateTransfer(files)
-        for (const file of files) {
-          await this._uploadFile(file)
-          this._writePointerFile(file, commit)
-        }
+    // Compute OID and size for all files
+    files = files.map(file => {
+      const { oid, size } = this._computeId(file)
+      return { ...file, oid, size }
+    })
 
-        beeline.finishSpan(span)
+    await this._initiateTransfer(files)
+    for (const file of files) {
+      await this._uploadFile(file)
+      this._writePointerFile(file, commit)
+    }
 
-        return files
-      }
-    )
+    return files
   }
 
   async persistBuffer(file, commit) {
