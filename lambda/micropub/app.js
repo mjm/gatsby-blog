@@ -6,15 +6,13 @@ const beeline = require("honeycomb-beeline")({
 
 const express = require("express")
 const morgan = require("morgan")
-const bodyParser = require("body-parser")
 const multer = require("multer")
-const { URL } = require("url")
 const moment = require("moment")
 const path = require("path")
-const fetch = require("node-fetch")
 const mime = require("mime-types")
 const uuid = require("uuid/v4")
 
+const { requireToken } = require("./auth")
 const { CommitBuilder } = require("./commits")
 const { repo, lfs } = require("./repo")
 const Post = require("./post")
@@ -26,9 +24,9 @@ const storage = multer.memoryStorage()
 const upload = multer({ storage })
 
 app.use(morgan("combined"))
-app.use(validateAuth)
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(requireToken)
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 const router = require("express-promise-router")()
 router.post("/micropub/media", upload.single("file"), async (req, res) => {
@@ -87,69 +85,6 @@ router.post(
 )
 
 app.use("/.netlify/functions", router)
-
-const TOKEN_URL = "https://tokens.indieauth.com/token"
-
-async function validateAuth(req, res, next) {
-  let token
-  try {
-    token = getAuthToken(req)
-    if (!token) {
-      beeline.customContext.add("token_present", false)
-
-      res.status(401).send("No auth token provided")
-      return
-    }
-  } catch (e) {
-    res.status(400).send(e.message)
-    return
-  }
-
-  beeline.customContext.add("token_present", true)
-
-  const response = await fetch(TOKEN_URL, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/json",
-    },
-  })
-  if (!response.ok) {
-    res.status(500).send("Bad response from token endpoint")
-    return
-  }
-
-  const responseJson = await response.json()
-
-  const expectedMe = new URL(baseUrl).hostname
-  const actualMe = new URL(responseJson.me).hostname
-  beeline.customContext.add("me", actualMe)
-
-  if (expectedMe !== actualMe) {
-    res.status(403).send("Forbidden")
-    return
-  }
-
-  beeline.customContext.add("scope", responseJson.scope)
-  if (responseJson.scope.indexOf("create") >= 0) {
-    next()
-  } else {
-    res.status(403).send("Need create scope")
-  }
-}
-
-function getAuthToken(req) {
-  const authz = req.get("authorization")
-  if (!authz) {
-    return null
-  }
-
-  const [type, token] = authz.split(" ")
-  if (type !== "Bearer") {
-    throw new Error(`Invalid authorization type '${type}`)
-  }
-
-  return token
-}
 
 function readPost(req) {
   const post = new Post()
