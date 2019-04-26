@@ -4,11 +4,12 @@
   "description": "",
   "main": "micropub.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/jest": "^24.0.11",
     "aws-serverless-express": "^3.3.6",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
@@ -26,5 +27,9 @@
     "randomstring": "^1.1.5",
     "slug": "^1.1.0",
     "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "jest": "^24.7.1",
+    "mockdate": "^2.0.2"
   }
 }

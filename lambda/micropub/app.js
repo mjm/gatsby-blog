@@ -9,8 +9,6 @@ const morgan = require("morgan")
 const bodyParser = require("body-parser")
 const multer = require("multer")
 const { URL } = require("url")
-const slug = require("slug")
-const rs = require("randomstring")
 const moment = require("moment")
 const path = require("path")
 const matter = require("gray-matter")
@@ -20,6 +18,7 @@ const uuid = require("uuid/v4")
 
 const { CommitBuilder } = require("./commits")
 const { repo, lfs } = require("./repo")
+const Post = require("./post")
 const baseUrl = "https://www.mattmoriarity.com"
 
 const app = express()
@@ -83,7 +82,7 @@ router.post(
 
     await commit.commit(`Added ${path.basename(post.path)}`)
 
-    res.set("Location", baseUrl + post.urlPath + "/")
+    res.set("Location", baseUrl + post.url + "/")
     res.status(202).send("")
   }
 )
@@ -154,26 +153,24 @@ function getAuthToken(req) {
 }
 
 function readPost(req) {
-  let post
+  const post = new Post()
   if (
     req.is("application/x-www-form-urlencoded") ||
     req.is("multipart/form-data")
   ) {
-    post = readPostForm(req.body, req.files)
+    readPostForm(post, req.body, req.files)
   } else if (req.is("application/json")) {
-    post = readPostJson(req.body)
+    readPostJson(post, req.body)
   } else {
     throw new Error(`Unexpected content type: ${req.get("content-type")}`)
   }
 
-  post.content = post.content || ""
-  post.templateKey = post.title ? "blog-post" : "microblog-post"
-  post.slug = createSlug(post)
-  post.published = post.published || new Date()
-  post.urlPath =
-    "/" + moment.utc(post.published).format("YYYY-MM-DD-") + post.slug
-  post.path = createPath(post)
+  const errors = post.validate()
+  if (errors.length > 0) {
+    throw new Error(`Could not create post: ${errors.join(", ")}`)
+  }
 
+  post.generate()
   return post
 }
 
@@ -208,14 +205,9 @@ async function persistFiles(post, commit) {
   }
 }
 
-function readPostForm(body, files) {
+function readPostForm(post, body, files) {
   beeline.customContext.add("micropub.request_type", "form")
 
-  if (body.h !== "entry") {
-    throw new Error("Cannot create a post that is not an entry.")
-  }
-
-  const post = {}
   post.type = body.h
   if (body.content) {
     post.content = body.content
@@ -240,18 +232,12 @@ function readPostForm(body, files) {
       post.photoFiles = files["photo[]"]
     }
   }
-
-  return post
 }
 
-function readPostJson({ type, properties: props }) {
+function readPostJson(post, { type, properties: props }) {
   beeline.customContext.add("micropub.request_type", "json")
 
-  if (type[0] !== "h-entry") {
-    throw new Error("Cannot create a post that is not an entry.")
-  }
-
-  const post = { type: "entry" }
+  post.type = type[0].replace(/^h-/, "")
   if (props.name) {
     post.title = props.name[0]
   }
@@ -267,52 +253,6 @@ function readPostJson({ type, properties: props }) {
   if (props.photo) {
     post.photos = props.photo
   }
-
-  return post
-}
-
-slug.defaults.modes.pretty.lower = true
-const SLUG_MAX_LENGTH = 40
-
-function createSlug(post) {
-  if (post.slug) {
-    return post.slug
-  }
-
-  if (post.title) {
-    return slug(post.title)
-  }
-
-  let content
-  if (post.content) {
-    content = post.content
-  } else {
-    content = rs.generate(10)
-  }
-
-  let s = slug(content)
-  if (s.length > SLUG_MAX_LENGTH) {
-    s = s.substring(0, SLUG_MAX_LENGTH)
-
-    const i = s.lastIndexOf("-")
-    s = s.substring(0, i)
-  }
-
-  return s
-}
-
-function createPath(post) {
-  let path = "src/pages/"
-  if (post.templateKey === "blog-post") {
-    path += "blog"
-  } else {
-    path += "micro"
-  }
-
-  path += post.urlPath
-  path += ".md"
-
-  return path
 }
 
 function mediaUrl(file) {
