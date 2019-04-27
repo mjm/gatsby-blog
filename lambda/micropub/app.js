@@ -7,14 +7,12 @@ const beeline = require("honeycomb-beeline")({
 const express = require("express")
 const morgan = require("morgan")
 const multer = require("multer")
-const moment = require("moment")
 const path = require("path")
-const mime = require("mime-types")
-const uuid = require("uuid/v4")
 
 const { requireToken } = require("./auth")
 const { CommitBuilder } = require("./commits")
 const { baseUrl } = require("./config")
+const MediaFile = require("./media")
 const postMiddleware = require("./middleware")
 const { repo, lfs } = require("./repo")
 
@@ -38,17 +36,10 @@ router.post("/micropub/media", upload.single("file"), async (req, res) => {
   return
 
   const commit = new CommitBuilder(repo)
-  const urlPath = mediaUrl(req.file)
-  const destFile = "static" + urlPath
+  const media = new MediaFile(req.file)
 
-  await lfs.persistBuffer(
-    {
-      buffer: req.file.buffer,
-      path: destFile,
-    },
-    commit
-  )
-  await commit.commit(`Uploaded ${urlPath}`)
+  await lfs.persistBuffer(media, commit)
+  await commit.commit(`Uploaded ${media.url}`)
 
   res.location(baseUrl + urlPath)
   res.status(201).send({})
@@ -104,27 +95,13 @@ function generatePost(req) {
 }
 
 async function persistFiles(post, commit) {
-  if (post.photoFiles) {
-    const files = post.photoFiles.map(file => {
-      const url = mediaUrl(file)
-      const path = "static" + url
-      return { ...file, url, path }
-    })
-
-    const uploadedFiles = await lfs.persistBuffers(files, commit)
-
-    post.photos = uploadedFiles.map(({ url }) => url)
+  // TODO make this more general and pull into Post class
+  if (post.media.photos) {
+    const uploadedFiles = await lfs.persistBuffers(post.media.photos, commit)
+    post.photos = (post.photos || []).concat(
+      uploadedFiles.map(({ url }) => url)
+    )
   }
-}
-
-function mediaUrl(file) {
-  const components = ["", "media"]
-  components.push(moment.utc().format("YYYY/MM"))
-
-  const ext = file.mimetype ? `.${mime.extension(file.mimetype)}` : ""
-  components.push(`${uuid()}${ext}`)
-
-  return components.join("/")
 }
 
 module.exports = app

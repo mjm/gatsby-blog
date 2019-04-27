@@ -106,6 +106,7 @@ describe("reading a form-based Micropub request", () => {
       "https://example.com/1.jpg",
       "https://example.com/2.jpg",
     ])
+    expect(req.post.media.photos).toBeUndefined()
   })
 
   test("reads photo files from the photo key", async () => {
@@ -116,7 +117,7 @@ describe("reading a form-based Micropub request", () => {
     )
 
     await mw.form(req, res)
-    expect(req.post.photoFiles.length).toBe(2)
+    expect(req.post.media.photos.length).toBe(2)
   })
 
   test("reads photo files from the photo[] key", async () => {
@@ -127,7 +128,7 @@ describe("reading a form-based Micropub request", () => {
     )
 
     await mw.form(req, res)
-    expect(req.post.photoFiles.length).toBe(2)
+    expect(req.post.media.photos.length).toBe(2)
   })
 })
 

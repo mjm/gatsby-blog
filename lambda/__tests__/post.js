@@ -59,6 +59,60 @@ describe("template key", () => {
   })
 })
 
+describe("adding media", () => {
+  test("adds first media item to be uploaded", () => {
+    const post = new Post()
+    post.addMedia("photos", {
+      buffer: Buffer.from("asdf"),
+      mimetype: "image/jpeg",
+    })
+
+    expect(post.media.photos.length).toBe(1)
+    expect(post.media.photos[0].url).toBeDefined()
+  })
+
+  test("adds additional media items to be uploaded", () => {
+    const post = new Post()
+    post.addMedia("photos", {
+      buffer: Buffer.from("asdf"),
+      mimetype: "image/jpeg",
+    })
+    post.addMedia("photos", {
+      buffer: Buffer.from("qwer"),
+      mimetype: "image/jpeg",
+    })
+
+    expect(post.media.photos.length).toBe(2)
+    expect(post.media.photos[0].buffer).toEqual(Buffer.from("asdf"))
+    expect(post.media.photos[1].buffer).toEqual(Buffer.from("qwer"))
+  })
+
+  test("adds an array of media items at once", () => {
+    const post = new Post()
+    post.addMedia("photos", [
+      {
+        buffer: Buffer.from("asdf"),
+        mimetype: "image/jpeg",
+      },
+      {
+        buffer: Buffer.from("qwer"),
+        mimetype: "image/jpeg",
+      },
+    ])
+
+    expect(post.media.photos.length).toBe(2)
+    expect(post.media.photos[0].buffer).toEqual(Buffer.from("asdf"))
+    expect(post.media.photos[1].buffer).toEqual(Buffer.from("qwer"))
+  })
+
+  test("ignores a falsy file value", () => {
+    const post = new Post()
+    post.addMedia("photos", undefined)
+
+    expect(post.media.photos).toBeUndefined()
+  })
+})
+
 describe("generating", () => {
   const now = new Date("2019-05-04T03:02:01Z")
 

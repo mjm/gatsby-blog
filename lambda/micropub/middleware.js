@@ -21,7 +21,7 @@ exports.form = async function formMiddleware(req) {
     post.photos = [].concat(body.photo)
   }
   if (files) {
-    post.photoFiles = files.photo || files["photo[]"]
+    post.addMedia("photos", files.photo || files["photo[]"])
   }
 
   req.post = post

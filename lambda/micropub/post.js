@@ -3,10 +3,16 @@ const rs = require("randomstring")
 const moment = require("moment")
 const matter = require("gray-matter")
 
+const MediaFile = require("./media")
+
 slug.defaults.modes.pretty.lower = true
 const SLUG_MAX_LENGTH = 40
 
 module.exports = class Post {
+  constructor() {
+    this.media = {}
+  }
+
   get content() {
     return this._content || ""
   }
@@ -33,6 +39,16 @@ module.exports = class Post {
     }
 
     return errors
+  }
+
+  addMedia(key, file) {
+    if (!file) {
+      return
+    }
+
+    const files = [].concat(file).map(f => new MediaFile(f))
+    const media = this.media[key]
+    this.media[key] = (media || []).concat(files)
   }
 
   generate() {
