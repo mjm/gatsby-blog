@@ -1,6 +1,7 @@
-const beeline = require("honeycomb-beeline")
+const beeline = require("honeycomb-beeline")()
 const { URL } = require("url")
 const fetch = require("node-fetch")
+const { baseUrl } = require("./config")
 
 const TOKEN_URL = "https://tokens.indieauth.com/token"
 
@@ -10,7 +11,7 @@ exports.setExpectedToken = token => {
   expectedToken = token
 }
 
-exports.requireToken = async function requireToken(req, res, next) {
+exports.requireToken = async function requireToken(req, res) {
   let token
   try {
     token = getAuthToken(req)
@@ -29,11 +30,11 @@ exports.requireToken = async function requireToken(req, res, next) {
 
   if (expectedToken) {
     if (token === expectedToken) {
-      next()
+      return "next"
     } else {
       res.status(403).send("Forbidden")
+      return
     }
-    return
   }
 
   const response = await fetch(TOKEN_URL, {
@@ -42,6 +43,10 @@ exports.requireToken = async function requireToken(req, res, next) {
       Accept: "application/json",
     },
   })
+  if (response.status === 403) {
+    res.status(403).send("IndieAuth rejected token")
+    return
+  }
   if (!response.ok) {
     res.status(500).send("Bad response from token endpoint")
     return
@@ -60,7 +65,7 @@ exports.requireToken = async function requireToken(req, res, next) {
 
   beeline.customContext.add("scope", responseJson.scope)
   if (responseJson.scope.indexOf("create") >= 0) {
-    next()
+    return "next"
   } else {
     res.status(403).send("Need create scope")
   }

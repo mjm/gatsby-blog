@@ -14,10 +14,9 @@ const uuid = require("uuid/v4")
 
 const { requireToken } = require("./auth")
 const { CommitBuilder } = require("./commits")
+const { baseUrl } = require("./config")
 const postMiddleware = require("./middleware")
 const { repo, lfs } = require("./repo")
-
-const baseUrl = "https://www.mattmoriarity.com"
 
 const app = express()
 
@@ -25,11 +24,13 @@ const storage = multer.memoryStorage()
 const upload = multer({ storage })
 
 app.use(morgan("combined"))
-app.use(requireToken)
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
 
 const router = require("express-promise-router")()
+
+router.use(requireToken)
+router.use(express.json())
+router.use(express.urlencoded({ extended: true }))
+
 router.post("/micropub/media", upload.single("file"), async (req, res) => {
   res.status(400).send("Media endpoint is not supported at the moment.")
   return
