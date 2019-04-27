@@ -10,8 +10,6 @@ const url = "/.netlify/functions/micropub"
 beforeAll(() => setExpectedToken("token"))
 afterAll(() => setExpectedToken(null))
 
-beforeEach(() => {})
-
 test("requires a valid token", async () => {
   await supertest(app)
     .post(url)
