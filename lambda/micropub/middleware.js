@@ -3,7 +3,7 @@ const Post = require("./post")
 
 exports.form = async function formMiddleware(req) {
   if (!req.is(["urlencoded", "multipart"])) {
-    return
+    return "next"
   }
 
   beeline.customContext.add("micropub.request_type", "form")
@@ -25,11 +25,12 @@ exports.form = async function formMiddleware(req) {
   }
 
   req.post = post
+  return "next"
 }
 
 exports.json = async function jsonMiddleware(req) {
   if (!req.is("json")) {
-    return
+    return "next"
   }
 
   beeline.customContext.add("micropub.request_type", "json")
@@ -47,6 +48,7 @@ exports.json = async function jsonMiddleware(req) {
   post.photos = props.photo
 
   req.post = post
+  return "next"
 }
 
 function single(arr) {
