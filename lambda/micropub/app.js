@@ -10,11 +10,10 @@ const multer = require("multer")
 const path = require("path")
 
 const { requireToken } = require("./auth")
-const { CommitBuilder } = require("./commits")
 const { baseUrl } = require("./config")
 const MediaFile = require("./media")
 const postMiddleware = require("./middleware")
-const { repo, lfs } = require("./repo")
+const { newCommit, lfs } = require("./repo")
 
 const app = express()
 
@@ -35,7 +34,7 @@ router.post("/micropub/media", upload.single("file"), async (req, res) => {
   res.status(400).send("Media endpoint is not supported at the moment.")
   return
 
-  const commit = new CommitBuilder(repo)
+  const commit = newCommit()
   const media = new MediaFile(req.file)
 
   await lfs.persistBuffer(media, commit)
@@ -64,7 +63,7 @@ router.post(
   postMiddleware.form,
   postMiddleware.json,
   async (req, res) => {
-    const commit = new CommitBuilder(repo)
+    const commit = newCommit()
 
     generatePost(req)
     console.log(req.post)
