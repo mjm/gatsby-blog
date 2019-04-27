@@ -4,6 +4,12 @@ const fetch = require("node-fetch")
 
 const TOKEN_URL = "https://tokens.indieauth.com/token"
 
+let expectedToken = null
+
+exports.setExpectedToken = token => {
+  expectedToken = token
+}
+
 exports.requireToken = async function requireToken(req, res, next) {
   let token
   try {
@@ -20,6 +26,15 @@ exports.requireToken = async function requireToken(req, res, next) {
   }
 
   beeline.customContext.add("token_present", true)
+
+  if (expectedToken) {
+    if (token === expectedToken) {
+      next()
+    } else {
+      res.status(403).send("Forbidden")
+    }
+    return
+  }
 
   const response = await fetch(TOKEN_URL, {
     headers: {
