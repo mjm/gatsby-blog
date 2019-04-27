@@ -23,7 +23,9 @@ const app = express()
 const storage = multer.memoryStorage()
 const upload = multer({ storage })
 
-app.use(morgan("combined"))
+if (process.env.NODE_ENV !== "test") {
+  app.use(morgan("combined"))
+}
 
 const router = require("express-promise-router")()
 
