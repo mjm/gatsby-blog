@@ -14,7 +14,6 @@ beforeEach(() => {
     .get("/token")
     .optionally()
     .reply(function() {
-      console.log(this.req)
       const token = this.req.headers.authorization[0].substring(7)
       return tokens[token] || [403, "bad token"]
     })
