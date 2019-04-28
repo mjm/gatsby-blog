@@ -1,9 +1,11 @@
+const path = require("path")
 const slug = require("slug")
 const rs = require("randomstring")
 const moment = require("moment")
 const matter = require("gray-matter")
 
 const MediaFile = require("./media")
+const { newCommit } = require("./commits")
 
 slug.defaults.modes.pretty.lower = true
 const SLUG_MAX_LENGTH = 40
@@ -64,6 +66,17 @@ module.exports = class Post {
 
   render() {
     return matter.stringify("\n" + this.content, this.frontmatter)
+  }
+
+  async commit() {
+    const commit = newCommit()
+
+    commit.addFile(this.path, this.render())
+    for (const file of this.media) {
+      commit.addMediaFile(file)
+    }
+
+    await commit.commit(`Added ${path.basename(this.path)}`)
   }
 
   get frontmatter() {

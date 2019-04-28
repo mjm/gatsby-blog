@@ -3,10 +3,8 @@ const beeline = require("./honeycomb")
 const express = require("express")
 const morgan = require("morgan")
 const multer = require("multer")
-const path = require("path")
 
 const { requireToken } = require("./auth")
-const { newCommit } = require("./commits")
 const { baseUrl } = require("./config")
 const MediaFile = require("./media")
 const postMiddleware = require("./middleware")
@@ -30,9 +28,8 @@ router.post("/micropub/media", upload.single("file"), async (req, res) => {
   res.status(400).send("Media endpoint is not supported at the moment.")
   return
 
-  const commit = newCommit()
-  commit.addMediaFile(new MediaFile(req.file))
-  await commit.commit(`Uploaded ${media.url}`)
+  const media = new MediaFile(req.file)
+  await media.commit()
 
   res.location(baseUrl + media.url)
   res.status(201).send({})
@@ -57,16 +54,10 @@ router.post(
   postMiddleware.form,
   postMiddleware.json,
   async (req, res) => {
-    const commit = newCommit()
-
     generatePost(req)
     console.log(req.post)
 
-    commit.addFile(req.post.path, req.post.render())
-    for (const file of req.post.media) {
-      commit.addMediaFile(file)
-    }
-    await commit.commit(`Added ${path.basename(req.post.path)}`)
+    await req.post.commit()
 
     res.set("Location", baseUrl + req.post.url + "/")
     res.status(202).send("")

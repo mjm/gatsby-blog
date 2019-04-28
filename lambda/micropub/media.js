@@ -3,6 +3,8 @@ const mime = require("mime-types")
 const uuid = require("uuid/v4")
 const crypto = require("crypto")
 
+const { newCommit } = require("./commits")
+
 module.exports = class MediaFile {
   constructor({ buffer, mimetype }) {
     this.buffer = buffer
@@ -19,6 +21,12 @@ module.exports = class MediaFile {
 oid sha256:${this.oid}
 size ${this.size}
 `
+  }
+
+  async commit() {
+    const commit = newCommit()
+    commit.addMediaFile(this)
+    await commit.commit(`Uploaded ${this.url}`)
   }
 
   _generateUrl() {
