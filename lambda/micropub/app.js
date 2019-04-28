@@ -31,12 +31,10 @@ router.post("/micropub/media", upload.single("file"), async (req, res) => {
   return
 
   const commit = newCommit()
-  const media = new MediaFile(req.file)
-
-  await lfs.persistBuffer(media, commit)
+  commit.addMediaFile(new MediaFile(req.file))
   await commit.commit(`Uploaded ${media.url}`)
 
-  res.location(baseUrl + urlPath)
+  res.location(baseUrl + media.url)
   res.status(201).send({})
 })
 router.get("/micropub", async (req, res) => {
