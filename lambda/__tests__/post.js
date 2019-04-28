@@ -60,18 +60,7 @@ describe("template key", () => {
 })
 
 describe("adding media", () => {
-  test("adds first media item to be uploaded", () => {
-    const post = new Post()
-    post.addMedia("photos", {
-      buffer: Buffer.from("asdf"),
-      mimetype: "image/jpeg",
-    })
-
-    expect(post.media.photos.length).toBe(1)
-    expect(post.media.photos[0].url).toBeDefined()
-  })
-
-  test("adds additional media items to be uploaded", () => {
+  test("adds individual media items to be uploaded", () => {
     const post = new Post()
     post.addMedia("photos", {
       buffer: Buffer.from("asdf"),
@@ -82,9 +71,14 @@ describe("adding media", () => {
       mimetype: "image/jpeg",
     })
 
-    expect(post.media.photos.length).toBe(2)
-    expect(post.media.photos[0].buffer).toEqual(Buffer.from("asdf"))
-    expect(post.media.photos[1].buffer).toEqual(Buffer.from("qwer"))
+    // check that media to upload is correct
+    expect(post.media.length).toBe(2)
+    expect(post.media[0].url).toBeDefined()
+    expect(post.media[0].buffer).toEqual(Buffer.from("asdf"))
+    expect(post.media[1].buffer).toEqual(Buffer.from("qwer"))
+
+    // check that photos is already updated with the URLs
+    expect(post.photos).toEqual(post.media.map(m => m.url))
   })
 
   test("adds an array of media items at once", () => {
@@ -100,16 +94,21 @@ describe("adding media", () => {
       },
     ])
 
-    expect(post.media.photos.length).toBe(2)
-    expect(post.media.photos[0].buffer).toEqual(Buffer.from("asdf"))
-    expect(post.media.photos[1].buffer).toEqual(Buffer.from("qwer"))
+    // check that media to upload is correct
+    expect(post.media.length).toBe(2)
+    expect(post.media[0].url).toBeDefined()
+    expect(post.media[0].buffer).toEqual(Buffer.from("asdf"))
+    expect(post.media[1].buffer).toEqual(Buffer.from("qwer"))
+
+    // check that photos is already updated with the URLs
+    expect(post.photos).toEqual(post.media.map(m => m.url))
   })
 
   test("ignores a falsy file value", () => {
     const post = new Post()
     post.addMedia("photos", undefined)
 
-    expect(post.media.photos).toBeUndefined()
+    expect(post.media).toEqual([])
   })
 })
 

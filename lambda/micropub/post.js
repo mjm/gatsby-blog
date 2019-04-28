@@ -10,7 +10,7 @@ const SLUG_MAX_LENGTH = 40
 
 module.exports = class Post {
   constructor() {
-    this.media = {}
+    this.media = []
   }
 
   get content() {
@@ -46,9 +46,14 @@ module.exports = class Post {
       return
     }
 
+    // coerce to an array if needed, and wrap all in MediaFile
     const files = [].concat(file).map(f => new MediaFile(f))
-    const media = this.media[key]
-    this.media[key] = (media || []).concat(files)
+
+    // add the files to the list of media this post needs to upload
+    this.media = this.media.concat(files)
+
+    // url is predetermined, so add the URLs to the appropriate list now
+    this[key] = (this[key] || []).concat(files.map(({ url }) => url))
   }
 
   generate() {

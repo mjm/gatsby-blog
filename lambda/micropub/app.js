@@ -10,10 +10,10 @@ const multer = require("multer")
 const path = require("path")
 
 const { requireToken } = require("./auth")
+const { newCommit } = require("./commits")
 const { baseUrl } = require("./config")
 const MediaFile = require("./media")
 const postMiddleware = require("./middleware")
-const { newCommit, lfs } = require("./repo")
 
 const app = express()
 
@@ -68,9 +68,10 @@ router.post(
     generatePost(req)
     console.log(req.post)
 
-    await persistFiles(req.post, commit)
-
     commit.addFile(req.post.path, req.post.render())
+    for (const file of req.post.media) {
+      commit.addMediaFile(file)
+    }
     await commit.commit(`Added ${path.basename(req.post.path)}`)
 
     res.set("Location", baseUrl + req.post.url + "/")
@@ -91,16 +92,6 @@ function generatePost(req) {
   }
 
   req.post.generate()
-}
-
-async function persistFiles(post, commit) {
-  // TODO make this more general and pull into Post class
-  if (post.media.photos) {
-    const uploadedFiles = await lfs.persistBuffers(post.media.photos, commit)
-    post.photos = (post.photos || []).concat(
-      uploadedFiles.map(({ url }) => url)
-    )
-  }
 }
 
 module.exports = app
