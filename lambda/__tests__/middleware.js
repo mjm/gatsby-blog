@@ -146,7 +146,7 @@ describe("reading a JSON Micropub request", () => {
 
   test("reads the type from the type key", async () => {
     const { req, res } = setup(jsonType, {
-      type: "h-entry",
+      type: ["h-entry"],
       properties: {},
     })
 
@@ -156,7 +156,7 @@ describe("reading a JSON Micropub request", () => {
 
   test("reads the title from the name key", async () => {
     const { req, res } = setup(jsonType, {
-      type: "h-entry",
+      type: ["h-entry"],
       properties: { name: ["Post title here"] },
     })
 
@@ -166,7 +166,7 @@ describe("reading a JSON Micropub request", () => {
 
   test("reads the content from the content key", async () => {
     const { req, res } = setup(jsonType, {
-      type: "h-entry",
+      type: ["h-entry"],
       properties: { content: ["This is my post content."] },
     })
 
@@ -176,7 +176,7 @@ describe("reading a JSON Micropub request", () => {
 
   test("reads the slug from the mp-slug key", async () => {
     const { req, res } = setup(jsonType, {
-      type: "h-entry",
+      type: ["h-entry"],
       properties: { "mp-slug": ["this-is-my-slug"] },
     })
 
@@ -186,7 +186,7 @@ describe("reading a JSON Micropub request", () => {
 
   test("reads the published date from the published key", async () => {
     const { req, res } = setup(jsonType, {
-      type: "h-entry",
+      type: ["h-entry"],
       properties: { published: ["2018-12-25T01:02:03Z"] },
     })
 
@@ -196,7 +196,7 @@ describe("reading a JSON Micropub request", () => {
 
   test("reads photo URLs from the photo key", async () => {
     const { req, res } = setup(jsonType, {
-      type: "h-entry",
+      type: ["h-entry"],
       properties: {
         photo: ["https://example.com/1.jpg", "https://example.com/2.jpg"],
       },

@@ -40,7 +40,7 @@ exports.json = async function jsonMiddleware(req) {
   } = req
 
   const post = new Post()
-  post.type = type.replace(/^h-/, "")
+  post.type = type[0].replace(/^h-/, "")
   post.title = single(props.name)
   post.content = single(props.content)
   post.slug = single(props["mp-slug"])

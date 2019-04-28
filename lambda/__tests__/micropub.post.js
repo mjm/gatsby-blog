@@ -52,7 +52,7 @@ test("creates a JSON-based post", async () => {
     .set("authorization", "Bearer token")
     .type("json")
     .send({
-      type: "h-entry",
+      type: ["h-entry"],
       properties: {
         content: ["A test post!"],
         published: ["2018-12-25T00:00:00Z"],
