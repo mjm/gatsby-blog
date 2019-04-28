@@ -29,6 +29,7 @@ const query = `
           frontmatter {
             title
             date
+            photos
           }
         }
       }
