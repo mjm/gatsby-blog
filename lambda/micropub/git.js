@@ -30,6 +30,10 @@ exports.commit = async function commit({ branch, message, files }) {
 }
 
 exports.upload = async function upload(files) {
+  if (!files.length) {
+    return
+  }
+
   await _initiateTransfer(files)
   for (const file of files) {
     await _uploadFile(file)
@@ -70,8 +74,8 @@ async function _initiateTransfer(files) {
     method: "POST",
     body: JSON.stringify(payload),
     headers: {
-      Accept: "applications/vnd.git-lfs+json",
-      "Content-Type": "applications/vnd.git-lfs+json",
+      Accept: "application/vnd.git-lfs+json",
+      "Content-Type": "application/vnd.git-lfs+json",
     },
   })
   const responseJson = await response.json()
