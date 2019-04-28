@@ -1,4 +1,4 @@
-const beeline = require("honeycomb-beeline")()
+const beeline = require("./honeycomb")
 const Post = require("./post")
 
 exports.form = async function formMiddleware(req) {

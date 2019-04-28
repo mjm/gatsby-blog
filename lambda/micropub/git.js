@@ -1,4 +1,4 @@
-const beeline = require("honeycomb-beeline")()
+const beeline = require("./honeycomb")
 const fetch = require("node-fetch")
 const GitHub = require("github-api")
 
@@ -10,6 +10,10 @@ const lfsUrl = `https://access-token:${
 const repo = gh.getRepo(process.env.GITHUB_USER, process.env.GITHUB_REPO)
 
 exports.commit = async function commit({ branch, message, files }) {
+  if (!files.length) {
+    return
+  }
+
   beeline.addContext({
     "app.commit.message": message,
     "app.commit.branch": branch,

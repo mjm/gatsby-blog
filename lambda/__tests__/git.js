@@ -1,3 +1,6 @@
+process.env.GITHUB_USER = "foo"
+process.env.GITHUB_REPO = "bar"
+
 const nock = require("nock")
 const { commit, upload } = require("../micropub/git")
 const MediaFile = require("../micropub/media")
@@ -10,7 +13,60 @@ afterAll(() => {
   nock.enableNetConnect()
 })
 
-describe("committing to GitHub", () => {})
+describe("committing to GitHub", () => {
+  test("makes no request when given no files", async () => {
+    await commit({
+      branch: "master",
+      message: "Foo bar",
+      files: [],
+    })
+  })
+
+  test("makes a commit to the specified branch", async () => {
+    const files = [
+      { path: "foo.md", content: "Foo bar!", mode: "100644", type: "blob" },
+      {
+        path: "media/bar.jpg",
+        content: "An LFS pointer here",
+        mode: "100644",
+        type: "blob",
+      },
+    ]
+
+    const scope = nock(/api.github.com/)
+      .defaultReplyHeaders({ "access-control-allow-origin": "*" })
+      .get("/repos/foo/bar/branches/my-branch")
+      .reply(200, {
+        commit: {
+          sha: "1234567",
+          commit: {
+            tree: { sha: "abcdef1" },
+          },
+        },
+      })
+      .post("/repos/foo/bar/git/trees", { tree: files, base_tree: "abcdef1" })
+      .reply(201, { sha: "7654321" })
+      .post("/repos/foo/bar/git/commits", {
+        message: "My commit message",
+        tree: "7654321",
+        parents: ["1234567"],
+      })
+      .reply(201, { sha: "2345678" })
+      .patch("/repos/foo/bar/git/refs/heads/my-branch", {
+        sha: "2345678",
+        force: false,
+      })
+      .reply(200, {})
+
+    await commit({
+      branch: "my-branch",
+      message: "My commit message",
+      files,
+    })
+
+    scope.done()
+  })
+})
 
 describe("uploading to Git LFS", () => {
   const lfsServer = new RegExp("//www.mattmoriarity.com")

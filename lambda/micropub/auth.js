@@ -1,4 +1,4 @@
-const beeline = require("honeycomb-beeline")()
+const beeline = require("./honeycomb")
 const { URL } = require("url")
 const fetch = require("node-fetch")
 const { baseUrl } = require("./config")

@@ -4,7 +4,7 @@
   "description": "",
   "main": "micropub.js",
   "scripts": {
-    "test": "jest -c '{\"clearMocks\":true}'"
+    "test": "jest -c '{\"clearMocks\":true}' --env node"
   },
   "author": "",
   "license": "ISC",

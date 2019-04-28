@@ -1,8 +1,4 @@
-const beeline = require("honeycomb-beeline")({
-  writeKey: process.env.HONEYCOMB_WRITE_KEY,
-  dataset: "gatsby-blog",
-  serviceName: "micropub",
-})
+const beeline = require("./honeycomb")
 
 const express = require("express")
 const morgan = require("morgan")
