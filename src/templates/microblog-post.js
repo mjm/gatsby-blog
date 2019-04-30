@@ -15,24 +15,17 @@ export const MicroblogPostTemplate = ({
   contentComponent,
   date,
   isoDate,
-  photos,
   helmet,
 }) => {
   const { siteUrl } = useSiteMetadata()
   const url = slug && siteUrl + slug
 
-  photos = photos || []
   const PostContent = contentComponent || Content
 
   return (
     <article className="h-entry">
       {helmet}
       <PostContent className="p-name e-content" content={content} />
-      {photos.map(photo => (
-        <figure key={photo}>
-          <img src={photo} alt="" className="u-photo" />
-        </figure>
-      ))}
       <div className={styles.footer}>
         <DateBubble isoDate={isoDate} className="dt-published">
           {date}
@@ -48,7 +41,6 @@ MicroblogPostTemplate.propTypes = {
   contentComponent: PropTypes.func,
   date: PropTypes.string,
   isoDate: PropTypes.string,
-  photos: PropTypes.array,
 }
 
 const MicroblogPost = ({ data }) => {
@@ -62,7 +54,6 @@ const MicroblogPost = ({ data }) => {
         contentComponent={HTMLContent}
         date={post.frontmatter.date}
         isoDate={post.frontmatter.isoDate}
-        photos={post.frontmatter.photos}
         helmet={
           <Helmet>
             <meta property="og:url" content={post.fields.slug} />
@@ -92,7 +83,6 @@ export const pageQuery = graphql`
       frontmatter {
         date(formatString: "MMM D, Y")
         isoDate: date(formatString: "YYYY-MM-DDTHH:mm:ssZ")
-        photos
       }
     }
   }

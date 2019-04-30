@@ -78,7 +78,6 @@ export const pageQuery = graphql`
       templateKey
       date(formatString: "MMM D, Y")
       isoDate: date(formatString: "YYYY-MM-DDTHH:mm:ssZ")
-      photos
     }
   }
 `

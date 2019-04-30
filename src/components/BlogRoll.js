@@ -23,7 +23,6 @@ const BlogRoll = ({ posts }) => {
 
 export const BlogRollEntry = ({ siteUrl, post, pinned }) => {
   const entryUrl = siteUrl + post.fields.slug
-  const photos = post.frontmatter.photos || []
 
   return (
     <div>
@@ -40,11 +39,6 @@ export const BlogRollEntry = ({ siteUrl, post, pinned }) => {
         ) : (
           <HTMLContent className="e-content" content={post.html} />
         )}
-        {photos.map(photo => (
-          <figure key={photo}>
-            <img src={photo} alt="" className="u-photo" />
-          </figure>
-        ))}
         {post.frontmatter.title && (
           <p>
             <Link to={post.fields.slug} className={styles.readMore}>

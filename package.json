@@ -51,7 +51,8 @@
   "scripts": {
     "clean": "rimraf .cache public",
     "start": "npm run clean && gatsby develop",
-    "build": "npm run clean && npm run lambda:install && npm test && gatsby build",
+    "build:app": "npm run clean && gatsby build",
+    "build": "npm run lambda:install && npm test && npm run build:app",
     "lambda:install": "npm install --cwd lambda --prefix lambda",
     "develop": "netlify dev",
     "serve": "gatsby serve",

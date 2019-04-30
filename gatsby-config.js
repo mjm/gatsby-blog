@@ -39,10 +39,14 @@ module.exports = {
               },
             },
           },
-          {
-            resolve: "gatsby-remark-prismjs",
-          },
+          "gatsby-remark-prismjs",
           "gatsby-remark-smartypants",
+          {
+            resolve: "gatsby-remark-microformats",
+            options: {
+              baseURL: "https://www.mattmoriarity.com",
+            },
+          },
         ],
       },
     },

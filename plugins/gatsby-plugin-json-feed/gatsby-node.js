@@ -29,7 +29,6 @@ const query = `
           frontmatter {
             title
             date
-            photos
           }
         }
       }
@@ -60,7 +59,7 @@ exports.onPostBuild = async ({ graphql }, pluginOptions) => {
       link: url,
       description: post.excerpt,
       published: new Date(post.frontmatter.date),
-      content: renderContent(post),
+      content: post.html,
     })
   })
 
@@ -69,16 +68,4 @@ exports.onPostBuild = async ({ graphql }, pluginOptions) => {
   return new Promise((yay, nah) => {
     fs.writeFile(outputPath, feed.json1(), err => (err ? nah(err) : yay()))
   })
-}
-
-function renderContent(post) {
-  const content = [post.html]
-
-  if (post.frontmatter.photos) {
-    for (const photo of post.frontmatter.photos) {
-      content.push(`<figure><img src="${photo}"></figure>`)
-    }
-  }
-
-  return content.join("\n")
 }
