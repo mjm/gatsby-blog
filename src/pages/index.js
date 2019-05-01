@@ -27,6 +27,10 @@ const IndexPage = ({ data }) => {
 const PinnedPosts = ({ posts }) => {
   const { siteUrl } = useSiteMetadata()
 
+  if (!posts.length) {
+    return null
+  }
+
   return (
     <section className={styles.pinnedPosts}>
       {posts.map(({ node: post }) => (
