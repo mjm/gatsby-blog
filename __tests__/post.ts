@@ -1,75 +1,42 @@
-const Post = require("../micropub/post.js")
+import { Post } from "../api/micropub/post"
 
-const MockDate = require("mockdate")
-const matter = require("gray-matter")
-
-test("exists", () => {
-  expect(Post).toBeTruthy()
-})
+import MockDate from "mockdate"
+import matter from "gray-matter"
 
 describe("validation", () => {
   test("fails with no type", () => {
-    const post = new Post()
-    expect(post.validate()).toContainEqual(
-      expect.stringContaining("must have a type")
-    )
+    const pb = Post.build()
+    expect(() => pb.generate()).toThrow(/type must be 'entry'/)
   })
 
   test("fails with non-entry type", () => {
-    const post = new Post()
-    post.type = "bookmark"
-    expect(post.validate()).toContainEqual(
-      expect.stringContaining('type must be "entry"')
-    )
+    const pb = Post.build()
+    pb.type = "bookmark"
+    expect(() => pb.generate()).toThrow(/type must be 'entry'/)
   })
 
   test("passes for entry type", () => {
-    const post = new Post()
-    post.type = "entry"
-    expect(post.validate()).toEqual([])
+    const pb = Post.build()
+    pb.type = "entry"
+    expect(() => pb.generate()).not.toThrow(/type must be 'entry'/)
   })
 })
 
 test("undefined content is an empty string", () => {
-  const post = new Post()
-  expect(post.content).toBe("")
+  const pb = Post.build({ type: "entry" })
 
-  post.content = "foo bar baz"
-  expect(post.content).toBe("foo bar baz")
-})
+  expect(pb.generate().content).toBe("")
 
-describe("template key", () => {
-  test("is microblog-post for title-less posts", () => {
-    const post = new Post()
-    post.content = "foo bar baz"
-
-    expect(post.templateKey).toBe("microblog-post")
-
-    // empty string shouldn't count either
-    post.title = ""
-    expect(post.templateKey).toBe("microblog-post")
-  })
-
-  test("is blog-post for titled posts", () => {
-    const post = new Post()
-    post.content = "foo bar baz"
-    post.title = "This is a new post"
-
-    expect(post.templateKey).toBe("blog-post")
-  })
+  pb.content = "foo bar baz"
+  expect(pb.generate().content).toBe("foo bar baz")
 })
 
 describe("adding media", () => {
   test("adds individual media items to be uploaded", () => {
-    const post = new Post()
-    post.addMedia("photos", {
-      buffer: Buffer.from("asdf"),
-      mimetype: "image/jpeg",
-    })
-    post.addMedia("photos", {
-      buffer: Buffer.from("qwer"),
-      mimetype: "image/jpeg",
-    })
+    const pb = Post.build({ type: "entry" })
+    pb.addMedia("photos", createFile("asdf"))
+    pb.addMedia("photos", createFile("qwer"))
+    const post = pb.generate()
 
     // check that media to upload is correct
     expect(post.media.length).toBe(2)
@@ -82,17 +49,9 @@ describe("adding media", () => {
   })
 
   test("adds an array of media items at once", () => {
-    const post = new Post()
-    post.addMedia("photos", [
-      {
-        buffer: Buffer.from("asdf"),
-        mimetype: "image/jpeg",
-      },
-      {
-        buffer: Buffer.from("qwer"),
-        mimetype: "image/jpeg",
-      },
-    ])
+    const pb = Post.build({ type: "entry" })
+    pb.addMedia("photos", [createFile("asdf"), createFile("qwer")])
+    const post = pb.generate()
 
     // check that media to upload is correct
     expect(post.media.length).toBe(2)
@@ -105,8 +64,9 @@ describe("adding media", () => {
   })
 
   test("ignores a falsy file value", () => {
-    const post = new Post()
-    post.addMedia("photos", undefined)
+    const pb = Post.build({ type: "entry" })
+    pb.addMedia("photos", undefined)
+    const post = pb.generate()
 
     expect(post.media).toEqual([])
   })
@@ -125,44 +85,43 @@ describe("generating", () => {
 
   describe("the slug", () => {
     test("uses already set slug if present", () => {
-      const post = new Post()
-      post.slug = "this-is-my-slug"
-      post.generate()
+      const pb = Post.build({ type: "entry" })
+      pb.slug = "this-is-my-slug"
+      const post = pb.generate()
 
       expect(post.slug).toBe("this-is-my-slug")
     })
 
     test("slugifies title if present", () => {
-      const post = new Post()
-      post.title = "This is my new post"
-      post.content = "This is some cool content"
-      post.generate()
+      const pb = Post.build({ type: "entry" })
+      pb.title = "This is my new post"
+      pb.content = "This is some cool content"
+      const post = pb.generate()
 
       expect(post.slug).toBe("this-is-my-new-post")
     })
 
     test("slugifies content if present", () => {
-      const post = new Post()
-      post.content = "Some cool new content is here."
-      post.generate()
+      const pb = Post.build({ type: "entry" })
+      pb.content = "Some cool new content is here."
+      const post = pb.generate()
 
       expect(post.slug).toBe("some-cool-new-content-is-here")
     })
 
     test("slugifies a random string if no title or content is present", () => {
-      const post = new Post()
-      post.generate()
+      const pb = Post.build({ type: "entry" })
+      const post = pb.generate()
 
       expect(post.slug.length).toBeGreaterThan(5)
     })
 
     test("chops content slug to be less than 40 characters", () => {
-      const post = new Post()
-      post.content =
+      const pb = Post.build({ type: "entry" })
+      pb.content =
         "This is some new content that extends beyond the expected 40 characters"
-      post.generate()
+      const post = pb.generate()
 
-      expect(post.slug.length).toBeLessThanOrEqual(40)
       expect(post.slug).toBe("this-is-some-new-content-that-extends")
     })
   })
@@ -170,16 +129,16 @@ describe("generating", () => {
   describe("the published date", () => {
     test("parses an already set date if present", () => {
       const date = new Date("2019-01-02T03:04:05Z")
-      const post = new Post()
-      post.published = "2019-01-02T03:04:05Z"
-      post.generate()
+      const pb = Post.build({ type: "entry" })
+      pb.published = "2019-01-02T03:04:05Z"
+      const post = pb.generate()
 
       expect(post.published).toEqual(date)
     })
 
     test("uses the current timestamp if no date is set", () => {
-      const post = new Post()
-      post.generate()
+      const pb = Post.build({ type: "entry" })
+      const post = pb.generate()
 
       expect(post.published).toEqual(now)
     })
@@ -187,18 +146,18 @@ describe("generating", () => {
 
   describe("the URL", () => {
     test("combines the published date and slug", () => {
-      const post = new Post()
-      post.published = "2019-01-02T03:04:05Z"
-      post.slug = "this-is-a-slug"
-      post.generate()
+      const pb = Post.build({ type: "entry" })
+      pb.published = "2019-01-02T03:04:05Z"
+      pb.slug = "this-is-a-slug"
+      const post = pb.generate()
 
       expect(post.url).toBe("/2019-01-02-this-is-a-slug")
     })
 
     test("uses generated values correctly", () => {
-      const post = new Post()
-      post.content = "This is my cool content."
-      post.generate()
+      const pb = Post.build({ type: "entry" })
+      pb.content = "This is my cool content."
+      const post = pb.generate()
 
       expect(post.url).toBe("/2019-05-04-this-is-my-cool-content")
     })
@@ -206,15 +165,15 @@ describe("generating", () => {
 
   describe("the file path", () => {
     test("combines the URL and the post type", () => {
-      const post = new Post()
-      post.title = "A brand new post"
-      post.generate()
+      const pb = Post.build({ type: "entry" })
+      pb.title = "A brand new post"
+      const post = pb.generate()
 
       expect(post.path).toBe("src/pages/blog/2019-05-04-a-brand-new-post.md")
 
-      const post2 = new Post()
-      post2.content = "A little thing I'm cooking up!"
-      post2.generate()
+      const pb2 = Post.build({ type: "entry" })
+      pb2.content = "A little thing I'm cooking up!"
+      const post2 = pb2.generate()
 
       expect(post2.path).toBe(
         "src/pages/micro/2019-05-04-a-little-thing-im-cooking-up.md"
@@ -225,10 +184,10 @@ describe("generating", () => {
 
 describe("rendering", () => {
   test("a minimal post", () => {
-    const post = new Post()
-    post.content = "This is some content."
-    post.published = "2018-01-02T03:04:05Z"
-    post.generate()
+    const pb = Post.build({ type: "entry" })
+    pb.content = "This is some content."
+    pb.published = "2018-01-02T03:04:05Z"
+    const post = pb.generate()
 
     const { data, content } = matter(post.render())
     expect(data).toEqual({
@@ -239,12 +198,12 @@ describe("rendering", () => {
   })
 
   test("a post with title and photos", () => {
-    const post = new Post()
-    post.content = "This is my sweet blog post."
-    post.published = "2018-01-02T03:04:05Z"
-    post.title = "A New Post"
-    post.photos = ["/media/1.jpg", "/media/2.jpg"]
-    post.generate()
+    const pb = Post.build({ type: "entry" })
+    pb.content = "This is my sweet blog post."
+    pb.published = "2018-01-02T03:04:05Z"
+    pb.title = "A New Post"
+    pb.photos = ["/media/1.jpg", "/media/2.jpg"]
+    const post = pb.generate()
 
     const { data, content } = matter(post.render())
     expect(data).toEqual({
@@ -257,10 +216,10 @@ describe("rendering", () => {
   })
 
   test("a post with no content", () => {
-    const post = new Post()
-    post.published = "2018-01-02T03:04:05Z"
-    post.photos = ["/media/1.jpg"]
-    post.generate()
+    const pb = Post.build({ type: "entry" })
+    pb.published = "2018-01-02T03:04:05Z"
+    pb.photos = ["/media/1.jpg"]
+    const post = pb.generate()
 
     const { data, content } = matter(post.render())
     expect(data).toEqual({
@@ -271,3 +230,20 @@ describe("rendering", () => {
     expect(content.trim()).toBe("")
   })
 })
+
+function createFile(
+  bufferStr: string,
+  mimetype: string = "image/jpeg"
+): Express.Multer.File {
+  return {
+    buffer: Buffer.from(bufferStr),
+    mimetype,
+    fieldname: "photo",
+    originalname: "foo.jpg",
+    size: bufferStr.length,
+    encoding: "utf8",
+    filename: "",
+    destination: "",
+    path: "",
+  }
+}

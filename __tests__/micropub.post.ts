@@ -1,11 +1,11 @@
-jest.mock("../micropub/git")
+jest.mock("../api/micropub/git")
 
-const app = require("../micropub/app")
-const supertest = require("supertest")
-const { setExpectedToken } = require("../micropub/auth")
-const { upload, commit } = require("../micropub/git")
+import app from "../api/micropub"
+import supertest from "supertest"
+import { setExpectedToken } from "../api/micropub/auth"
+import { upload, commit } from "../api/micropub/git"
 
-const url = "/.netlify/functions/micropub"
+const url = "/api/micropub"
 
 beforeAll(() => setExpectedToken("token"))
 afterAll(() => setExpectedToken(null))
@@ -35,11 +35,11 @@ test("creates a form-based post with no photos", async () => {
     .expect("Location", "https://www.mattmoriarity.com/2018-12-25-a-test-post/")
 
   // call upload, but with no files
-  expect(upload.mock.calls).toEqual([[[]]])
+  expect(mocked(upload).mock.calls).toEqual([[[]]])
 
   // verify the commit was built correctly
-  expect(commit.mock.calls.length).toBe(1)
-  expect(commit.mock.calls[0][0]).toMatchObject({
+  expect(mocked(commit).mock.calls.length).toBe(1)
+  expect(mocked(commit).mock.calls[0][0]).toMatchObject({
     branch: "master",
     message: "Added 2018-12-25-a-test-post.md",
     files: [{ path: "src/pages/micro/2018-12-25-a-test-post.md" }],
@@ -62,11 +62,11 @@ test("creates a JSON-based post", async () => {
     .expect("Location", "https://www.mattmoriarity.com/2018-12-25-a-test-post/")
 
   // call upload, but with no files
-  expect(upload.mock.calls).toEqual([[[]]])
+  expect(mocked(upload).mock.calls).toEqual([[[]]])
 
   // verify the commit was built correctly
-  expect(commit.mock.calls.length).toBe(1)
-  expect(commit.mock.calls[0][0]).toMatchObject({
+  expect(mocked(commit).mock.calls.length).toBe(1)
+  expect(mocked(commit).mock.calls[0][0]).toMatchObject({
     branch: "master",
     message: "Added 2018-12-25-a-test-post.md",
     files: [{ path: "src/pages/micro/2018-12-25-a-test-post.md" }],
@@ -91,15 +91,15 @@ test.each(["photo", "photo[]"])(
       )
 
     // call upload, but with no files
-    expect(upload.mock.calls.length).toBe(1)
-    expect(upload.mock.calls[0][0]).toMatchObject([
+    expect(mocked(upload).mock.calls.length).toBe(1)
+    expect(mocked(upload).mock.calls[0][0]).toMatchObject([
       { buffer: Buffer.from("asdf") },
       { buffer: Buffer.from("qwer") },
     ])
 
     // verify the commit was built correctly
-    expect(commit.mock.calls.length).toBe(1)
-    expect(commit.mock.calls[0][0]).toMatchObject({
+    expect(mocked(commit).mock.calls.length).toBe(1)
+    expect(mocked(commit).mock.calls[0][0]).toMatchObject({
       branch: "master",
       message: "Added 2018-12-25-a-test-post.md",
       files: [
@@ -110,3 +110,7 @@ test.each(["photo", "photo[]"])(
     })
   }
 )
+
+function mocked<T>(value: T): jest.Mock<T> {
+  return (value as unknown) as jest.Mock<T>
+}

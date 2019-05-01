@@ -2,7 +2,7 @@ import React from "react"
 import Layout from "../../components/Layout"
 import { graphql, Link } from "gatsby"
 import styles from "../../components/Project.module.scss"
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet"
 
 const ProjectsPage = ({ data }) => {
   const {

@@ -1,8 +1,8 @@
-const app = require("../micropub/app")
-const supertest = require("supertest")
-const { setExpectedToken } = require("../micropub/auth")
+import app from "../api/micropub"
+import supertest from "supertest"
+import { setExpectedToken } from "../api/micropub/auth"
 
-const url = "/.netlify/functions/micropub"
+const url = "/api/micropub"
 
 beforeAll(() => setExpectedToken("token"))
 afterAll(() => setExpectedToken(null))
@@ -34,7 +34,7 @@ test("q=config gives the media endpoint", async () => {
     .expect("content-type", /json/)
 
   expect(body["media-endpoint"]).toBe(
-    "https://www.mattmoriarity.com/.netlify/functions/micropub/media"
+    "https://gatsby-blog.mjm.now.sh/api/micropub/media"
   )
 })
 

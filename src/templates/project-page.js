@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faGithub } from "@fortawesome/free-brands-svg-icons"
 import { faTools } from "@fortawesome/free-solid-svg-icons"
 import styles from "../components/Project.module.scss"
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet"
 
 export const ProjectPageTemplate = ({
   title,

@@ -1,13 +1,18 @@
-const git = require("./git")
+import * as git from "./git"
+import MediaFile from "./media"
 
 class CommitBuilder {
-  constructor(branch) {
+  branch: string
+  files: git.CommitFile[]
+  mediaFiles: MediaFile[]
+
+  constructor(branch: string) {
     this.branch = branch
     this.files = []
     this.mediaFiles = []
   }
 
-  addFile(path, content) {
+  addFile(path: string, content: string) {
     console.log(`Adding file ${path} to commit`)
     this.files.push({
       path,
@@ -17,7 +22,7 @@ class CommitBuilder {
     })
   }
 
-  addMediaFile(file) {
+  addMediaFile(file: MediaFile) {
     console.log(`Adding media file ${file.path} to commit`)
     this.mediaFiles.push(file)
 
@@ -29,7 +34,7 @@ class CommitBuilder {
     })
   }
 
-  async commit(message) {
+  async commit(message: string): Promise<void> {
     if (this.files.length === 0) {
       return
     }
@@ -47,6 +52,21 @@ class CommitBuilder {
   }
 }
 
-exports.newCommit = function(branch = "master") {
+function getDefaultBranch() {
+  if (process.env.GITHUB_BRANCH) {
+    return process.env.GITHUB_BRANCH
+  }
+
+  if (
+    process.env.NOW_GITHUB_COMMIT_REF &&
+    process.env.NOW_GITHUB_COMMIT_REF !== "master"
+  ) {
+    return "testing"
+  }
+
+  return "master"
+}
+
+export function newCommit(branch = getDefaultBranch()): CommitBuilder {
   return new CommitBuilder(branch)
 }

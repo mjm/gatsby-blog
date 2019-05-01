@@ -1,35 +1,48 @@
-const moment = require("moment")
-const mime = require("mime-types")
-const uuid = require("uuid/v4")
-const crypto = require("crypto")
+import moment from "moment"
+import * as mime from "mime-types"
+import uuid from "uuid/v4"
+import { createHash } from "crypto"
 
-const { newCommit } = require("./commits")
+import { newCommit } from "./commits"
 
-module.exports = class MediaFile {
-  constructor({ buffer, mimetype }) {
+export default class MediaFile {
+  buffer: Buffer
+  mimetype: string
+  url: string
+  path: string
+  oid: string
+  size: number
+
+  href?: string
+  headers?: any
+
+  constructor({ buffer, mimetype }: { buffer: Buffer; mimetype: string }) {
     this.buffer = buffer
     this.mimetype = mimetype
 
     this.url = this._generateUrl()
     this.path = "static" + this.url
     this.oid = this._computeOid()
+
+    // Buffer.byteLength actually supports many types besides just strings
+    // @ts-ignore
     this.size = Buffer.byteLength(buffer)
   }
 
-  get pointerFileContent() {
+  get pointerFileContent(): string {
     return `version https://git-lfs.github.com/spec/v1
 oid sha256:${this.oid}
 size ${this.size}
 `
   }
 
-  async commit() {
+  async commit(): Promise<void> {
     const commit = newCommit()
     commit.addMediaFile(this)
     await commit.commit(`Uploaded ${this.url}`)
   }
 
-  _generateUrl() {
+  _generateUrl(): string {
     const components = ["", "media"]
     components.push(moment.utc().format("YYYY/MM"))
 
@@ -39,8 +52,8 @@ size ${this.size}
     return components.join("/")
   }
 
-  _computeOid() {
-    const hash = crypto.createHash("sha256")
+  _computeOid(): string {
+    const hash = createHash("sha256")
     hash.update(this.buffer)
     return hash.digest("hex")
   }

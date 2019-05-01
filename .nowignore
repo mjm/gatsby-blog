@@ -1,0 +1,7 @@
+.git
+src
+plugins
+node_modules
+public
+.cache
+static

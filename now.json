@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "builds": [{ "src": "api/micropub/index.ts", "use": "@now/node" }],
+  "routes": [{ "src": "/api/micropub/media", "dest": "/api/micropub" }],
+  "env": {
+    "GITHUB_USER": "mjm",
+    "GITHUB_REPO": "gatsby-blog",
+    "GITHUB_TOKEN": "@github-token",
+    "NETLIFY_TOKEN": "@netlify-token",
+    "HONEYCOMB_WRITE_KEY": "@honeycomb-write-key"
+  }
+}

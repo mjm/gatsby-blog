@@ -1,12 +1,12 @@
-const { createRequest, createResponse } = require("node-mocks-http")
-const mw = require("../micropub/middleware")
+import { createRequest, createResponse } from "node-mocks-http"
+import * as mw from "../api/micropub/middleware"
 
-function setup(type, body, files = {}) {
+function setup(type: string, body: any, files: any = {}) {
   const req = createRequest({
     headers: {
       "content-type": type,
       // type-is needs this to believe that the request had a body
-      "content-length": 100,
+      "content-length": "100",
     },
     body,
     files,
@@ -43,6 +43,14 @@ describe("reading a form-based Micropub request", () => {
 
     await mw.form(req, res)
     expect(req.post.type).toBe("entry")
+  })
+
+  test("returns a 400 response if the type is wrong", async () => {
+    const { req, res } = setup(formType, { h: "bookmark" })
+
+    const result = mw.form(req, res)
+    await expect(result).rejects.toThrow(/type must be 'entry'/)
+    await expect(result).rejects.toHaveProperty("statusCode", 400)
   })
 
   test("reads the title from the name key", async () => {
@@ -82,7 +90,7 @@ describe("reading a form-based Micropub request", () => {
     })
 
     await mw.form(req, res)
-    expect(req.post.published).toBe("2018-12-25T01:02:03Z")
+    expect(req.post.published).toEqual(new Date("2018-12-25T01:02:03Z"))
   })
 
   test("reads single photo URL from the photo key", async () => {
@@ -154,6 +162,17 @@ describe("reading a JSON Micropub request", () => {
     expect(req.post.type).toBe("entry")
   })
 
+  test("returns a 400 response if the type is wrong", async () => {
+    const { req, res } = setup(jsonType, {
+      type: ["h-bookmark"],
+      properties: {},
+    })
+
+    const result = mw.json(req, res)
+    await expect(result).rejects.toThrow(/type must be 'entry'/)
+    await expect(result).rejects.toHaveProperty("statusCode", 400)
+  })
+
   test("reads the title from the name key", async () => {
     const { req, res } = setup(jsonType, {
       type: ["h-entry"],
@@ -191,7 +210,7 @@ describe("reading a JSON Micropub request", () => {
     })
 
     await mw.json(req, res)
-    expect(req.post.published).toBe("2018-12-25T01:02:03Z")
+    expect(req.post.published).toEqual(new Date("2018-12-25T01:02:03Z"))
   })
 
   test("reads photo URLs from the photo key", async () => {

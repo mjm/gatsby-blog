@@ -1,5 +1,5 @@
-const MediaFile = require("../micropub/media")
-const MockDate = require("mockdate")
+import MediaFile from "../api/micropub/media"
+import MockDate from "mockdate"
 
 beforeEach(() => {
   MockDate.set(new Date("2018-12-25T00:00:00Z"))

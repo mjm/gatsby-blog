@@ -1,11 +1,9 @@
-process.env.GITHUB_USER = "foo"
-process.env.GITHUB_REPO = "bar"
-
-const nock = require("nock")
-const { commit, upload } = require("../micropub/git")
-const MediaFile = require("../micropub/media")
+import nock from "nock"
+import { CommitFile, setRepo, commit, upload } from "../api/micropub/git"
+import MediaFile from "../api/micropub/media"
 
 beforeAll(() => {
+  setRepo("foo", "bar")
   nock.disableNetConnect()
 })
 afterAll(() => {
@@ -23,7 +21,7 @@ describe("committing to GitHub", () => {
   })
 
   test("makes a commit to the specified branch", async () => {
-    const files = [
+    const files: CommitFile[] = [
       { path: "foo.md", content: "Foo bar!", mode: "100644", type: "blob" },
       {
         path: "media/bar.jpg",
@@ -78,8 +76,8 @@ describe("uploading to Git LFS", () => {
   })
 
   test("does not upload anything if files are already present", async () => {
-    const file1 = new MediaFile({ buffer: Buffer.from("asdf") })
-    const file2 = new MediaFile({ buffer: Buffer.from("qwer") })
+    const file1 = new MediaFile({ buffer: Buffer.from("asdf"), mimetype: "" })
+    const file2 = new MediaFile({ buffer: Buffer.from("qwer"), mimetype: "" })
 
     const scope = nock(lfsServer)
       .matchHeader("accept", "application/vnd.git-lfs+json")
@@ -99,8 +97,8 @@ describe("uploading to Git LFS", () => {
   })
 
   test("performs upload if a file is given an upload URL", async () => {
-    const file1 = new MediaFile({ buffer: Buffer.from("asdf") })
-    const file2 = new MediaFile({ buffer: Buffer.from("qwer") })
+    const file1 = new MediaFile({ buffer: Buffer.from("asdf"), mimetype: "" })
+    const file2 = new MediaFile({ buffer: Buffer.from("qwer"), mimetype: "" })
 
     const scope = nock(lfsServer)
       .post("/.netlify/large-media/objects/batch", {

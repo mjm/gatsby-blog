@@ -1,15 +1,37 @@
-const beeline = require("./honeycomb")
-const fetch = require("node-fetch")
-const GitHub = require("github-api")
+import beeline from "./honeycomb"
+import fetch from "node-fetch"
+import GitHub from "github-api"
+import MediaFile from "./media"
 
 const gh = new GitHub({ token: process.env.GITHUB_TOKEN })
 const lfsUrl = `https://access-token:${
   process.env.NETLIFY_TOKEN
 }@www.mattmoriarity.com/.netlify/large-media`
 
-const repo = gh.getRepo(process.env.GITHUB_USER, process.env.GITHUB_REPO)
+let repo = gh.getRepo(process.env.GITHUB_USER, process.env.GITHUB_REPO)
 
-exports.commit = async function commit({ branch, message, files }) {
+export function setRepo(user: string, name: string) {
+  repo = gh.getRepo(user, name)
+}
+
+export interface CommitFile {
+  path: string
+  content: string
+  mode: string
+  type: "blob"
+}
+
+export interface Commit {
+  branch: string
+  message: string
+  files: CommitFile[]
+}
+
+export async function commit({
+  branch,
+  message,
+  files,
+}: Commit): Promise<void> {
   if (!files.length) {
     return
   }
@@ -33,7 +55,7 @@ exports.commit = async function commit({ branch, message, files }) {
   await _createCommit(branch, parentCommit, treeSha, message)
 }
 
-exports.upload = async function upload(files) {
+export async function upload(files: MediaFile[]): Promise<void> {
   if (!files.length) {
     return
   }
@@ -44,18 +66,23 @@ exports.upload = async function upload(files) {
   }
 }
 
-async function _getBranch(branch) {
+async function _getBranch(branch: string) {
   const response = await repo.getBranch(branch)
   return response.data
 }
 
-async function _createTree(parent, files) {
+async function _createTree(parent: string, files: CommitFile[]) {
   console.log(`Creating tree with ${files.length} files`)
   const response = await repo.createTree(files, parent)
   return response.data
 }
 
-async function _createCommit(branch, parent, tree, message) {
+async function _createCommit(
+  branch: string,
+  parent: string,
+  tree: string,
+  message: string
+) {
   console.log(`Creating commit "${message}"`)
   const response = await repo.commit(parent, tree, message)
   const { sha } = response.data
@@ -65,7 +92,27 @@ async function _createCommit(branch, parent, tree, message) {
   await repo.updateHead(`heads/${branch}`, sha, false)
 }
 
-async function _initiateTransfer(files) {
+interface LfsBatchResponse {
+  transfer: string
+  objects: LfsObjectResponse[]
+}
+
+interface LfsObjectResponse {
+  oid: string
+  size: string
+  actions?: LfsActions
+}
+
+interface LfsActions {
+  upload?: LfsUploadAction
+}
+
+interface LfsUploadAction {
+  href: string
+  header?: any
+}
+
+async function _initiateTransfer(files: MediaFile[]) {
   beeline.customContext.add("lfs.file_count", files.length)
 
   const payload = {
@@ -82,7 +129,7 @@ async function _initiateTransfer(files) {
       "Content-Type": "application/vnd.git-lfs+json",
     },
   })
-  const responseJson = await response.json()
+  const responseJson: LfsBatchResponse = await response.json()
 
   let existingFiles = 0
   responseJson.objects.forEach((object, i) => {
@@ -100,7 +147,7 @@ async function _initiateTransfer(files) {
   beeline.customContext.add("lfs.existing_files", existingFiles)
 }
 
-async function _uploadFile({ href, buffer, headers }) {
+async function _uploadFile({ href, buffer, headers }: MediaFile) {
   if (!href) {
     return
   }

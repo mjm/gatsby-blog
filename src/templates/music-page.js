@@ -3,7 +3,7 @@ import { graphql } from "gatsby"
 import Layout from "../components/Layout"
 import Content, { HTMLContent } from "../components/Content"
 import styles from "../components/Music.module.scss"
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet"
 
 export const MusicPageTemplate = ({
   title,
