@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "regions": ["sfo1", "cle1"],
   "builds": [{ "src": "api/micropub/index.ts", "use": "@now/node" }],
   "routes": [{ "src": "/api/micropub/media", "dest": "/api/micropub" }],
   "env": {
@@ -8,5 +9,8 @@
     "GITHUB_TOKEN": "@github-token",
     "NETLIFY_TOKEN": "@netlify-token",
     "HONEYCOMB_WRITE_KEY": "@honeycomb-write-key"
+  },
+  "github": {
+    "silent": true
   }
 }
