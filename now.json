@@ -2,23 +2,7 @@
   "version": 2,
   "regions": ["sfo1", "cle1"],
   "builds": [{ "src": "api/routes/**/*.ts", "use": "@now/node" }],
-  "routes": [
-    {
-      "src": "/api/micropub",
-      "methods": ["GET"],
-      "dest": "/api/routes/micropub/get.ts"
-    },
-    {
-      "src": "/api/micropub",
-      "methods": ["POST"],
-      "dest": "/api/routes/micropub/post.ts"
-    },
-    {
-      "src": "/api/micropub/media",
-      "methods": ["POST"],
-      "dest": "/api/routes/micropub/media.ts"
-    }
-  ],
+  "routes": [{ "src": "/api/(.*)", "dest": "/api/route/$1.ts" }],
   "env": {
     "GITHUB_USER": "mjm",
     "GITHUB_REPO": "gatsby-blog",
