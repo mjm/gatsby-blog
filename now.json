@@ -2,7 +2,7 @@
   "version": 2,
   "regions": ["sfo1", "cle1"],
   "builds": [{ "src": "api/routes/**/*.ts", "use": "@now/node" }],
-  "routes": [{ "src": "/api/(.*)", "dest": "/api/route/$1.ts" }],
+  "routes": [{ "src": "/api/(.*)", "dest": "/api/routes/$1.ts" }],
   "env": {
     "GITHUB_USER": "mjm",
     "GITHUB_REPO": "gatsby-blog",
