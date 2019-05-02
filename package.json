@@ -68,7 +68,6 @@
   "license": "MIT",
   "main": "n/a",
   "scripts": {
-    "now-build": "npm test",
     "clean": "rimraf .cache public",
     "start": "npm run clean && gatsby develop",
     "build": "npm run clean && gatsby build",
