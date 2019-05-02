@@ -1,11 +1,14 @@
 jest.mock("../api/micropub/git")
 
-import app from "../api/micropub"
+import app from "../api/routes/micropub"
 import supertest from "supertest"
 import { setExpectedToken } from "../api/micropub/auth"
 import { upload, commit } from "../api/micropub/git"
 
-const url = "/api/micropub"
+const url = "/"
+
+// Branch can change depending on environment
+process.env.GITHUB_BRANCH = "my-test-branch"
 
 beforeAll(() => setExpectedToken("token"))
 afterAll(() => setExpectedToken(null))
@@ -40,7 +43,7 @@ test("creates a form-based post with no photos", async () => {
   // verify the commit was built correctly
   expect(mocked(commit).mock.calls.length).toBe(1)
   expect(mocked(commit).mock.calls[0][0]).toMatchObject({
-    branch: "master",
+    branch: "my-test-branch",
     message: "Added 2018-12-25-a-test-post.md",
     files: [{ path: "src/pages/micro/2018-12-25-a-test-post.md" }],
   })
@@ -67,7 +70,7 @@ test("creates a JSON-based post", async () => {
   // verify the commit was built correctly
   expect(mocked(commit).mock.calls.length).toBe(1)
   expect(mocked(commit).mock.calls[0][0]).toMatchObject({
-    branch: "master",
+    branch: "my-test-branch",
     message: "Added 2018-12-25-a-test-post.md",
     files: [{ path: "src/pages/micro/2018-12-25-a-test-post.md" }],
   })
@@ -100,7 +103,7 @@ test.each(["photo", "photo[]"])(
     // verify the commit was built correctly
     expect(mocked(commit).mock.calls.length).toBe(1)
     expect(mocked(commit).mock.calls[0][0]).toMatchObject({
-      branch: "master",
+      branch: "my-test-branch",
       message: "Added 2018-12-25-a-test-post.md",
       files: [
         { path: "src/pages/micro/2018-12-25-a-test-post.md" },
