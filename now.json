@@ -6,17 +6,17 @@
     {
       "src": "/api/micropub",
       "methods": ["GET"],
-      "dest": "/api/routes/micropub/get"
+      "dest": "/api/routes/micropub/get.ts"
     },
     {
       "src": "/api/micropub",
       "methods": ["POST"],
-      "dest": "/api/routes/micropub/post"
+      "dest": "/api/routes/micropub/post.ts"
     },
     {
       "src": "/api/micropub/media",
       "methods": ["POST"],
-      "dest": "/api/routes/micropub/media"
+      "dest": "/api/routes/micropub/media.ts"
     }
   ],
   "env": {
