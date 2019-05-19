@@ -1,16 +1,26 @@
 /* eslint-disable */
 const xmlrpc = require("xmlrpc")
-const { URL } = require("url")
 
 const pingURLs = [
-  "https://app.courier.blog/ping",
   "https://courier.now.sh/ping",
+  "https://app.courier.blog/ping",
+  "https://courier-staging.herokuapp.com/ping",
 ]
 
-exports.handler = async function(event, context) {
+exports.handler = async function(event) {
   try {
     const body = JSON.parse(event.body)
-    console.log(body)
+
+    const title = body.site.name
+    const url = body.site.url
+
+    for (const pingURL of pingURLs) {
+      const client = pingURL.startsWith("https")
+        ? xmlrpc.createSecureClient(pingURL)
+        : xmlrpc.createClient(pingURL)
+
+      await sendPing(client, title, url)
+    }
 
     return {
       statusCode: 200,
