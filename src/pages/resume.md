@@ -10,7 +10,7 @@ experience:
 - company: Stripe
   startDate: May 2019
   description: >
-    This story hasn't been written yet.
+    Infrastructure engineer on the Foundation team.
 - company: Travis CI
   startDate: June 2018
   endDate: May 2019
