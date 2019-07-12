@@ -2,7 +2,8 @@
 const xmlrpc = require("xmlrpc")
 
 const pingURLs = [
-  "https://courier.now.sh/ping",
+  "https://courier.blog/ping",
+  "https://staging.courier.blog/ping",
   "https://app.courier.blog/ping",
   "https://courier-staging.herokuapp.com/ping",
 ]
