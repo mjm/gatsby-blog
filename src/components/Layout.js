@@ -10,7 +10,6 @@ const TemplateWrapper = ({ children }) => {
   const {
     title,
     description,
-    siteUrl,
     selfLinks,
     webmentionUsername,
   } = useSiteMetadata()
