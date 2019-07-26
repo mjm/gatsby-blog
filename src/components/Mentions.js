@@ -2,7 +2,7 @@ import React from "react"
 import Content, { HTMLContent } from "./Content"
 import moment from "moment"
 import styles from "./Mentions.module.scss"
-import { orderBy } from "lodash"
+import { groupBy, orderBy } from "lodash"
 import { useFetch } from "./hooks"
 
 export const MentionCount = ({ url, children }) => {
@@ -36,23 +36,45 @@ const Mentions = ({ url }) => {
   }
 
   const mentions = useFetch(getFetchUrl(), {
-    initial: [],
+    initial: {},
     transform(data) {
-      return orderBy(data.children, "published")
+      return groupBy(orderBy(data.children, "published"), "wm-property")
     },
   })
 
-  if (mentions.length === 0) {
+  if (Object.keys(mentions).length === 0) {
     return null
   }
 
   return (
     <div>
       <hr className={styles.separator} />
-      <h3>Mentions</h3>
-      {mentions.map(mention => (
-        <Mention key={mention.url} mention={mention} />
-      ))}
+      {mentions["like-of"] && (
+        <>
+          <h3>Likes</h3>
+          <div className={styles.likes}>
+            {mentions["like-of"].map(mention => (
+              <Like key={mention.url} mention={mention} />
+            ))}
+          </div>
+        </>
+      )}
+      {mentions["in-reply-to"] && (
+        <>
+          <h3>Replies</h3>
+          {mentions["in-reply-to"].map(mention => (
+            <Mention key={mention.url} mention={mention} />
+          ))}
+        </>
+      )}
+    </div>
+  )
+}
+
+const Like = ({ mention }) => {
+  return (
+    <div className={styles.avatar}>
+      <MentionAvatar mention={mention} />
     </div>
   )
 }
@@ -80,7 +102,7 @@ const Mention = ({ mention }) => {
 
 const MentionAvatar = ({ mention }) => {
   return (
-    <a href={mention.author.url}>
+    <a href={mention.author.url} title={mention.author.name}>
       <img src={mention.author.photo} alt={mention.author.name} />
     </a>
   )

@@ -8,6 +8,13 @@
   border-radius: 9999px;
 }
 
+.likes {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: spacing(4);
+}
+
 .mention {
   display: flex;
   flex-direction: row;
@@ -24,6 +31,7 @@
 
   img {
     width: spacing(12);
+    height: spacing(12);
     margin-bottom: 0;
     border-radius: 9999px;
   }
