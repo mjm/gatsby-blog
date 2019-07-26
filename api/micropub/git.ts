@@ -92,6 +92,11 @@ async function _createCommit(
   await repo.updateHead(`heads/${branch}`, sha, false)
 }
 
+export async function getFile(branch: string, path: string): Promise<string> {
+  const response = await repo.getContents(branch, path, true)
+  return response.data
+}
+
 interface LfsBatchResponse {
   transfer: string
   objects: LfsObjectResponse[]
