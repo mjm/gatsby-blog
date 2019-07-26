@@ -8,6 +8,7 @@ import Mentions from "../components/Mentions"
 import useSiteMetadata from "../components/SiteMetadata"
 import DateBubble from "../components/DateBubble"
 import styles from "../components/Blog.module.scss"
+import { Syndication } from "../components/Syndication"
 
 export const BlogPostTemplate = ({
   slug,
@@ -16,6 +17,7 @@ export const BlogPostTemplate = ({
   date,
   helmet,
   isoDate,
+  syndication,
   title,
 }) => {
   const { siteUrl } = useSiteMetadata()
@@ -35,6 +37,7 @@ export const BlogPostTemplate = ({
           {date}
         </DateBubble>
       </div>
+      <Syndication urls={syndication} />
       <Mentions url={url} />
     </article>
   )
@@ -47,6 +50,7 @@ BlogPostTemplate.propTypes = {
   helmet: PropTypes.object,
   isoDate: PropTypes.string,
   title: PropTypes.string,
+  syndication: PropTypes.arrayOf(PropTypes.string),
 }
 
 const BlogPost = ({ data }) => {
@@ -68,6 +72,7 @@ const BlogPost = ({ data }) => {
         }
         isoDate={post.frontmatter.isoDate}
         title={post.frontmatter.title}
+        syndication={post.frontmatter.syndication}
       />
     </Layout>
   )
@@ -93,6 +98,7 @@ export const pageQuery = graphql`
         date(formatString: "MMM D, Y")
         isoDate: date(formatString: "YYYY-MM-DDTHH:mm:ssZ")
         title
+        syndication
       }
     }
   }

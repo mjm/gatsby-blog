@@ -8,6 +8,7 @@ import Mentions from "../components/Mentions"
 import useSiteMetadata from "../components/SiteMetadata"
 import DateBubble from "../components/DateBubble"
 import styles from "../components/Blog.module.scss"
+import { Syndication } from "../components/Syndication"
 
 export const MicroblogPostTemplate = ({
   slug,
@@ -15,6 +16,7 @@ export const MicroblogPostTemplate = ({
   contentComponent,
   date,
   isoDate,
+  syndication,
   helmet,
 }) => {
   const { siteUrl } = useSiteMetadata()
@@ -31,6 +33,7 @@ export const MicroblogPostTemplate = ({
           {date}
         </DateBubble>
       </div>
+      <Syndication urls={syndication} />
       <Mentions url={url} />
     </article>
   )
@@ -41,6 +44,7 @@ MicroblogPostTemplate.propTypes = {
   contentComponent: PropTypes.func,
   date: PropTypes.string,
   isoDate: PropTypes.string,
+  syndication: PropTypes.arrayOf(PropTypes.string),
 }
 
 const MicroblogPost = ({ data }) => {
@@ -54,6 +58,7 @@ const MicroblogPost = ({ data }) => {
         contentComponent={HTMLContent}
         date={post.frontmatter.date}
         isoDate={post.frontmatter.isoDate}
+        syndication={post.frontmatter.syndication}
         helmet={
           <Helmet>
             <meta property="og:url" content={post.fields.slug} />
@@ -83,6 +88,7 @@ export const pageQuery = graphql`
       frontmatter {
         date(formatString: "MMM D, Y")
         isoDate: date(formatString: "YYYY-MM-DDTHH:mm:ssZ")
+        syndication
       }
     }
   }
