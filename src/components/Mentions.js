@@ -1,5 +1,5 @@
 import React from "react"
-import { HTMLContent } from "./Content"
+import Content, { HTMLContent } from "./Content"
 import moment from "moment"
 import styles from "./Mentions.module.scss"
 import { orderBy } from "lodash"
@@ -72,7 +72,7 @@ const Mention = ({ mention }) => {
             <MentionTimestamp mention={mention} />
           </div>
         </div>
-        <HTMLContent className={styles.body} content={mention.content.html} />
+        <MentionContent mention={mention} />
       </div>
     </article>
   )
@@ -102,6 +102,33 @@ const MentionTimestamp = ({ mention }) => {
       <time dateTime={mention.published}>{formatted}</time>
     </a>
   )
+}
+
+const MentionContent = ({ mention }) => {
+  if (!mention.content) {
+    if (mention["wm-property"] === "like-of") {
+      return (
+        <div className={styles.body}>
+          <em>liked this post.</em>
+        </div>
+      )
+    }
+
+    // TODO there are probably other types of mentions
+    return null
+  }
+
+  if (mention.content.html) {
+    return (
+      <HTMLContent className={styles.body} content={mention.content.html} />
+    )
+  }
+
+  if (mention.content.text) {
+    return <Content className={styles.body} content={mention.content.text} />
+  }
+
+  return null
 }
 
 export default Mentions
