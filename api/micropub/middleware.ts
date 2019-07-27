@@ -52,9 +52,20 @@ export async function json(
 
   beeline.customContext.add("micropub.request_type", "json")
 
-  const {
-    body: { type, properties: props },
-  } = req
+  const { body } = req
+  if (body.action === "update") {
+    return await handleJsonUpdate(body, req, res)
+  } else if (body.type) {
+    return await handleJsonCreate(body, req, res)
+  }
+}
+
+async function handleJsonCreate(
+  body: any,
+  req: express.Request,
+  res: express.Response
+): Promise<"next" | void> {
+  const { type, properties: props } = body
 
   const post = Post.build()
   post.type = type[0].replace(/^h-/, "")
@@ -66,6 +77,12 @@ export async function json(
 
   return await generatePost(post, req, res)
 }
+
+async function handleJsonUpdate(
+  body: any,
+  req: express.Request,
+  res: express.Response
+): Promise<"next" | void> {}
 
 async function generatePost(
   post: PostBuilder,

@@ -8,15 +8,27 @@ import httpError from "http-errors"
 
 import MediaFile from "./media"
 import { newCommit } from "./commits"
+import { getFile } from "./git"
+import { URL } from "url"
 
 slug.defaults.modes.pretty.lower = true
 const SLUG_MAX_LENGTH = 40
+
+interface PostInput {
+  readonly type: "entry"
+  readonly title?: string
+  readonly content?: string
+  readonly published: Date
+  readonly photos?: string[]
+  readonly media?: MediaFile[]
+  readonly path: string
+  readonly url: string
+}
 
 export class Post {
   readonly type: "entry"
   readonly title: string
   readonly content: string
-  readonly slug: string
   readonly published: Date
   readonly photos: string[]
   readonly media: MediaFile[]
@@ -29,29 +41,47 @@ export class Post {
     return builder
   }
 
-  constructor(builder: PostBuilder) {
-    if (builder.type !== "entry") {
-      throw new httpError.BadRequest("a post's type must be 'entry'")
+  constructor({
+    type,
+    title = "",
+    content = "",
+    published,
+    photos = [],
+    media = [],
+    path,
+    url,
+  }: PostInput) {
+    this.type = type
+    this.title = title
+    this.content = content
+    this.published = published
+    this.photos = photos
+    this.media = media
+    this.path = path
+    this.url = url
+  }
+
+  static async fetch(branch: string, url: string): Promise<Post> {
+    const pathPart = new URL(url).pathname.replace(/\/$/, "")
+    let filePath = `src/pages/micro${pathPart}.md`
+    let contents: string | undefined
+    try {
+      contents = await getFile(branch, filePath)
+    } catch (err) {
+      filePath = `src/pages/blog${pathPart}.md`
+      contents = await getFile(branch, filePath)
     }
+    const { data, content } = matter(contents)
 
-    this.type = builder.type
-    this.title = builder.title || ""
-    this.content = builder.content || ""
-    this.photos = builder.photos || []
-    this.media = builder.media
-
-    this.slug = builder._createSlug()
-    if (builder.published) {
-      this.published = moment.utc(builder.published).toDate()
-    } else {
-      this.published = new Date()
-    }
-
-    this.url =
-      "/" + moment.utc(this.published).format("YYYY-MM-DD-") + this.slug
-
-    const type = this.title ? "blog" : "micro"
-    this.path = "src/pages/" + type + this.url + ".md"
+    return new Post({
+      type: "entry",
+      title: data.title,
+      content: content.replace(/^\n/, ""),
+      published: data.date,
+      photos: data.photos,
+      path: filePath,
+      url: pathPart,
+    })
   }
 
   render() {
@@ -143,7 +173,28 @@ export class PostBuilder implements IPostBuilder {
   }
 
   generate(): Post {
-    return new Post(this)
+    if (this.type !== "entry") {
+      throw new httpError.BadRequest("a post's type must be 'entry'")
+    }
+
+    const slug = this._createSlug()
+    const published = this.published
+      ? moment.utc(this.published).toDate()
+      : new Date()
+    const url = "/" + moment.utc(published).format("YYYY-MM-DD-") + slug
+    const type = this.title ? "blog" : "micro"
+    const path = "src/pages/" + type + url + ".md"
+
+    return new Post({
+      type: this.type,
+      title: this.title,
+      content: this.content,
+      photos: this.photos,
+      media: this.media,
+      published,
+      path,
+      url,
+    })
   }
 
   _createSlug(): string {
