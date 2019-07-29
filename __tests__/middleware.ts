@@ -1,5 +1,10 @@
+jest.mock("../api/micropub/git")
+
 import { createRequest, createResponse } from "node-mocks-http"
 import * as mw from "../api/micropub/middleware"
+import * as git from "../api/micropub/git"
+
+process.env.GITHUB_BRANCH = "my-test-branch"
 
 function setup(type: string, body: any, files: any = {}) {
   const req = createRequest({
@@ -231,13 +236,122 @@ describe("reading a JSON Micropub request", () => {
   })
 
   describe("an update request", () => {
-    it("does not fail", async () => {
+    beforeAll(() => {
+      // @ts-ignore
+      git.__registerFile(
+        "my-test-branch",
+        "src/pages/micro/foo.md",
+        `---
+templateKey: microblog-post
+date: 2019-07-25T19:29:55.878Z
+photos:
+- https://example.org/baz.jpg
+---
+
+Yes! I think this means that TypeScript can add the feature now.
+
+https://twitter.com/drosenwasser/status/1154456633642119168
+`
+      )
+    })
+
+    test("errors if there are no actions to perform", async () => {
       const { req, res } = setup(jsonType, {
         action: "update",
         url: "https://example.com/foo",
       })
 
+      await expect(
+        mw.json(req, res)
+      ).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"No changes specified for update"`
+      )
+    })
+
+    test("allows replacing the title", async () => {
+      const { req, res } = setup(jsonType, {
+        action: "update",
+        url: "https://example.com/foo",
+        replace: {
+          name: ["A new post title"],
+        },
+      })
+
       await mw.json(req, res)
+      expect(req.post).toMatchInlineSnapshot(`
+        Post {
+          "content": "Yes! I think this means that TypeScript can add the feature now.
+
+        https://twitter.com/drosenwasser/status/1154456633642119168
+        ",
+          "media": Array [],
+          "path": "src/pages/micro/foo.md",
+          "photos": Array [
+            "https://example.org/baz.jpg",
+          ],
+          "published": 2019-07-25T19:29:55.878Z,
+          "title": "A new post title",
+          "type": "entry",
+          "url": "/foo",
+        }
+      `)
+    })
+
+    test("allows replacing the content", async () => {
+      const { req, res } = setup(jsonType, {
+        action: "update",
+        url: "https://example.com/foo",
+        replace: {
+          content: ["This is the new post content."],
+        },
+      })
+
+      await mw.json(req, res)
+      expect(req.post).toMatchInlineSnapshot(`
+        Post {
+          "content": "This is the new post content.",
+          "media": Array [],
+          "path": "src/pages/micro/foo.md",
+          "photos": Array [
+            "https://example.org/baz.jpg",
+          ],
+          "published": 2019-07-25T19:29:55.878Z,
+          "title": "",
+          "type": "entry",
+          "url": "/foo",
+        }
+      `)
+    })
+
+    test("allows adding photos", async () => {
+      const { req, res } = setup(jsonType, {
+        action: "update",
+        url: "https://example.com/foo",
+        add: {
+          photo: ["https://example.com/foo.jpg", "https://example.org/bar.png"],
+        },
+      })
+
+      await mw.json(req, res)
+      expect(req.post).toMatchInlineSnapshot(`
+        Post {
+          "content": "Yes! I think this means that TypeScript can add the feature now.
+
+        https://twitter.com/drosenwasser/status/1154456633642119168
+        ",
+          "media": Array [],
+          "path": "src/pages/micro/foo.md",
+          "photos": Array [
+            "https://example.org/baz.jpg",
+            "https://example.com/foo.jpg",
+            "https://example.org/bar.png",
+          ],
+          "published": 2019-07-25T19:29:55.878Z,
+          "title": "",
+          "type": "entry",
+          "url": "/foo",
+        }
+      `)
     })
   })
 })

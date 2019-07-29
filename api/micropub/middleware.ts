@@ -1,7 +1,9 @@
 import express from "express"
 import "multer"
 import beeline from "./honeycomb"
+import httpError from "http-errors"
 import { Post, PostBuilder } from "./post"
+import { getDefaultBranch } from "./commits"
 
 declare global {
   namespace Express {
@@ -81,13 +83,41 @@ async function handleJsonCreate(
 async function handleJsonUpdate(
   body: any,
   req: express.Request,
-  res: express.Response
-): Promise<"next" | void> {}
+  _res: express.Response
+): Promise<"next" | void> {
+  const { url, ...actions } = body
+
+  if (!actions.replace && !actions.add && !actions.delete) {
+    throw new httpError.BadRequest("No changes specified for update")
+  }
+
+  const post = await Post.fetch(getDefaultBranch(), url)
+
+  if (actions.replace) {
+    const changes = actions.replace
+    if (changes.name) {
+      post.title = changes.name[0]
+    }
+    if (changes.content) {
+      post.content = changes.content[0]
+    }
+  }
+
+  if (actions.add) {
+    const changes = actions.add
+    if (changes.photo) {
+      post.photos = [...post.photos, ...changes.photo]
+    }
+  }
+
+  req.post = post
+  return "next"
+}
 
 async function generatePost(
   post: PostBuilder,
   req: express.Request,
-  res: express.Response
+  _res: express.Response
 ): Promise<"next" | void> {
   req.post = post.generate()
   return "next"

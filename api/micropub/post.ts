@@ -27,10 +27,10 @@ interface PostInput {
 
 export class Post {
   readonly type: "entry"
-  readonly title: string
-  readonly content: string
+  title: string
+  content: string
   readonly published: Date
-  readonly photos: string[]
+  photos: string[]
   readonly media: MediaFile[]
   readonly path: string
   readonly url: string
