@@ -179,7 +179,7 @@ test("updates a post", async () => {
           "type": "blob",
         },
       ],
-      "message": "Added foo.md",
+      "message": "Updated foo.md",
     }
   `)
 })

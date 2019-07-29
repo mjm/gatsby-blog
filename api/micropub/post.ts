@@ -106,7 +106,9 @@ export class Post {
       commit.addMediaFile(file)
     }
 
-    await commit.commit(`Added ${path.basename(this.path)}`)
+    const basename = path.basename(this.path)
+    const message = this.exists ? `Updated ${basename}` : `Added ${basename}`
+    await commit.commit(message)
   }
 
   private get frontmatter() {
