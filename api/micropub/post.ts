@@ -24,6 +24,7 @@ interface PostInput {
   readonly syndication?: string[]
   readonly path: string
   readonly url: string
+  readonly exists?: boolean
 }
 
 export class Post {
@@ -36,6 +37,7 @@ export class Post {
   readonly media: MediaFile[]
   readonly path: string
   readonly url: string
+  readonly exists: boolean
 
   static build(attrs: IPostBuilder = {}): PostBuilder {
     const builder = new PostBuilder()
@@ -53,6 +55,7 @@ export class Post {
     syndication = [],
     path,
     url,
+    exists = false,
   }: PostInput) {
     this.type = type
     this.title = title
@@ -63,6 +66,7 @@ export class Post {
     this.syndication = syndication
     this.path = path
     this.url = url
+    this.exists = exists
   }
 
   static async fetch(branch: string, url: string): Promise<Post> {
@@ -86,6 +90,7 @@ export class Post {
       syndication: data.syndication,
       path: filePath,
       url: pathPart,
+      exists: true,
     })
   }
 

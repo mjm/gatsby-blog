@@ -276,6 +276,7 @@ Content goes here.
 
       https://twitter.com/drosenwasser/status/1154456633642119168
       ",
+        "exists": true,
         "media": Array [],
         "path": "src/pages/micro/foo-bar-baz.md",
         "photos": Array [],
@@ -297,6 +298,7 @@ Content goes here.
       Post {
         "content": "Content goes here.
       ",
+        "exists": true,
         "media": Array [],
         "path": "src/pages/blog/baz-bar-foo.md",
         "photos": Array [],
