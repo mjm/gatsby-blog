@@ -37,6 +37,9 @@ export async function form(
   if (body.photo) {
     post.photos = [].concat(body.photo)
   }
+  if (body.syndication) {
+    post.syndication = [].concat(body.syndication)
+  }
   if (files) {
     post.addMedia("photos", files.photo || files["photo[]"])
   }
@@ -76,6 +79,7 @@ async function handleJsonCreate(
   post.slug = single(props["mp-slug"])
   post.published = single(props.published)
   post.photos = props.photo
+  post.syndication = props.syndication
 
   return await generatePost(post, req, res)
 }
@@ -107,6 +111,9 @@ async function handleJsonUpdate(
     const changes = actions.add
     if (changes.photo) {
       post.photos = [...post.photos, ...changes.photo]
+    }
+    if (changes.syndication) {
+      post.syndication = [...post.syndication, ...changes.syndication]
     }
   }
 

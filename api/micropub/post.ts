@@ -21,6 +21,7 @@ interface PostInput {
   readonly published: Date
   readonly photos?: string[]
   readonly media?: MediaFile[]
+  readonly syndication?: string[]
   readonly path: string
   readonly url: string
 }
@@ -31,6 +32,7 @@ export class Post {
   content: string
   readonly published: Date
   photos: string[]
+  syndication: string[]
   readonly media: MediaFile[]
   readonly path: string
   readonly url: string
@@ -48,6 +50,7 @@ export class Post {
     published,
     photos = [],
     media = [],
+    syndication = [],
     path,
     url,
   }: PostInput) {
@@ -57,6 +60,7 @@ export class Post {
     this.published = published
     this.photos = photos
     this.media = media
+    this.syndication = syndication
     this.path = path
     this.url = url
   }
@@ -79,6 +83,7 @@ export class Post {
       content: content.replace(/^\n/, ""),
       published: data.date,
       photos: data.photos,
+      syndication: data.syndication,
       path: filePath,
       url: pathPart,
     })
@@ -113,6 +118,10 @@ export class Post {
       data.photos = this.photos
     }
 
+    if (this.syndication.length) {
+      data.syndication = this.syndication
+    }
+
     return data
   }
 
@@ -137,6 +146,7 @@ export class PostBuilder implements IPostBuilder {
   slug?: string | undefined
   published?: string | Date | undefined
   photos?: string[] | undefined
+  syndication?: string[]
   media: MediaFile[]
 
   constructor() {
@@ -191,6 +201,7 @@ export class PostBuilder implements IPostBuilder {
       content: this.content,
       photos: this.photos,
       media: this.media,
+      syndication: this.syndication,
       published,
       path,
       url,
