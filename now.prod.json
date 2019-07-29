@@ -1,14 +1,14 @@
 {
   "version": 2,
-  "name": "gatsby-blog-staging",
-  "alias": ["gatsby-blog-staging.now.sh"],
+  "name": "gatsby-blog",
+  "alias": ["gatsby-blog.now.sh"],
   "regions": ["sfo1", "cle1"],
   "builds": [{ "src": "api/routes/**/*.ts", "use": "@now/node" }],
   "routes": [{ "src": "/api/(.*)", "dest": "/api/routes/$1.ts" }],
   "env": {
     "GITHUB_USER": "mjm",
     "GITHUB_REPO": "gatsby-blog",
-    "GITHUB_BRANCH": "testing",
+    "GITHUB_BRANCH": "master",
     "GITHUB_TOKEN": "@github-token",
     "NETLIFY_TOKEN": "@netlify-token",
     "HONEYCOMB_WRITE_KEY": "@honeycomb-write-key"

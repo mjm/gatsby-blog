@@ -57,13 +57,6 @@ export function getDefaultBranch() {
     return process.env.GITHUB_BRANCH
   }
 
-  if (
-    process.env.NOW_GITHUB_COMMIT_REF &&
-    process.env.NOW_GITHUB_COMMIT_REF !== "master"
-  ) {
-    return "testing"
-  }
-
   return "master"
 }
 
