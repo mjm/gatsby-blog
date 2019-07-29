@@ -4,6 +4,7 @@ import app from "../api/routes/micropub"
 import supertest from "supertest"
 import { setExpectedToken } from "../api/micropub/auth"
 import { upload, commit } from "../api/micropub/git"
+import * as git from "../api/micropub/git"
 
 const url = "/"
 
@@ -12,6 +13,27 @@ process.env.GITHUB_BRANCH = "my-test-branch"
 
 beforeAll(() => setExpectedToken("token"))
 afterAll(() => setExpectedToken(null))
+
+beforeAll(() => {
+  // @ts-ignore
+  git.__registerFile(
+    "my-test-branch",
+    "src/pages/micro/foo.md",
+    `---
+templateKey: microblog-post
+date: 2019-07-25T19:29:55.878Z
+photos:
+- https://example.org/baz.jpg
+syndication:
+- https://www.instagram.com/p/Brv38GxhwXI/
+---
+
+Yes! I think this means that TypeScript can add the feature now.
+
+https://twitter.com/drosenwasser/status/1154456633642119168
+`
+  )
+})
 
 test("requires a valid token", async () => {
   await supertest(app)
@@ -113,6 +135,54 @@ test.each(["photo", "photo[]"])(
     })
   }
 )
+
+test("updates a post", async () => {
+  await supertest(app)
+    .post(url)
+    .set("authorization", "Bearer token")
+    .type("json")
+    .send({
+      action: "update",
+      url: "https://www.mattmoriarity.com/foo/",
+      add: {
+        syndication: ["https://twitter.com/foo/status/1234"],
+      },
+    })
+    .expect(204)
+
+  // call upload, but with no files
+  expect(mocked(upload).mock.calls).toEqual([[[]]])
+
+  // verify the commit was built correctly
+  expect(mocked(commit).mock.calls.length).toBe(1)
+  expect(mocked(commit).mock.calls[0][0]).toMatchInlineSnapshot(`
+    Object {
+      "branch": "my-test-branch",
+      "files": Array [
+        Object {
+          "content": "---
+    templateKey: microblog-post
+    date: 2019-07-25T19:29:55.878Z
+    photos:
+      - 'https://example.org/baz.jpg'
+    syndication:
+      - 'https://www.instagram.com/p/Brv38GxhwXI/'
+      - 'https://twitter.com/foo/status/1234'
+    ---
+
+    Yes! I think this means that TypeScript can add the feature now.
+
+    https://twitter.com/drosenwasser/status/1154456633642119168
+    ",
+          "mode": "100644",
+          "path": "src/pages/micro/foo.md",
+          "type": "blob",
+        },
+      ],
+      "message": "Added foo.md",
+    }
+  `)
+})
 
 function mocked<T>(value: T): jest.Mock<T> {
   return (value as unknown) as jest.Mock<T>

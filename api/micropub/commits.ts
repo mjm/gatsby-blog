@@ -52,7 +52,7 @@ class CommitBuilder {
   }
 }
 
-function getDefaultBranch() {
+export function getDefaultBranch() {
   if (process.env.GITHUB_BRANCH) {
     return process.env.GITHUB_BRANCH
   }

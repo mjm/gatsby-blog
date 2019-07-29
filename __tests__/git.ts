@@ -1,5 +1,11 @@
 import nock from "nock"
-import { CommitFile, setRepo, commit, upload } from "../api/micropub/git"
+import {
+  CommitFile,
+  setRepo,
+  commit,
+  upload,
+  getFile,
+} from "../api/micropub/git"
 import MediaFile from "../api/micropub/media"
 
 beforeAll(() => {
@@ -61,6 +67,37 @@ describe("committing to GitHub", () => {
       message: "My commit message",
       files,
     })
+
+    scope.done()
+  })
+})
+
+describe("getting a file from GitHub", () => {
+  it("gets a file that exists in the branch", async () => {
+    const scope = nock(/api.github.com/)
+      .defaultReplyHeaders({ "access-control-allow-origin": "*" })
+      .get("/repos/foo/bar/contents/a/b/c.md")
+      .query({ ref: "my-branch" })
+      .reply(200, "this is my file contents")
+
+    const contents = await getFile("my-branch", "a/b/c.md")
+    expect(contents).toEqual("this is my file contents")
+
+    scope.done()
+  })
+
+  it("throws an error if the file does not exist", async () => {
+    const scope = nock(/api.github.com/)
+      .defaultReplyHeaders({ "access-control-allow-origin": "*" })
+      .get("/repos/foo/bar/contents/a/b/c.md")
+      .query({ ref: "my-branch" })
+      .reply(404, {
+        message: "Not Found",
+        documentation_url:
+          "https://developer.github.com/v3/repos/contents/#get-contents",
+      })
+
+    await expect(getFile("my-branch", "a/b/c.md")).rejects.toThrowError()
 
     scope.done()
   })

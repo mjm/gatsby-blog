@@ -1,4 +1,7 @@
+jest.mock("../api/micropub/git")
+
 import { Post } from "../api/micropub/post"
+import * as git from "../api/micropub/git"
 
 import MockDate from "mockdate"
 import matter from "gray-matter"
@@ -89,7 +92,7 @@ describe("generating", () => {
       pb.slug = "this-is-my-slug"
       const post = pb.generate()
 
-      expect(post.slug).toBe("this-is-my-slug")
+      expect(post.url).toMatch(/this-is-my-slug$/)
     })
 
     test("slugifies title if present", () => {
@@ -98,7 +101,7 @@ describe("generating", () => {
       pb.content = "This is some cool content"
       const post = pb.generate()
 
-      expect(post.slug).toBe("this-is-my-new-post")
+      expect(post.url).toMatch(/this-is-my-new-post$/)
     })
 
     test("slugifies content if present", () => {
@@ -106,14 +109,14 @@ describe("generating", () => {
       pb.content = "Some cool new content is here."
       const post = pb.generate()
 
-      expect(post.slug).toBe("some-cool-new-content-is-here")
+      expect(post.url).toMatch(/some-cool-new-content-is-here$/)
     })
 
     test("slugifies a random string if no title or content is present", () => {
       const pb = Post.build({ type: "entry" })
       const post = pb.generate()
 
-      expect(post.slug.length).toBeGreaterThan(5)
+      expect(post.url.length).toBeGreaterThan(5)
     })
 
     test("chops content slug to be less than 40 characters", () => {
@@ -122,7 +125,7 @@ describe("generating", () => {
         "This is some new content that extends beyond the expected 40 characters"
       const post = pb.generate()
 
-      expect(post.slug).toBe("this-is-some-new-content-that-extends")
+      expect(post.url).toMatch(/this-is-some-new-content-that-extends$/)
     })
   })
 
@@ -228,6 +231,96 @@ describe("rendering", () => {
       photos: ["/media/1.jpg"],
     })
     expect(content.trim()).toBe("")
+  })
+})
+
+describe("fetching", () => {
+  beforeAll(() => {
+    // @ts-ignore
+    git.__registerFile(
+      "my-branch",
+      "src/pages/micro/foo-bar-baz.md",
+      `---
+templateKey: microblog-post
+date: 2019-07-25T19:29:55.878Z
+---
+
+Yes! I think this means that TypeScript can add the feature now.
+
+https://twitter.com/drosenwasser/status/1154456633642119168
+`
+    )
+    // @ts-ignore
+    git.__registerFile(
+      "my-branch",
+      "src/pages/blog/baz-bar-foo.md",
+      `---
+templateKey: blog-post
+title: Baz Bar Foo
+date: 2019-07-25T19:29:55.878Z
+---
+
+Content goes here.
+`
+    )
+  })
+
+  test("a microblog post", async () => {
+    const post = await Post.fetch(
+      "my-branch",
+      "https://example.com/foo-bar-baz/"
+    )
+    expect(post).toMatchInlineSnapshot(`
+      Post {
+        "content": "Yes! I think this means that TypeScript can add the feature now.
+
+      https://twitter.com/drosenwasser/status/1154456633642119168
+      ",
+        "exists": true,
+        "media": Array [],
+        "path": "src/pages/micro/foo-bar-baz.md",
+        "photos": Array [],
+        "published": 2019-07-25T19:29:55.878Z,
+        "syndication": Array [],
+        "title": "",
+        "type": "entry",
+        "url": "/foo-bar-baz",
+      }
+    `)
+  })
+
+  test("a blog post", async () => {
+    const post = await Post.fetch(
+      "my-branch",
+      "https://example.com/baz-bar-foo"
+    )
+    expect(post).toMatchInlineSnapshot(`
+      Post {
+        "content": "Content goes here.
+      ",
+        "exists": true,
+        "media": Array [],
+        "path": "src/pages/blog/baz-bar-foo.md",
+        "photos": Array [],
+        "published": 2019-07-25T19:29:55.878Z,
+        "syndication": Array [],
+        "title": "Baz Bar Foo",
+        "type": "entry",
+        "url": "/baz-bar-foo",
+      }
+    `)
+  })
+
+  test("a post that doesn't exist", async () => {
+    expect(
+      Post.fetch("my-branch", "https://example.com/not-found")
+    ).rejects.toThrowError()
+  })
+
+  test("a post from a different branch", async () => {
+    expect(
+      Post.fetch("my-other-branch", "https://example.com/baz-bar-foo")
+    ).rejects.toThrowError()
   })
 })
 

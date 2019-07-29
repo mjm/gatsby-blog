@@ -47,8 +47,12 @@ router.post(
     console.log(req.post)
     await req.post.commit()
 
-    res.set("Location", baseUrl + req.post.url + "/")
-    res.status(202).send("")
+    if (req.post.exists) {
+      res.status(204).end()
+    } else {
+      res.set("Location", baseUrl + req.post.url + "/")
+      res.status(202).send("")
+    }
   }
 )
 
