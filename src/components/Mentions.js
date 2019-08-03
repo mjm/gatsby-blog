@@ -11,18 +11,15 @@ export const MentionCount = ({ url, children }) => {
     return `https://webmention.io/api/count?${search.toString()}`
   }
 
-  const mentionCount = useFetch(getFetchUrl(), {
-    initial: 0,
-    transform(data) {
-      return data.count
-    },
+  const mentionCounts = useFetch(getFetchUrl(), {
+    initial: { count: 0, type: {} },
   })
 
-  if (mentionCount === 0) {
+  if (mentionCounts.count === 0) {
     return null
   }
 
-  return children(mentionCount)
+  return children(mentionCounts)
 }
 
 const Mentions = ({ url }) => {

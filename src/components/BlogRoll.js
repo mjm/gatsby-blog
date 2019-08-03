@@ -3,7 +3,11 @@ import { Link } from "gatsby"
 import { HTMLContent } from "./Content"
 import useSiteMetadata from "./SiteMetadata"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faComment, faThumbtack } from "@fortawesome/free-solid-svg-icons"
+import {
+  faComment,
+  faThumbtack,
+  faHeart,
+} from "@fortawesome/free-solid-svg-icons"
 import { DateBubbleLink } from "./DateBubble"
 import styles from "./Blog.module.scss"
 import { MentionCount } from "./Mentions"
@@ -54,11 +58,21 @@ export const BlogRollEntry = ({ siteUrl, post, pinned }) => {
             </div>
           )}
           <MentionCount url={entryUrl}>
-            {count => (
-              <div className={styles.mentionCount}>
-                <FontAwesomeIcon icon={faComment} />
-                {count}
-              </div>
+            {({ type }) => (
+              <>
+                {type.like ? (
+                  <div className={styles.mentionCount}>
+                    <FontAwesomeIcon icon={faHeart} />
+                    {type.like}
+                  </div>
+                ) : null}
+                {type.reply ? (
+                  <div className={styles.mentionCount}>
+                    <FontAwesomeIcon icon={faComment} />
+                    {type.reply}
+                  </div>
+                ) : null}
+              </>
             )}
           </MentionCount>
           <DateBubbleLink
