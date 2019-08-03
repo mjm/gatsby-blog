@@ -15,7 +15,6 @@ app.use(router)
 
 const tokens: { [key: string]: [number, any] } = {
   correct: [200, { me: "https://www.mattmoriarity.com/", scope: "create" }],
-  bad_scope: [200, { me: "https://www.mattmoriarity.com/", scope: "post" }],
   bad_me: [200, { me: "https://example.com/", scope: "create" }],
   bad_response: [500, "An internal error happened on the token endpoint"],
 }
@@ -60,13 +59,6 @@ test("returns 403 if the token is for a different website", async () => {
   await supertest(app)
     .get("/")
     .set("authorization", "Bearer bad_me")
-    .expect(403)
-})
-
-test("returns 403 if the token does not have create scope", async () => {
-  await supertest(app)
-    .get("/")
-    .set("authorization", "Bearer bad_scope")
     .expect(403)
 })
 

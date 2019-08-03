@@ -5,6 +5,14 @@ import express from "express"
 import httpError from "http-errors"
 import { baseUrl } from "./config"
 
+declare global {
+  namespace Express {
+    interface Request {
+      scopes: string[]
+    }
+  }
+}
+
 const TOKEN_URL = "https://tokens.indieauth.com/token"
 
 let expectedToken: string | null = null
@@ -24,6 +32,7 @@ export async function requireToken(req: express.Request) {
 
   if (expectedToken) {
     if (token === expectedToken) {
+      req.scopes = ["create", "update"]
       return "next"
     } else {
       throw new httpError.Forbidden("you are forbidden")
@@ -57,11 +66,9 @@ export async function requireToken(req: express.Request) {
   }
 
   beeline.customContext.add("scope", responseJson.scope)
-  if (responseJson.scope.indexOf("create") >= 0) {
-    return "next"
-  } else {
-    throw new httpError.Forbidden("'create' scope is required")
-  }
+  req.scopes = responseJson.scope.split(" ")
+
+  return "next"
 }
 
 function getAuthToken(req: express.Request) {

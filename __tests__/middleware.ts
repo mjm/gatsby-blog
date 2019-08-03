@@ -15,6 +15,7 @@ function setup(type: string, body: any, files: any = {}) {
     },
     body,
     files,
+    scopes: ["create", "update"],
   })
   const res = createResponse({ req })
 
@@ -41,6 +42,15 @@ describe("reading a form-based Micropub request", () => {
 
     await mw.form(req, res)
     expect(req.post).toBe(undefined)
+  })
+
+  test("throws a forbidden error if the user does not have create scope", async () => {
+    const { req, res } = setup(formType, { h: "entry" })
+    req.scopes = ["update"]
+
+    await expect(mw.form(req, res)).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"The 'create' scope is required"`
+    )
   })
 
   test("reads the type from the h key", async () => {
@@ -184,6 +194,20 @@ describe("reading a JSON Micropub request", () => {
       expect(req.post).toBe(undefined)
     })
 
+    test("throws a forbidden error when the user does not have create scope", async () => {
+      const { req, res } = setup(jsonType, {
+        type: ["h-entry"],
+        properties: {},
+      })
+      req.scopes = ["update"]
+
+      await expect(
+        mw.json(req, res)
+      ).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"The 'create' scope is required"`
+      )
+    })
+
     test("reads the type from the type key", async () => {
       const { req, res } = setup(jsonType, {
         type: ["h-entry"],
@@ -301,6 +325,23 @@ https://twitter.com/drosenwasser/status/1154456633642119168
       )
     })
 
+    test("throws a forbidden error when the user does not have update scope", async () => {
+      const { req, res } = setup(jsonType, {
+        action: "update",
+        url: "https://example.com/foo",
+        replace: {
+          name: ["A new post title"],
+        },
+      })
+      req.scopes = ["create"]
+
+      await expect(
+        mw.json(req, res)
+      ).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"The 'update' scope is required"`
+      )
+    })
+
     test("errors if there are no actions to perform", async () => {
       const { req, res } = setup(jsonType, {
         action: "update",
@@ -325,26 +366,26 @@ https://twitter.com/drosenwasser/status/1154456633642119168
 
       await mw.json(req, res)
       expect(req.post).toMatchInlineSnapshot(`
-        Post {
-          "content": "Yes! I think this means that TypeScript can add the feature now.
+                        Post {
+                          "content": "Yes! I think this means that TypeScript can add the feature now.
 
-        https://twitter.com/drosenwasser/status/1154456633642119168
-        ",
-          "exists": true,
-          "media": Array [],
-          "path": "src/pages/micro/foo.md",
-          "photos": Array [
-            "https://example.org/baz.jpg",
-          ],
-          "published": 2019-07-25T19:29:55.878Z,
-          "syndication": Array [
-            "https://www.instagram.com/p/Brv38GxhwXI/",
-          ],
-          "title": "A new post title",
-          "type": "entry",
-          "url": "/foo",
-        }
-      `)
+                        https://twitter.com/drosenwasser/status/1154456633642119168
+                        ",
+                          "exists": true,
+                          "media": Array [],
+                          "path": "src/pages/micro/foo.md",
+                          "photos": Array [
+                            "https://example.org/baz.jpg",
+                          ],
+                          "published": 2019-07-25T19:29:55.878Z,
+                          "syndication": Array [
+                            "https://www.instagram.com/p/Brv38GxhwXI/",
+                          ],
+                          "title": "A new post title",
+                          "type": "entry",
+                          "url": "/foo",
+                        }
+                  `)
     })
 
     test("allows replacing the content", async () => {
@@ -358,23 +399,23 @@ https://twitter.com/drosenwasser/status/1154456633642119168
 
       await mw.json(req, res)
       expect(req.post).toMatchInlineSnapshot(`
-        Post {
-          "content": "This is the new post content.",
-          "exists": true,
-          "media": Array [],
-          "path": "src/pages/micro/foo.md",
-          "photos": Array [
-            "https://example.org/baz.jpg",
-          ],
-          "published": 2019-07-25T19:29:55.878Z,
-          "syndication": Array [
-            "https://www.instagram.com/p/Brv38GxhwXI/",
-          ],
-          "title": "",
-          "type": "entry",
-          "url": "/foo",
-        }
-      `)
+                        Post {
+                          "content": "This is the new post content.",
+                          "exists": true,
+                          "media": Array [],
+                          "path": "src/pages/micro/foo.md",
+                          "photos": Array [
+                            "https://example.org/baz.jpg",
+                          ],
+                          "published": 2019-07-25T19:29:55.878Z,
+                          "syndication": Array [
+                            "https://www.instagram.com/p/Brv38GxhwXI/",
+                          ],
+                          "title": "",
+                          "type": "entry",
+                          "url": "/foo",
+                        }
+                  `)
     })
 
     test("allows adding photos", async () => {
@@ -388,28 +429,28 @@ https://twitter.com/drosenwasser/status/1154456633642119168
 
       await mw.json(req, res)
       expect(req.post).toMatchInlineSnapshot(`
-        Post {
-          "content": "Yes! I think this means that TypeScript can add the feature now.
+                        Post {
+                          "content": "Yes! I think this means that TypeScript can add the feature now.
 
-        https://twitter.com/drosenwasser/status/1154456633642119168
-        ",
-          "exists": true,
-          "media": Array [],
-          "path": "src/pages/micro/foo.md",
-          "photos": Array [
-            "https://example.org/baz.jpg",
-            "https://example.com/foo.jpg",
-            "https://example.org/bar.png",
-          ],
-          "published": 2019-07-25T19:29:55.878Z,
-          "syndication": Array [
-            "https://www.instagram.com/p/Brv38GxhwXI/",
-          ],
-          "title": "",
-          "type": "entry",
-          "url": "/foo",
-        }
-      `)
+                        https://twitter.com/drosenwasser/status/1154456633642119168
+                        ",
+                          "exists": true,
+                          "media": Array [],
+                          "path": "src/pages/micro/foo.md",
+                          "photos": Array [
+                            "https://example.org/baz.jpg",
+                            "https://example.com/foo.jpg",
+                            "https://example.org/bar.png",
+                          ],
+                          "published": 2019-07-25T19:29:55.878Z,
+                          "syndication": Array [
+                            "https://www.instagram.com/p/Brv38GxhwXI/",
+                          ],
+                          "title": "",
+                          "type": "entry",
+                          "url": "/foo",
+                        }
+                  `)
     })
 
     test("allows adding syndication URLs", async () => {
@@ -426,28 +467,28 @@ https://twitter.com/drosenwasser/status/1154456633642119168
 
       await mw.json(req, res)
       expect(req.post).toMatchInlineSnapshot(`
-        Post {
-          "content": "Yes! I think this means that TypeScript can add the feature now.
+                        Post {
+                          "content": "Yes! I think this means that TypeScript can add the feature now.
 
-        https://twitter.com/drosenwasser/status/1154456633642119168
-        ",
-          "exists": true,
-          "media": Array [],
-          "path": "src/pages/micro/foo.md",
-          "photos": Array [
-            "https://example.org/baz.jpg",
-          ],
-          "published": 2019-07-25T19:29:55.878Z,
-          "syndication": Array [
-            "https://www.instagram.com/p/Brv38GxhwXI/",
-            "https://twitter.com/foo/status/123",
-            "https://instagram.com/p/foo",
-          ],
-          "title": "",
-          "type": "entry",
-          "url": "/foo",
-        }
-      `)
+                        https://twitter.com/drosenwasser/status/1154456633642119168
+                        ",
+                          "exists": true,
+                          "media": Array [],
+                          "path": "src/pages/micro/foo.md",
+                          "photos": Array [
+                            "https://example.org/baz.jpg",
+                          ],
+                          "published": 2019-07-25T19:29:55.878Z,
+                          "syndication": Array [
+                            "https://www.instagram.com/p/Brv38GxhwXI/",
+                            "https://twitter.com/foo/status/123",
+                            "https://instagram.com/p/foo",
+                          ],
+                          "title": "",
+                          "type": "entry",
+                          "url": "/foo",
+                        }
+                  `)
     })
   })
 })

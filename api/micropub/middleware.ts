@@ -22,6 +22,10 @@ export async function form(
     return "next"
   }
 
+  if (!req.scopes.includes("create")) {
+    throw new httpError.Forbidden("The 'create' scope is required")
+  }
+
   beeline.customContext.add("micropub.request_type", "form")
 
   const body = req.body
@@ -70,6 +74,10 @@ async function handleJsonCreate(
   req: express.Request,
   res: express.Response
 ): Promise<"next" | void> {
+  if (!req.scopes.includes("create")) {
+    throw new httpError.Forbidden("The 'create' scope is required")
+  }
+
   const { type, properties: props } = body
 
   const post = Post.build()
@@ -89,6 +97,10 @@ async function handleJsonUpdate(
   req: express.Request,
   _res: express.Response
 ): Promise<"next" | void> {
+  if (!req.scopes.includes("update")) {
+    throw new httpError.Forbidden("The 'update' scope is required")
+  }
+
   const { url, ...actions } = body
 
   if (!actions.replace && !actions.add && !actions.delete) {
