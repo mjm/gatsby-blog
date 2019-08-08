@@ -1,6 +1,6 @@
-import app from "../api/routes/micropub"
+import app from "../api/micropub"
 import supertest from "supertest"
-import { setExpectedToken } from "../api/micropub/auth"
+import { setExpectedToken } from "../lib/auth"
 
 const url = "/"
 

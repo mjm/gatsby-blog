@@ -1,8 +1,8 @@
-jest.mock("../api/micropub/git")
+jest.mock("../lib/git")
 
 import { createRequest, createResponse } from "node-mocks-http"
-import * as mw from "../api/micropub/middleware"
-import * as git from "../api/micropub/git"
+import * as mw from "../lib/middleware"
+import * as git from "../lib/git"
 
 process.env.GITHUB_BRANCH = "my-test-branch"
 

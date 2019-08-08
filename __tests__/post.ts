@@ -1,7 +1,7 @@
-jest.mock("../api/micropub/git")
+jest.mock("../lib/git")
 
-import { Post } from "../api/micropub/post"
-import * as git from "../api/micropub/git"
+import { Post } from "../lib/post"
+import * as git from "../lib/git"
 
 import MockDate from "mockdate"
 import matter from "gray-matter"

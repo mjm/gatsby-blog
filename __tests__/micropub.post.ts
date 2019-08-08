@@ -1,10 +1,10 @@
-jest.mock("../api/micropub/git")
+jest.mock("../lib/git")
 
-import app from "../api/routes/micropub"
+import app from "../api/micropub"
 import supertest from "supertest"
-import { setExpectedToken } from "../api/micropub/auth"
-import { upload, commit } from "../api/micropub/git"
-import * as git from "../api/micropub/git"
+import { setExpectedToken } from "../lib/auth"
+import { upload, commit } from "../lib/git"
+import * as git from "../lib/git"
 
 const url = "/"
 

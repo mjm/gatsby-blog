@@ -1,12 +1,6 @@
 import nock from "nock"
-import {
-  CommitFile,
-  setRepo,
-  commit,
-  upload,
-  getFile,
-} from "../api/micropub/git"
-import MediaFile from "../api/micropub/media"
+import { CommitFile, setRepo, commit, upload, getFile } from "../lib/git"
+import MediaFile from "../lib/media"
 
 beforeAll(() => {
   setRepo("foo", "bar")

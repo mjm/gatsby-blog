@@ -1,11 +1,11 @@
-import beeline from "../micropub/honeycomb"
+import beeline from "../lib/honeycomb"
 import express from "express"
 import multer from "multer"
 import httpError from "http-errors"
-import { app, router } from "../micropub/app"
-import { requireToken } from "../micropub/auth"
-import { baseUrl } from "../micropub/config"
-import * as postMiddleware from "../micropub/middleware"
+import { app, router } from "../lib/app"
+import { requireToken } from "../lib/auth"
+import { baseUrl } from "../lib/config"
+import * as postMiddleware from "../lib/middleware"
 
 const storage = multer.memoryStorage()
 const upload = multer({ storage })

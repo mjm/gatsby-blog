@@ -2,7 +2,7 @@ import express from "express"
 import promiseRouter from "express-promise-router"
 import supertest from "supertest"
 import nock from "nock"
-import { requireToken } from "../api/micropub/auth"
+import { requireToken } from "../lib/auth"
 
 // create small test app that uses the middleware
 const app = express()

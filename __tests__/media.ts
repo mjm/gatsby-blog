@@ -1,4 +1,4 @@
-import MediaFile from "../api/micropub/media"
+import MediaFile from "../lib/media"
 import MockDate from "mockdate"
 
 beforeEach(() => {

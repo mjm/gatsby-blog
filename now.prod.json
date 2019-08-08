@@ -1,10 +1,8 @@
 {
   "version": 2,
   "name": "gatsby-blog",
-  "alias": ["gatsby-blog.now.sh"],
-  "regions": ["sfo1", "cle1"],
-  "builds": [{ "src": "api/routes/**/*.ts", "use": "@now/node" }],
-  "routes": [{ "src": "/api/(.*)", "dest": "/api/routes/$1.ts" }],
+  "builds": [{ "src": "api/**/*", "use": "@now/node" }],
+  "routes": [{ "src": "/api/(.*)", "dest": "api/$1.ts" }],
   "env": {
     "GITHUB_USER": "mjm",
     "GITHUB_REPO": "gatsby-blog",

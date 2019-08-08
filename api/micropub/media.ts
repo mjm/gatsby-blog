@@ -1,60 +1,29 @@
-import moment from "moment"
-import * as mime from "mime-types"
-import uuid from "uuid/v4"
-import { createHash } from "crypto"
+import express from "express"
+import multer from "multer"
+import httpError from "http-errors"
+import { app, router } from "../../lib/app"
+import { requireToken } from "../../lib/auth"
+import { baseUrl } from "../../lib/config"
+import MediaFile from "../../lib/media"
 
-import { newCommit } from "./commits"
+const storage = multer.memoryStorage()
+const upload = multer({ storage })
 
-export default class MediaFile {
-  buffer: Buffer
-  mimetype: string
-  url: string
-  path: string
-  oid: string
-  size: number
+router.post(
+  "/api/micropub/media",
+  requireToken,
+  upload.single("file"),
+  async (req: express.Request, res: express.Response) => {
+    throw new httpError.BadRequest(
+      "media endpoint is not supported at the moment"
+    )
 
-  href?: string
-  headers?: any
+    const media = new MediaFile(req.file)
+    await media.commit()
 
-  constructor({ buffer, mimetype }: { buffer: Buffer; mimetype: string }) {
-    this.buffer = buffer
-    this.mimetype = mimetype
-
-    this.url = this._generateUrl()
-    this.path = "static" + this.url
-    this.oid = this._computeOid()
-
-    // Buffer.byteLength actually supports many types besides just strings
-    // @ts-ignore
-    this.size = Buffer.byteLength(buffer)
+    res.location(baseUrl + media.url)
+    res.status(201).send({})
   }
+)
 
-  get pointerFileContent(): string {
-    return `version https://git-lfs.github.com/spec/v1
-oid sha256:${this.oid}
-size ${this.size}
-`
-  }
-
-  async commit(): Promise<void> {
-    const commit = newCommit()
-    commit.addMediaFile(this)
-    await commit.commit(`Uploaded ${this.url}`)
-  }
-
-  _generateUrl(): string {
-    const components = ["", "media"]
-    components.push(moment.utc().format("YYYY/MM"))
-
-    const ext = this.mimetype ? `.${mime.extension(this.mimetype)}` : ""
-    components.push(`${uuid()}${ext}`)
-
-    return components.join("/")
-  }
-
-  _computeOid(): string {
-    const hash = createHash("sha256")
-    hash.update(this.buffer)
-    return hash.digest("hex")
-  }
-}
+export default app

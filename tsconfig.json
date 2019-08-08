@@ -14,7 +14,11 @@
     // Disallow features that require cross-file information for emit.
     "isolatedModules": true,
     // Import non-ES modules as default imports.
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "*": ["lib/*"]
+    }
   },
-  "include": ["__tests__", "api"]
+  "include": ["__tests__", "api", "lib"]
 }
