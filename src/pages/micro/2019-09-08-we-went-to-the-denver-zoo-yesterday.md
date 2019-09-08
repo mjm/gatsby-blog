@@ -11,6 +11,7 @@ photos:
   - /media/2019/09/cc87b70e-9777-477d-812f-ecda55441949.jpeg
 syndication:
   - 'https://www.instagram.com/p/B2J3mZYl296/'
+  - 'https://twitter.com/mjmoriarity/status/1170739044357066753'
 ---
 
 We went to the Denver Zoo yesterday!
