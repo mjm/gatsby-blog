@@ -20,5 +20,5 @@
       "*": ["lib/*"]
     }
   },
-  "include": ["__tests__", "api", "lib"]
+  "include": ["__tests__", "api", "lib", "bin"]
 }

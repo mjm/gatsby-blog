@@ -8,7 +8,9 @@ if (process.env.NODE_ENV === "test") {
   })
 } else {
   if (!process.env.HONEYCOMB_WRITE_KEY) {
-    console.warn("No Honeycomb write key was provided")
+    if (!process.env.SUPPRESS_HONEYCOMB_LOG) {
+      console.warn("No Honeycomb write key was provided")
+    }
   } else {
     console.log("Enabling Honeycomb instrumentation")
   }
