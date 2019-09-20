@@ -5,6 +5,7 @@ photos:
   - /media/2019/09/305b6335-77b5-486b-9f45-a6a43af360d7.jpeg
 syndication:
   - 'https://www.instagram.com/p/B2ouVABFqxG/'
+  - 'https://twitter.com/mjmoriarity/status/1175064269198462978'
 ---
 
 So excited for this game!
