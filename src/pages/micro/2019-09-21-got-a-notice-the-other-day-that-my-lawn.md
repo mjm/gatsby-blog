@@ -1,6 +1,8 @@
 ---
 templateKey: microblog-post
 date: 2019-09-21T18:35:31.183Z
+syndication:
+  - 'https://twitter.com/mjmoriarity/status/1175480509838721024'
 ---
 
 Got a notice the other day that my lawn is so shitty it's **illegal** and I better fix it or go to court. Apparently that's what it takes to get me to get out the lawnmower.
