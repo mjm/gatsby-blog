@@ -1,12 +1,24 @@
 @import "./variables.scss";
 
+:root {
+  --title-color: #{$purple-800};
+  --mention-count-color: #{$purple-600};
+  --article-count-color: #{$purple-400};
+
+  @media (prefers-color-scheme: dark) {
+    --title-color: #{$purple-300};
+    --mention-count-color: #{$purple-400};
+    --article-count-color: #{$purple-600};
+  }
+}
+
 .title {
-  color: $purple-800;
+  color: var(--title-color);
   text-decoration: none;
 }
 
 .readMore {
-  color: $purple-600;
+  color: var(--mention-count-color);
   font-style: italic;
   font-size: 0.9rem;
 }
@@ -20,7 +32,7 @@
 }
 
 .mentionCount {
-  color: $purple-600;
+  color: var(--mention-count-color);
   margin-right: spacing(3);
   font-size: 0.9rem;
 
@@ -32,7 +44,7 @@
 
 .separator {
   height: spacing(1);
-  background-color: $purple-200;
+  background-color: var(--separator-color);
   margin: spacing(10) auto spacing(12) auto;
   width: 33.3333%;
   border-radius: 9999px;
@@ -43,7 +55,7 @@
   margin-top: spacing(8);
 
   a {
-    color: $purple-700;
+    color: var(--link-color);
   }
 }
 
@@ -89,7 +101,7 @@
 .archiveTitle {
   padding-bottom: spacing(1);
   margin-bottom: spacing(10);
-  border-bottom: 4px solid $purple-200;
+  border-bottom: 4px solid var(--separator-color);
 }
 
 .archives {
@@ -97,11 +109,11 @@
   margin-left: 0;
 
   a {
-    color: $purple-700;
+    color: var(--link-color);
   }
 
   .articleCount {
     font-size: 0.9rem;
-    color: $purple-400;
+    color: var(--article-count-color);
   }
 }

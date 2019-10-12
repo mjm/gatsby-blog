@@ -1,24 +1,36 @@
 @import "./variables.scss";
 
+:root {
+  --project-dark-color: #{$purple-800};
+  --project-pill-border-color: #{$purple-200};
+  --project-cell-border-color: #{$purple-300};
+
+  @media (prefers-color-scheme: dark) {
+    --project-dark-color: #{$purple-200};
+    --project-pill-border-color: #{$purple-800};
+    --project-cell-border-color: #{$purple-700};
+  }
+}
+
 .metadata {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   margin: spacing(-1) 0 spacing(1) 0;
   font-size: 0.9rem;
-  color: $purple-800;
+  color: var(--project-dark-color);
 }
 
 %pill {
-  background-color: $purple-100;
-  color: $purple-800;
+  background-color: var(--secondary-background);
+  color: var(--project-dark-color);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   margin: 0 spacing(2) spacing(2) 0;
   padding: spacing(1) spacing(2);
   border-radius: 0.25rem;
-  border: 1px solid $purple-200;
+  border: 1px solid var(--project-pill-border-color);
 
   .label {
     font-size: 0.75rem;
@@ -35,9 +47,9 @@
 }
 
 .cell {
-  border: 1px solid $purple-300;
+  border: 1px solid var(--project-cell-border-color);
   border-radius: 0.5rem;
-  background-color: $purple-100;
+  background-color: var(--secondary-background);
   margin-bottom: spacing(5);
   @include shadow;
 
@@ -54,11 +66,11 @@
 
   h3 {
     margin-bottom: spacing(2);
-    color: $purple-800;
+    color: var(--project-dark-color);
   }
 
   p {
     margin-bottom: 0;
-    color: $indigo-900;
+    color: var(--body-color);
   }
 }

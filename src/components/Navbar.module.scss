@@ -1,5 +1,15 @@
 @import "./variables.scss";
 
+:root {
+  --navbar-link-color: #{$purple-700};
+  --navbar-hover-color: #{$purple-300};
+
+  @media (prefers-color-scheme: dark) {
+    --navbar-link-color: #{$purple-300};
+    --navbar-hover-color: #{$purple-700};
+  }
+}
+
 .navbar {
   margin-bottom: spacing(2);
 
@@ -11,7 +21,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    background-color: $purple-100;
+    background-color: var(--secondary-background);
     @include shadow-md;
     font-size: 0.85rem;
 
@@ -32,11 +42,11 @@
   padding: spacing(2) spacing(1) spacing(1) spacing(1);
   margin: 0 spacing(1);
   border-bottom: 4px solid transparent;
-  color: $purple-600;
+  color: var(--navbar-link-color);
   text-decoration: none;
 
   &:hover {
-    border-color: $purple-300;
+    border-color: var(--navbar-hover-color);
   }
 }
 

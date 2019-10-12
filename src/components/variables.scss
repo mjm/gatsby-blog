@@ -1,6 +1,8 @@
 $sm-width: 640px;
 
 $gray-100: #f7fafc;
+$gray-800: #2D3748;
+$gray-900: #1A202C;
 
 $purple-100: #faf5ff;
 $purple-200: #e9d8fd;
@@ -12,6 +14,7 @@ $purple-700: #6b46c1;
 $purple-800: #553c9a;
 $purple-900: #44337a;
 
+$indigo-100: #EBF4FF;
 $indigo-900: #3c366b;
 
 @function spacing($n) {

@@ -1,5 +1,17 @@
 @import "./variables.scss";
 
+:root {
+  --book-separator-color: #{$purple-200};
+  --book-link-color: #{$purple-800};
+  --book-date-color: #{$purple-500};
+
+  @media (prefers-color-scheme: dark) {
+    --book-separator-color: #{$purple-800};
+    --book-link-color: #{$purple-200};
+    --book-date-color: #{$purple-400};
+  }
+}
+
 .section {
   h2 {
     margin-bottom: spacing(3);
@@ -9,13 +21,13 @@
 .books {
   list-style: none;
   margin-left: 0;
-  border-bottom: 3px solid $purple-200;
+  border-bottom: 3px solid var(--book-separator-color);
   margin-bottom: spacing(8);
 }
 
 .book {
-  border-top: 3px solid $purple-200;
-  background-color: $purple-100;
+  border-top: 3px solid var(--book-separator-color);
+  background-color: var(--secondary-background);
   margin-bottom: 0;
   padding: spacing(3) spacing(3) spacing(2) spacing(3);
 
@@ -35,14 +47,14 @@
 
   a {
     text-decoration: none;
-    color: $purple-800;
+    color: var(--book-link-color);
   }
 
   .date {
     flex-grow: 0;
     flex-shrink: 0;
     font-size: 0.85rem;
-    color: $purple-500;
+    color: var(--book-date-color);
     margin-left: spacing(2);
   }
 }

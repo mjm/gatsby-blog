@@ -1,8 +1,16 @@
 @import "./variables.scss";
 
+:root {
+  --mention-author-color: #{$purple-800};
+
+  @media (prefers-color-scheme: dark) {
+    --mention-author-color: #{$purple-200};
+  }
+}
+
 .separator {
   height: spacing(1);
-  background-color: $purple-200;
+  background-color: var(--separator-color);
   margin: spacing(6) auto spacing(5) auto;
   width: 33.3333%;
   border-radius: 9999px;
@@ -19,7 +27,7 @@
   display: flex;
   flex-direction: row;
   margin-top: spacing(4);
-  background-color: $purple-100;
+  background-color: var(--secondary-background);
   padding: spacing(3) spacing(3);
   border-radius: 0.5rem;
   @include shadow;
@@ -56,7 +64,7 @@
   a {
     font-weight: 700;
     text-decoration: none;
-    color: $purple-800;
+    color: var(--mention-author-color);
   }
 }
 
@@ -65,13 +73,13 @@
 
   a {
     text-decoration: none;
-    color: $purple-700;
+    color: var(--link-color);
   }
 }
 
 .body {
   a {
-    color: $purple-700;
+    color: var(--link-color);
   }
 
   *:last-child {

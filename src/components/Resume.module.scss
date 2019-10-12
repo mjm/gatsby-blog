@@ -5,11 +5,15 @@
 }
 
 .experience {
-  background-color: $purple-100;
+  background-color: var(--secondary-background);
   border-top: 4px solid $purple-300;
   margin-bottom: spacing(5);
   padding: spacing(4);
   @include shadow-md;
+
+  @media (prefers-color-scheme: dark) {
+    border-top-color: $purple-700;
+  }
 
   .header {
     display: flex;
@@ -71,7 +75,7 @@
 
   .skill {
     font-size: 0.9rem;
-    background-color: $purple-100;
+    background-color: var(--secondary-background);
     padding: spacing(1) spacing(2);
     margin: 0 spacing(2) spacing(2) 0;
     border-radius: 0.25rem;

@@ -1,12 +1,31 @@
 @import "./variables.scss";
 
+:root {
+  color-scheme: light dark;
+  --page-background: #{$gray-100};
+  --body-color: #{$indigo-900};
+  --link-color: #{$purple-700};
+
+  --secondary-background: #{$purple-100};
+  --separator-color: #{$purple-200};
+
+  @media (prefers-color-scheme: dark) {
+    --page-background: #{$gray-900};
+    --body-color: #{$purple-100};
+    --link-color: #{$purple-300};
+
+    --secondary-background: #{$purple-900};
+    --separator-color: #{$purple-900};
+  }
+}
+
 .e-content {
   a {
-    color: $purple-700;
+    color: var(--link-color);
   }
 
   hr {
-    background-color: $purple-200;
+    background-color: var(--separator-color);
     height: 2px;
   }
 }
