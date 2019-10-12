@@ -9,6 +9,9 @@
   --secondary-background: #{$purple-100};
   --separator-color: #{$purple-200};
 
+  --primary-shadow-color: rgba(0, 0, 0, 0.1);
+  --secondary-shadow-color: rgba(0, 0, 0, 0.06);
+
   @media (prefers-color-scheme: dark) {
     --page-background: #{$gray-900};
     --body-color: #{$purple-100};
@@ -16,6 +19,9 @@
 
     --secondary-background: #{$purple-900};
     --separator-color: #{$purple-900};
+
+    --primary-shadow-color: rgba(255, 255, 255, 0.05);
+    --secondary-shadow-color: rgba(255, 255, 255, 0.03);
   }
 }
 
