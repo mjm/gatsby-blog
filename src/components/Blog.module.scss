@@ -4,11 +4,13 @@
   --title-color: #{$purple-800};
   --mention-count-color: #{$purple-600};
   --article-count-color: #{$purple-400};
+  --pinned-border-color: #{$purple-300};
 
   @media (prefers-color-scheme: dark) {
     --title-color: #{$purple-300};
     --mention-count-color: #{$purple-400};
     --article-count-color: #{$purple-600};
+    --pinned-border-color: #{$purple-700};
   }
 }
 
@@ -64,9 +66,9 @@
 }
 
 .pinned {
-  background-color: $purple-100;
+  background-color: var(--secondary-background);
   padding: spacing(5) spacing(4) spacing(4) spacing(4);
-  border-top: 4px solid $purple-300;
+  border-top: 4px solid var(--pinned-border-color);
   margin-bottom: spacing(6);
   @include shadow-md;
 
@@ -75,7 +77,7 @@
   }
 
   .dateBubble {
-    background-color: white;
+    background-color: var(--page-background);
   }
 }
 
@@ -85,7 +87,7 @@
   align-self: flex-end;
   align-items: center;
 
-  color: $purple-400;
+  color: var(--article-count-color);
   font-style: italic;
   font-size: 0.85rem;
 
