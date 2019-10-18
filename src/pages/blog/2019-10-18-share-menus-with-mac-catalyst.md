@@ -1,8 +1,9 @@
 ---
 templateKey: blog-post
-date: 2019-10-18T20:00:00Z
+date: 2019-10-18T20:00:00.000Z
 title: Share Menus with Mac Catalyst
-pinned: true
+syndication:
+  - 'https://twitter.com/mjmoriarity/status/1185288682372100096'
 ---
 
 I've been working on porting a new iOS app to the Mac using Catalyst.
