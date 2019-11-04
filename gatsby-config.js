@@ -31,6 +31,8 @@ module.exports = {
               destinationDir: "static",
             },
           },
+          "gatsby-remark-autolink-headers",
+          "gatsby-remark-embed-snippet",
           {
             resolve: `@raae/gatsby-remark-oembed`,
             options: {
@@ -39,7 +41,12 @@ module.exports = {
               },
             },
           },
-          "gatsby-remark-prismjs",
+          {
+            resolve: "gatsby-remark-prismjs",
+            options: {
+              noInlineHighlight: true,
+            }
+          },
           "gatsby-remark-smartypants",
           {
             resolve: "gatsby-remark-microformats",

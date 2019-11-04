@@ -14,6 +14,7 @@ export const BlogPostTemplate = ({
   slug,
   content,
   contentComponent,
+  tableOfContents,
   date,
   helmet,
   isoDate,
@@ -29,6 +30,7 @@ export const BlogPostTemplate = ({
     <article className="h-entry">
       {helmet || ""}
       <h1 className="p-name">{title}</h1>
+      <div className={styles.tableOfContents} dangerouslySetInnerHTML={{__html: tableOfContents}} />
       <div className="e-content">
         <PostContent content={content} />
       </div>
@@ -46,6 +48,7 @@ export const BlogPostTemplate = ({
 BlogPostTemplate.propTypes = {
   content: PropTypes.node.isRequired,
   contentComponent: PropTypes.func,
+  tableOfContents: PropTypes.string,
   date: PropTypes.string,
   helmet: PropTypes.object,
   isoDate: PropTypes.string,
@@ -62,6 +65,7 @@ const BlogPost = ({ data }) => {
         slug={post.fields.slug}
         content={post.html}
         contentComponent={HTMLContent}
+        tableOfContents={post.tableOfContents}
         date={post.frontmatter.date}
         helmet={
           <Helmet>
@@ -91,6 +95,7 @@ export const pageQuery = graphql`
     markdownRemark(id: { eq: $id }) {
       id
       html
+      tableOfContents
       fields {
         slug
       }

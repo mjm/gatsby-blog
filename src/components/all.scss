@@ -36,11 +36,15 @@
   }
 }
 
+code {
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0;
+}
+
 body {
   code[class*="language-"],
   pre[class*="language-"] {
     font-size: 0.8rem;
-    font-variant-ligatures: none;
     margin-top: 0;
     margin-bottom: 1rem;
   }
