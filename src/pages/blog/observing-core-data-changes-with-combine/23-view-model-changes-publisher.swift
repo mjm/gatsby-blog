@@ -10,7 +10,7 @@ class ToDoItemsViewModel {
 
     var itemChanges: AnyPublisher<CollectionDifference<ToDoItem>, Never> {
         context.changesPublisher(for: ToDoItem.allItemsFetchRequest())
-            .ignoreError() // converts Failure to Never, you could also handle with `catch`
+            .catch { _ in Empty() } // replace error with an empty, completed stream
             .eraseToAnyPublisher()
     }
 

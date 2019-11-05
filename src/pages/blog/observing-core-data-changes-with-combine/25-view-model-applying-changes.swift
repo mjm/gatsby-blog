@@ -4,7 +4,7 @@ class ToDoItemsViewModel {
 
     var itemChanges: AnyPublisher<CollectionDifference<ToDoItem>, Never> {
         context.changesPublisher(for: ToDoItem.allItemsFetchRequest())
-            .ignoreError()
+            .catch { _ in Empty() }
             .eraseToAnyPublisher()
     }
 
