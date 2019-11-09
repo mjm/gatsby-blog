@@ -136,7 +136,7 @@ export const pageQuery = graphql`
     }
 
     series: allMarkdownRemark(
-      filter: { frontmatter: { series: { eq: $series } } }
+      filter: { frontmatter: { series: { eq: $series, nin: [null] } } }
       sort: { fields: frontmatter___date, order: ASC }
     ) {
       nodes {
