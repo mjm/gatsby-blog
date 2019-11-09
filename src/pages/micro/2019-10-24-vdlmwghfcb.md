@@ -5,5 +5,6 @@ photos:
   - /media/2019/11/8a645d30-d0e5-4137-913c-f307ef00913b.jpeg
 syndication:
   - 'https://www.instagram.com/p/B4AS0z-lbiZ/'
+  - 'https://twitter.com/mjmoriarity/status/1193140662905925635'
 ---
 
