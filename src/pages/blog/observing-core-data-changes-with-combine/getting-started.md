@@ -1,8 +1,9 @@
 ---
 templateKey: blog-post
-date: 2019-11-08T20:00:00Z
+date: 2019-11-08T20:00:00.000Z
 title: Getting Started with Combine and Core Data
-series: using Combine to observe Core Data changes
+syndication:
+  - 'https://twitter.com/mjmoriarity/status/1193024362955231232'
 ---
 
 Because Apple released [SwiftUI][] and [Combine][] together, you could be forgiven for ignoring Combine if you're only using UIKit in your app.
