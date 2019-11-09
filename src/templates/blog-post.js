@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import Helmet from "react-helmet"
-import { graphql } from "gatsby"
+import { graphql, Link } from "gatsby"
 import Layout from "../components/Layout"
 import Content, { HTMLContent } from "../components/Content"
 import Mentions from "../components/Mentions"
@@ -15,6 +15,7 @@ export const BlogPostTemplate = ({
   content,
   contentComponent,
   tableOfContents,
+  series,
   date,
   helmet,
   isoDate,
@@ -30,7 +31,30 @@ export const BlogPostTemplate = ({
     <article className="h-entry">
       {helmet || ""}
       <h1 className="p-name">{title}</h1>
-      <div className={styles.tableOfContents} dangerouslySetInnerHTML={{__html: tableOfContents}} />
+      {series.parts.length ? (
+        <blockquote className={styles.series}>
+          <p>This article is part of a series on {series.about}:</p>
+          <ul>
+            {series.parts.map((part, index) => (
+              <li key={part.fields.slug}>
+                {part.fields.slug === slug ? (
+                  <>
+                    Part {index + 1}: {part.frontmatter.title}
+                  </>
+                ) : (
+                  <Link to={part.fields.slug}>
+                    Part {index + 1}: {part.frontmatter.title}
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        </blockquote>
+      ) : null}
+      <div
+        className={styles.tableOfContents}
+        dangerouslySetInnerHTML={{ __html: tableOfContents }}
+      />
       <div className="e-content">
         <PostContent content={content} />
       </div>
@@ -49,6 +73,7 @@ BlogPostTemplate.propTypes = {
   content: PropTypes.node.isRequired,
   contentComponent: PropTypes.func,
   tableOfContents: PropTypes.string,
+  series: PropTypes.object,
   date: PropTypes.string,
   helmet: PropTypes.object,
   isoDate: PropTypes.string,
@@ -57,7 +82,7 @@ BlogPostTemplate.propTypes = {
 }
 
 const BlogPost = ({ data }) => {
-  const { markdownRemark: post } = data
+  const { markdownRemark: post, series } = data
 
   return (
     <Layout>
@@ -66,6 +91,7 @@ const BlogPost = ({ data }) => {
         content={post.html}
         contentComponent={HTMLContent}
         tableOfContents={post.tableOfContents}
+        series={{ about: post.frontmatter.series, parts: series.nodes }}
         date={post.frontmatter.date}
         helmet={
           <Helmet>
@@ -85,13 +111,14 @@ const BlogPost = ({ data }) => {
 BlogPost.propTypes = {
   data: PropTypes.shape({
     markdownRemark: PropTypes.object,
+    series: PropTypes.object,
   }),
 }
 
 export default BlogPost
 
 export const pageQuery = graphql`
-  query BlogPostByID($id: String!) {
+  query BlogPostByID($id: String!, $series: String) {
     markdownRemark(id: { eq: $id }) {
       id
       html
@@ -104,6 +131,21 @@ export const pageQuery = graphql`
         isoDate: date(formatString: "YYYY-MM-DDTHH:mm:ssZ")
         title
         syndication
+        series
+      }
+    }
+
+    series: allMarkdownRemark(
+      filter: { frontmatter: { series: { eq: $series } } }
+      sort: { fields: frontmatter___date, order: ASC }
+    ) {
+      nodes {
+        fields {
+          slug
+        }
+        frontmatter {
+          title
+        }
       }
     }
   }

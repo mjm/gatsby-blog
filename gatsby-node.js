@@ -17,6 +17,7 @@ exports.createPages = ({ actions, graphql }) => {
             }
             frontmatter {
               templateKey
+              series
             }
           }
         }
@@ -37,6 +38,7 @@ exports.createPages = ({ actions, graphql }) => {
       }
 
       const id = edge.node.id
+      const series = edge.node.frontmatter.series
       createPage({
         path: edge.node.fields.slug,
         component: path.resolve(
@@ -45,6 +47,7 @@ exports.createPages = ({ actions, graphql }) => {
         // additional data can be passed via context
         context: {
           id,
+          series,
         },
       })
     })

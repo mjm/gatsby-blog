@@ -135,11 +135,14 @@
   }
 }
 
-:global(.e-content) {
-  blockquote {
-    background-color: var(--secondary-background);
-    margin: 0 0 0.9rem 0;
-    padding: spacing(3) spacing(5);
-    border-left: 4px solid var(--pinned-border-color);
+:global(.e-content) blockquote,
+.series {
+  background-color: var(--secondary-background);
+  margin: 0 0 0.9rem 0;
+  padding: spacing(3) spacing(5);
+  border-left: 4px solid var(--pinned-border-color);
+
+  a {
+    color: var(--link-color);
   }
 }
