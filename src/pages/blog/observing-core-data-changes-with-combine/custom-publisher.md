@@ -1,8 +1,9 @@
 ---
 templateKey: blog-post
-date: 2019-11-08T23:00:00Z
+date: 2019-11-08T23:00:00.000Z
 title: Observing Core Data Changes with a Custom Combine Publisher
-series: using Combine to observe Core Data changes
+syndication:
+  - 'https://twitter.com/mjmoriarity/status/1193962561634353152'
 ---
 
 At the end of [the last post](/observing-core-data-changes-with-combine/mvvm/), I described the way I wanted to observe [Core Data][] changes in my app: with a stream of collection changes that I can apply to a list of view models to keep it in sync the current state of the managed object context.
