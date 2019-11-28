@@ -1,6 +1,8 @@
 ---
 templateKey: microblog-post
 date: 2019-11-28T14:25:04.471Z
+syndication:
+  - 'https://twitter.com/mjmoriarity/status/1200060000091029504'
 ---
 
 Seriously Apple? How many international issues can you be on the wrong side of?
