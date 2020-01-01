@@ -1,6 +1,8 @@
 ---
 templateKey: microblog-post
 date: 2020-01-01T20:11:29.796Z
+syndication:
+  - 'https://twitter.com/mjmoriarity/status/1212468220059254784'
 ---
 
 Kieran is spot-on here. Every single software job I've had has required me to grow into it. I wasn't fully qualified for the work when I started, but you get there from hands on experience. Go for the job you want!
