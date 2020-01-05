@@ -7,6 +7,7 @@ photos:
   - /media/2020/01/e8cb5b58-083b-4892-b901-44c795c95eb1.jpeg
 syndication:
   - 'https://www.instagram.com/p/B64NUAHlzJc/'
+  - 'https://twitter.com/mjmoriarity/status/1213691026784735232'
 ---
 
 Haunted Doll Watch!
