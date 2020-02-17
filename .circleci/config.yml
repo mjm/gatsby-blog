@@ -2,7 +2,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:12
     steps:
       - checkout
       - restore_cache:
@@ -19,7 +19,7 @@ jobs:
           command: npm test
   deploy_staging:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:12
     steps:
       - checkout
       - run:
@@ -39,7 +39,7 @@ jobs:
           command: now --token $NOW_TOKEN --target production
   deploy_prod:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:12
     steps:
       - checkout
       - run:
