@@ -1,6 +1,8 @@
 ---
 templateKey: microblog-post
 date: 2020-03-02T06:59:43.511Z
+syndication:
+  - 'https://twitter.com/mjmoriarity/status/1234374801759686656'
 ---
 
 Oh no I've been called out.
